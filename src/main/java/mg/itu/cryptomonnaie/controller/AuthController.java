@@ -33,8 +33,18 @@ public class AuthController {
 
     @PostMapping("/connexion")
     public String connexion(@ModelAttribute ConnexionRequest connexionRequest) {
-        // TODO : Utilisation de l'API identity-flow
+        /* TODO :
+            - Utilisation de l'API identity-flow
+            - Mettre l'utilisateur en base de données puis en session
+        */
 
         return null;
+    }
+
+    @PostMapping("/deconnexion")
+    public String deconnexion() {
+        // TODO : Utilisation de l'API identity-flow
+
+        return "redirect:/auth/connexion";
     }
 }
