@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr" th:fragment="layout(title, body, styles, scripts)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:replace="${title}">Cryptomonnaie</title>
+    <th:block th:replace="${styles}"/>
+</head>
+<body>
+
+<div class="container-fluid p-3" th:insert="${body}"></div>
+
+<th:block th:insert="${scripts}"/>
+</body>
+</html>
