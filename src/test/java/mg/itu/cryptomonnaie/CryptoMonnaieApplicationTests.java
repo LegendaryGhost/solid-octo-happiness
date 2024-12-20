@@ -1,10 +1,10 @@
-package mg.itu.solid_octo_happiness;
+package mg.itu.cryptomonnaie;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SolidOctoHappinessApplicationTests {
+class CryptoMonnaieApplicationTests {
 
 	@Test
 	void contextLoads() {

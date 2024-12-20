@@ -1,4 +1,4 @@
-package mg.itu.solid_octo_happiness;
+package mg.itu.cryptomonnaie;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -7,7 +7,6 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(SolidOctoHappinessApplication.class);
+		return application.sources(CryptoMonnaieApplication.class);
 	}
-
 }
