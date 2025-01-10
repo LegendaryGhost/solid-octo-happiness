@@ -23,42 +23,44 @@ public class HistoriqueFondService {
     private final TypeTransactionRepository typeTransactionRepository;
     private final CacheManager cacheManager;
     private final HistoriqueFondRepository historiqueFondRepository;
+    private ProfilService profilService;
 
-    public List<HistoriqueFond> transactionProfil(Profil profil) {
-	return historiqueFondRepository.findTransactionsProfil(profil.getId());
+    public List<HistoriqueFond> transactionProfil() {
+        Profil profil = profilService.getProfilConnecte();
+        return historiqueFondRepository.findTransactionsProfil(profil.getId());
     }
 
     public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request) {
-	HistoriqueFond historiqueFond = new HistoriqueFond();
-	historiqueFond.setMontant(request.getMontant());
-	historiqueFond.setNumCarteBancaire(request.getNumCarteBancaire());
+        HistoriqueFond historiqueFond = new HistoriqueFond();
+        historiqueFond.setMontant(request.getMontant());
+        historiqueFond.setNumCarteBancaire(request.getNumCarteBancaire());
 
-	Profil profil = new Profil();
-	// TODO: récupérer l'ID de l'utilisateur connecté
-	profil.setId(1L);
+        Profil profil = new Profil();
+        // TODO: récupérer l'ID de l'utilisateur connecté
+        profil.setId(1L);
 
-	TypeTransaction typeTransaction = typeTransactionRepository.findById(
-			Long.valueOf(request.getIdTypeTransaction()))
-		.orElseThrow(() -> new RuntimeException("Type de transaction introuvable"));
-	historiqueFond.setTypeTransaction(typeTransaction);
+        TypeTransaction typeTransaction = typeTransactionRepository.findById(
+                Long.valueOf(request.getIdTypeTransaction()))
+                .orElseThrow(() -> new RuntimeException("Type de transaction introuvable"));
+        historiqueFond.setTypeTransaction(typeTransaction);
 
-	String token = SecureTokenGenerator.generateToken(20);
-	System.out.println("Token: " + token);
-	// Stocker l'objet dans le cache
-	Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).put(token, historiqueFond);
+        String token = SecureTokenGenerator.generateToken(20);
+        System.out.println("Token: " + token);
+        // Stocker l'objet dans le cache
+        Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).put(token, historiqueFond);
 
-	// Envoyer email de validation
+        // Envoyer email de validation
     }
 
     public HistoriqueFond getCachedHistoriqueFond(String token) {
-	return Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).get(token, HistoriqueFond.class);
+        return Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).get(token, HistoriqueFond.class);
     }
 
     public void confirmerHistoriqueFond(String token) {
-	HistoriqueFond historiqueFond = getCachedHistoriqueFond(token);
-	if (historiqueFond != null) {
-	    historiqueFondRepository.save(historiqueFond);
-	}
+        HistoriqueFond historiqueFond = getCachedHistoriqueFond(token);
+        if (historiqueFond != null) {
+            historiqueFondRepository.save(historiqueFond);
+        }
     }
 
     public List<HistoriqueFond> listeTransactions() {

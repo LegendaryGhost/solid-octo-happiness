@@ -21,7 +21,11 @@ public class HistoriqueCryptoService {
     @Autowired
     private CoursCryptoRepository coursCryptoRepository;
 
-    public List<HistoriqueCryptoDTO> portefeuilleClientActuel(Profil profil) {
+    @Autowired
+    private ProfilService profilService;
+
+    public List<HistoriqueCryptoDTO> portefeuilleClientActuel() {
+        Profil profil = profilService.getProfilConnecte();
         List<HistoriqueCryptoDTO> portefeuilles = new ArrayList<>();
 
         List<HistoriqueCrypto> historiqueCryptos = historiqueCryptoRepository.findAllByProfil(profil.getId());
@@ -33,7 +37,7 @@ public class HistoriqueCryptoService {
             portefeuille.setDateAction(historiqueCrypto.getDateAction());
             portefeuille.setQuantite(historiqueCrypto.getQuantite());
             CoursCrypto coursCryptoActuel = coursCryptoRepository
-                    .findCoursActuel(portefeuille.getCryptomonnaie().getId());
+                    .findFirstByCryptomonnaieIdOrderByDateCoursDesc(portefeuille.getCryptomonnaie().getId());
             portefeuille.setPrixActuel(coursCryptoActuel.getCoursActuel());
             portefeuille.setPrixAchatU(historiqueCrypto.getCours());
             Double variation = variationCours(portefeuille.getPrixActuel(), portefeuille.getPrixAchatU());

@@ -150,22 +150,22 @@
                 <th>Cours d'achat</th>
                 <th>Cours actuel</th>
                 <th>Variation</th>
-                <th>Valeur</th>
+                <th>Valeur Actuelle</th>
                 <th>Profit/Perte</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="etat : ${etatPortefeuilles}">
-                <td class="crypto-name" th:text="${etat.crypto.nom}"></td>
-                <td class="date" th:text="${#temporals.format(etat.dateAchat, 'dd/MM/yyyy')}"></td>
+                <td class="crypto-name" th:text="${etat.cryptomonnaie.designation}"></td>
+                <td class="date" th:text="${#temporals.format(etat.dateAction, 'dd/MM/yyyy')}"></td>
                 <td class="quantity" th:text="${#numbers.formatDecimal(etat.quantite, 1, 8)}"></td>
-                <td class="price" th:text="${#numbers.formatDecimal(etat.coursAchat, 1, 2) + ' €'}"></td>
-                <td class="price" th:text="${#numbers.formatDecimal(etat.coursActuel, 1, 2) + ' €'}"></td>
+                <td class="price" th:text="${#numbers.formatDecimal(etat.prixAchatU, 1, 2) + ' €'}"></td>
+                <td class="price" th:text="${#numbers.formatDecimal(etat.prixActuel, 1, 2) + ' €'}"></td>
                 <td th:class="${etat.variation >= 0 ? 'variation-positive' : 'variation-negative'}"
                     th:text="${#numbers.formatDecimal(etat.variation, 1, 2) + ' %'}"></td>
-                <td class="price" th:text="${#numbers.formatDecimal(etat.valeur, 1, 2) + ' €'}"></td>
-                <td th:class="${etat.profit > 0 ? 'profit' : 'loss'}"
-                    th:text="${#numbers.formatDecimal((etat.profit > 0 ? etat.profit : etat.perte), 1, 2) + ' €'}"></td>
+                <td class="price" th:text="${#numbers.formatDecimal(etat.valeurActuelle, 1, 2) + ' €'}"></td>
+                <td th:class="price"
+                    th:text="${#numbers.formatDecimal(etat.profitOuPerte, 1, 2) + ' €'}"></td>
             </tr>
             </tbody>
         </table>
