@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body}, ~{::styles}, _)}" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Inscription</title>
-    <style th:fragment="styles">
+    <style>
         :root {
             --primary-bg: #1a1f2c;
             --secondary-bg: #2d3748;
@@ -106,7 +106,7 @@
         }
     </style>
 </head>
-<div class="container" th:fragment="body">
+<body class="container">
     <div class="signup-card">
         <div class="signup-header">
             <h1>Inscription</h1>
@@ -145,5 +145,5 @@
             <button type="submit" class="submit-btn">S'inscrire</button>
         </form>
     </div>
-</div>
+</body>
 </html>

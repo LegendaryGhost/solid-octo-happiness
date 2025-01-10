@@ -1,20 +1,16 @@
 package mg.itu.cryptomonnaie.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.repository.ProfilRepository;
+import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class ProfilService {
-    @Autowired
-    private ProfilRepository profilRepository;
+    private final ProfilRepository profilRepository;
 
-    public Profil getProfilConnecte() {
-        Long id = 1L;
-        Profil profil = profilRepository.findById(id).orElse(null);
-        return profil;
+    public Profil getByEmail(String email) {
+        return profilRepository.findByEmail(email);
     }
-
 }

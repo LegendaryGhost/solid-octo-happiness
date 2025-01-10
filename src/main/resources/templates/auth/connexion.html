@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body}, ~{::styles}, _)}" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Connexion</title>
-    <style th:fragment="styles">
+    <style>
         :root {
             --primary-bg: #1a1f2c;
             --secondary-bg: #2d3748;
@@ -132,7 +132,7 @@
         }
     </style>
 </head>
-<div class="container" th:fragment="body">
+<body class="container">
     <div class="login-card">
         <div class="login-header">
             <h1>Connexion</h1>
@@ -155,5 +155,5 @@
             </div>
         </form>
     </div>
-</div>
+</body>
 </html>
