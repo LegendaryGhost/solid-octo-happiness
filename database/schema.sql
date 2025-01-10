@@ -36,7 +36,7 @@ CREATE TABLE historique_crypto(
    id SERIAL,
    date_action TIMESTAMP,
    cours NUMERIC(15,2)  ,
-   montant NUMERIC(15,2)  ,
+   quantite NUMERIC(15,2)  ,
    id_profil INTEGER NOT NULL,
    id_cryptomonnaie INTEGER NOT NULL,
    id_type_action INTEGER NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE historique_crypto(
 
 CREATE TABLE historique_fond(
    id SERIAL,
-   date_transaction TIMESTAMP,
+   date_transaction TIMESTAMP,   
    montant NUMERIC(15,2)  ,
    id_profil INTEGER NOT NULL,
    id_type_transaction INTEGER NOT NULL,

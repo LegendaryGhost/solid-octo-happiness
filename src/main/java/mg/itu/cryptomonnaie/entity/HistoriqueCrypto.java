@@ -15,13 +15,13 @@ public class HistoriqueCrypto {
     private Long id;
 
     @Column(name = "date_action", nullable = false)
-    private LocalDateTime dateAction;
+    private LocalDate dateAction;
 
     @Column(precision = 15, scale = 2, nullable = false)
-    private BigDecimal cours;
+    private Double cours;
 
     @Column(precision = 15, scale = 2, nullable = false)
-    private BigDecimal montant;
+    private Double quantite;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_profil")
