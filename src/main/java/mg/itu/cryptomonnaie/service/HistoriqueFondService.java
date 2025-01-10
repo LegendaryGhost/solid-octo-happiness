@@ -2,6 +2,8 @@ package mg.itu.cryptomonnaie.service;
 
 import java.util.List;
 
+import jakarta.mail.MessagingException;
+import mg.itu.cryptomonnaie.repository.ProfilRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -23,19 +25,21 @@ public class HistoriqueFondService {
     private final TypeTransactionRepository typeTransactionRepository;
     private final CacheManager cacheManager;
     private final HistoriqueFondRepository historiqueFondRepository;
+    private final EmailService emailService;
+    private final ProfilRepository profilRepository;
 
     public List<HistoriqueFond> transactionProfil(Profil profil) {
 	return historiqueFondRepository.findTransactionsProfil(profil.getId());
     }
 
-    public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request) {
+    public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request) throws MessagingException {
 	HistoriqueFond historiqueFond = new HistoriqueFond();
 	historiqueFond.setMontant(request.getMontant());
 	historiqueFond.setNumCarteBancaire(request.getNumCarteBancaire());
 
-	Profil profil = new Profil();
 	// TODO: récupérer l'ID de l'utilisateur connecté
-	profil.setId(1L);
+	Profil profil = profilRepository.findById(1L).orElseThrow(() -> new RuntimeException("Profil introuvable"));
+	historiqueFond.setProfil(profil);
 
 	TypeTransaction typeTransaction = typeTransactionRepository.findById(
 			Long.valueOf(request.getIdTypeTransaction()))
@@ -48,13 +52,14 @@ public class HistoriqueFondService {
 	Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).put(token, historiqueFond);
 
 	// Envoyer email de validation
+	emailService.envoyerValidationHistoFondEmail(profil.getEmail(), token);
     }
 
     public HistoriqueFond getCachedHistoriqueFond(String token) {
 	return Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).get(token, HistoriqueFond.class);
     }
 
-    public void confirmerHistoriqueFond(String token) {
+    public void confirmerTransaction(String token) {
 	HistoriqueFond historiqueFond = getCachedHistoriqueFond(token);
 	if (historiqueFond != null) {
 	    historiqueFondRepository.save(historiqueFond);
@@ -62,7 +67,6 @@ public class HistoriqueFondService {
     }
 
     public List<HistoriqueFond> listeTransactions() {
-        List<HistoriqueFond> historiqueFonds = historiqueFondRepository.findAll();
-        return historiqueFonds;
+	return historiqueFondRepository.findAll();
     }
 }
