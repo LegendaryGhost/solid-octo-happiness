@@ -58,3 +58,4 @@ CREATE TABLE historique_fond
     FOREIGN KEY (id_profil) REFERENCES profil (id),
     FOREIGN KEY (id_type_transaction) REFERENCES type_transaction (id)
 );
+
