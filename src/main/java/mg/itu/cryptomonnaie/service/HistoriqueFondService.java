@@ -2,6 +2,7 @@ package mg.itu.cryptomonnaie.service;
 
 import java.util.List;
 
+import jakarta.mail.MessagingException;
 import mg.itu.cryptomonnaie.repository.ProfilRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class HistoriqueFondService {
 	return historiqueFondRepository.findTransactionsProfil(profil.getId());
     }
 
-    public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request) {
+    public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request) throws MessagingException {
 	HistoriqueFond historiqueFond = new HistoriqueFond();
 	historiqueFond.setMontant(request.getMontant());
 	historiqueFond.setNumCarteBancaire(request.getNumCarteBancaire());

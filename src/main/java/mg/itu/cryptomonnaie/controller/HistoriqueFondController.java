@@ -1,5 +1,6 @@
 package mg.itu.cryptomonnaie.controller;
 
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.service.HistoriqueFondService;
@@ -28,7 +29,7 @@ public class HistoriqueFondController {
     }
 
     @PostMapping("/ajouter")
-    public String ajouter(HistoriqueFondRequest historique) {
+    public String ajouter(HistoriqueFondRequest historique) throws MessagingException {
 	historiqueFondService.creerHistoriqueFondTemporaire(historique);
 	return "redirect:/historique-fond/form";
     }
