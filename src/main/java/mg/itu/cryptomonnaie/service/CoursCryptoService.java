@@ -43,4 +43,14 @@ public class CoursCryptoService {
         Double facteur = (random.nextDouble() * 0.2) - 0.1;
         return dernierCours + (dernierCours * facteur);
     }
+
+    public List<CoursCrypto> listeCoursCrypto() {
+        List<CoursCrypto> coursCryptos = coursCryptoRepository.findAll();
+        return coursCryptos;
+    }
+
+    public List<CoursCrypto> listeCoursParCryptomonnaie(Cryptomonnaie cryptomonnaie) {
+        List<CoursCrypto> coursCryptos = coursCryptoRepository.findCoursParCryptomonnaie(cryptomonnaie.getId());
+        return coursCryptos;
+    }
 }
