@@ -8,4 +8,5 @@ import mg.itu.cryptomonnaie.entity.Profil;
 @Repository
 public interface ProfilRepository extends JpaRepository<Profil, Long> {
 
+    Profil findByEmail(String email);
 }
