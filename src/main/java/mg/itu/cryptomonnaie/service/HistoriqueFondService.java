@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import mg.itu.cryptomonnaie.Utils;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;
@@ -23,10 +25,9 @@ public class HistoriqueFondService {
     private final TypeTransactionRepository typeTransactionRepository;
     private final CacheManager cacheManager;
     private final HistoriqueFondRepository historiqueFondRepository;
-    private ProfilService profilService;
 
-    public List<HistoriqueFond> transactionProfil() {
-        Profil profil = profilService.getProfilConnecte();
+    public List<HistoriqueFond> transactionProfil(HttpSession session) {
+        Profil profil = Utils.getUser(session);
         return historiqueFondRepository.findTransactionsProfil(profil.getId());
     }
 
