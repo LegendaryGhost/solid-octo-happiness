@@ -14,7 +14,7 @@ public class CoursCrypto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cours_actuel", precision = 15, scale = 2, nullable = false)
+    @Column(name = "cours_actuel", nullable = false)
     private Double coursActuel;
 
     @Column(name = "date_cours", nullable = false)

@@ -2,7 +2,7 @@ package mg.itu.cryptomonnaie.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,16 +15,19 @@ public class HistoriqueFond {
     private Long id;
 
     @Column(name = "date_transaction", nullable = false)
-    private LocalDateTime dateTransaction;
+    private LocalDateTime dateTransaction = LocalDateTime.now();
 
-    @Column(precision = 15, scale = 2, nullable = false)
+    @Column(nullable = false)
     private Double montant;
 
-    @ManyToOne(optional = false)
+    @Column(name = "num_carte_bancaire", nullable = false)
+    private String numCarteBancaire;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_profil")
     private Profil profil;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_type_transaction")
     private TypeTransaction typeTransaction;
 }
