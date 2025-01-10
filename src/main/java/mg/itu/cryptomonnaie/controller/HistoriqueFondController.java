@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @AllArgsConstructor
 @RequestMapping("/historique-fond")
@@ -29,6 +30,12 @@ public class HistoriqueFondController {
     @PostMapping("/ajouter")
     public String ajouter(HistoriqueFondRequest historique) {
 	historiqueFondService.creerHistoriqueFondTemporaire(historique);
+	return "redirect:/historique-fond/form";
+    }
+
+    @GetMapping("/valider")
+    public String validerTransaction(@RequestParam("token") String token) {
+	historiqueFondService.confirmerTransaction(token);
 	return "redirect:/historique-fond/form";
     }
 

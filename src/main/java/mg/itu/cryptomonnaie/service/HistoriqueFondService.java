@@ -58,7 +58,7 @@ public class HistoriqueFondService {
 	return Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).get(token, HistoriqueFond.class);
     }
 
-    public void confirmerHistoriqueFond(String token) {
+    public void confirmerTransaction(String token) {
 	HistoriqueFond historiqueFond = getCachedHistoriqueFond(token);
 	if (historiqueFond != null) {
 	    historiqueFondRepository.save(historiqueFond);
