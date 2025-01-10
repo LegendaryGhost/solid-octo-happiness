@@ -1,0 +1,37 @@
+<div th:fragment="sidebar">
+    <button class="toggle-btn">☰</button>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>Navigation</h2>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="#" class="nav-link">Profil</a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle">Portefeuille</a>
+                <div class="dropdown-content">
+                    <a href="#" class="nav-link">Historique</a>
+                    <a href="#" class="nav-link">État</a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle">Gestion de fond</a>
+                <div class="dropdown-content">
+                    <a href="#" class="nav-link">Retrait/Dépôt</a>
+                    <a href="#" class="nav-link">Historique</a>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">Cours</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">Historique global</a>
+            </li>
+        </ul>
+    </nav>
+</div>
