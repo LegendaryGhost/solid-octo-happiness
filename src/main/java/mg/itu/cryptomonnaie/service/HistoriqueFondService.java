@@ -19,4 +19,9 @@ public class HistoriqueFondService {
         List<HistoriqueFond> historiqueFonds = historiqueFondRepository.findTransactionsProfil(profil.getId());
         return historiqueFonds;
     }
+
+    public List<HistoriqueFond> listeTransactions() {
+        List<HistoriqueFond> historiqueFonds = historiqueFondRepository.findAll();
+        return historiqueFonds;
+    }
 }
