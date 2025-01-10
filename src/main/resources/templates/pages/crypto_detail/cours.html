@@ -118,56 +118,59 @@
         <canvas id="cryptoChart"></canvas>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        const ctx = document.getElementById('cryptoChart').getContext('2d');
-        const chartData = /*[[${chartData}]]*/ [];
+    <th:block th:fragment="scripts">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            const ctx = document.getElementById('cryptoChart').getContext('2d');
+            const chartData = /*[[${chartData}]]*/ [];
 
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: chartData.map(data => data.date),
-                datasets: [{
-                    label: 'Prix en EUR',
-                    data: chartData.map(data => data.price),
-                    borderColor: '#4facfe',
-                    backgroundColor: 'rgba(79, 172, 254, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#a0aec0'
-                        }
-                    }
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartData.map(data => data.date),
+                    datasets: [{
+                        label: 'Prix en EUR',
+                        data: chartData.map(data => data.price),
+                        borderColor: '#4facfe',
+                        backgroundColor: 'rgba(79, 172, 254, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
                 },
-                scales: {
-                    x: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        },
-                        ticks: {
-                            color: '#a0aec0'
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#a0aec0'
+                            }
                         }
                     },
-                    y: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#a0aec0'
+                            }
                         },
-                        ticks: {
-                            color: '#a0aec0'
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#a0aec0'
+                            }
                         }
                     }
                 }
-            }
-        });
-        /*]]>*/
-    </script>
+            });
+            /*]]>*/
+        </script>
+    </th:block>
+
 </div>
 </html>
