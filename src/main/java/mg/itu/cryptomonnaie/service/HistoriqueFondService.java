@@ -1,5 +1,9 @@
 package mg.itu.cryptomonnaie.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import lombok.AllArgsConstructor;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
@@ -9,7 +13,6 @@ import mg.itu.cryptomonnaie.repository.TypeTransactionRepository;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.utils.SecureTokenGenerator;
 import org.springframework.cache.CacheManager;
-import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
@@ -20,6 +23,10 @@ public class HistoriqueFondService {
     private final TypeTransactionRepository typeTransactionRepository;
     private final CacheManager cacheManager;
     private final HistoriqueFondRepository historiqueFondRepository;
+
+    public List<HistoriqueFond> transactionProfil(Profil profil) {
+	return historiqueFondRepository.findTransactionsProfil(profil.getId());
+    }
 
     public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request) {
 	HistoriqueFond historiqueFond = new HistoriqueFond();
@@ -53,5 +60,4 @@ public class HistoriqueFondService {
 	    historiqueFondRepository.save(historiqueFond);
 	}
     }
-
 }
