@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="_layout::layout(title, body, styles, _)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil</title>
+    <style th:fragment="styles">
+        :root {
+            --primary-bg: #1a1f2c;
+            --secondary-bg: #2d3748;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --accent-gradient: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: var(--text-primary);
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .profile-card {
+            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-section {
+            background: var(--card-bg);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .portfolio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .crypto-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(45, 55, 72, 0.5);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .crypto-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .crypto-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .crypto-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .crypto-name {
+            font-weight: bold;
+        }
+
+        .crypto-amount {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .user-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<div class="container" th:fragment="body">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="avatar">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+            </div>
+            <div>
+                <h1 th:text="'Nom : '+${utilisateur.nom}">Nom</h1>
+                <p th:text="'Prénom : '+${utilisateur.prenom}" style="color: var(--text-secondary);">Prénom</p>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <div class="info-card">
+                <div class="info-label">Email</div>
+                <div th:text="${utilisateur.email}">email@example.com</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">Date de naissance</div>
+                <div th:text="${utilisateur.dateNaissance}">01/01/1990</div>
+            </div>
+        </div>
+
+        <div class="portfolio-section">
+            <div class="portfolio-header">
+                <h2>Portfolio</h2>
+                <div th:text="'Fond total : '+${utilisateur.fond}+'€'">0.00 €</div>
+            </div>
+
+            <div th:each="crypto : ${utilisateur.cryptos}" class="crypto-item">
+                <div class="crypto-info">
+                    <div class="crypto-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke-width="2"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke-width="2"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke-width="2"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="crypto-details">
+                        <div class="crypto-name" th:text="${crypto.nom}">Bitcoin</div>
+                        <div class="crypto-amount" th:text="${crypto.quantite}">0.5 BTC</div>
+                    </div>
+                </div>
+                <div th:text="${crypto.valeur}+'€'">0.00 €</div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
