@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.HistoriqueCrypto;
@@ -24,8 +25,7 @@ public class HistoriqueCryptoService {
     @Autowired
     private ProfilService profilService;
 
-    public List<HistoriqueCryptoDTO> portefeuilleClientActuel() {
-        Profil profil = profilService.getProfilConnecte();
+    public List<HistoriqueCryptoDTO> portefeuilleClientActuel(HttpSession session) {
         List<HistoriqueCryptoDTO> portefeuilles = new ArrayList<>();
 
         List<HistoriqueCrypto> historiqueCryptos = historiqueCryptoRepository.findAllByProfil(profil.getId());
