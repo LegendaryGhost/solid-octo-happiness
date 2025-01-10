@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="_layout::layout(title, body, styles, _)" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body}, ~{::styles}, _)}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Formulaire de transaction des fonds (achat ou vente)</title>
