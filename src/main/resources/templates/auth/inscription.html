@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="_layout::layout(title, body, styles, _)" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body}, ~{::styles}, _)}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Inscription</title>
@@ -111,7 +111,7 @@
         <div class="signup-header">
             <h1>Inscription</h1>
         </div>
-        <form th:action="@{/inscription}" th:object="${utilisateur}" method="post">
+        <form th:action="@{/inscription}" th:object="${inscriptionRequest}" method="post">
             <div class="form-group">
                 <label class="form-label" for="nom">Nom</label>
                 <input type="text" id="nom" th:field="*{nom}" class="form-input" required>
