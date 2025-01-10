@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class VerificationRequest {
+public class VerificationPinRequest {
     private String email;
 
     @JsonProperty("code_pin")
-    private String codePin;
+    private Integer codePin;
 }
