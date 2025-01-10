@@ -37,6 +37,11 @@ public class AuthController {
     @Value("${identity-flow.api.url}")
     private String identityFlowApiUrl;
 
+    @GetMapping("/")
+    public String index() {
+        return "redirect:/connexion";
+    }
+
     @GetMapping("/inscription")
     public String formulaireInscription(Model model) {
         model.addAttribute("inscriptionRequest", new InscriptionRequest());
