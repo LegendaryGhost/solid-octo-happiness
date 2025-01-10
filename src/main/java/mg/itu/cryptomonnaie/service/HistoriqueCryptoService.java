@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.HistoriqueCrypto;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
-import mg.itu.cryptomonnaie.repository.CryptomonnaieRepository;
 import mg.itu.cryptomonnaie.repository.HistoriqueCryptoRepository;
-import mg.itu.cryptomonnaie.repository.ProfilRepository;
-import mg.itu.cryptomonnaie.repository.TypeActionRepository;
 
+@Service
 public class HistoriqueCryptoService {
     @Autowired
     private HistoriqueCryptoRepository historiqueCryptoRepository;
