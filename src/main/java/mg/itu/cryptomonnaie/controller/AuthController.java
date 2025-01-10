@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.Utils;
 import mg.itu.cryptomonnaie.request.ConnexionRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
-import org.apache.tomcat.util.json.JSONParser;
+import mg.itu.cryptomonnaie.request.VerificationPinRequest;
+import mg.itu.cryptomonnaie.service.ProfilService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,13 +32,13 @@ public class AuthController {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private final ProfilService profilService;
 
     @Value("${identity-flow.api.url}")
     private String identityFlowApiUrl;
 
     @GetMapping("/inscription")
     public String formulaireInscription(Model model) {
-
         model.addAttribute("inscriptionRequest", new InscriptionRequest());
         return "auth/inscription";
     }
@@ -129,22 +129,39 @@ public class AuthController {
 
     @PostMapping("/verification-code-pin")
     public String verificationCodePin(
+        @RequestParam Integer codePin,
         HttpSession httpSession,
-        @RequestParam Integer codePin
+        RedirectAttributes redirectAttributes
     ) {
         String pendingUserEmail = (String) httpSession.getAttribute(PENDING_USER_EMAIL_KEY);
         if (pendingUserEmail == null) return "redirect:/connexion";
 
-        // TODO: Utilisation de l'API identity-flow
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        VerificationPinRequest verificationPinRequest = new VerificationPinRequest(pendingUserEmail, codePin);
 
-        return null;
-    }
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                identityFlowApiUrl + "/auth/verification-pin", HttpMethod.POST,
+                new HttpEntity<>(verificationPinRequest, httpHeaders), String.class
+            );
 
-    @PostMapping("/deconnexion")
-    public String deconnexion() {
-        // TODO : Utilisation de l'API identity-flow
+            if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                httpSession.removeAttribute(PENDING_USER_EMAIL_KEY);
+                Utils.login(pendingUserEmail, profilService, httpSession);
 
-        return "redirect:/connexion";
+                return ""; // redirection vers la page d'accueil
+            }
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED)
+                redirectAttributes.addFlashAttribute("error", "Code PIN invalide ou expiré");
+            else if (e.getStatusCode() == HttpStatus.NOT_FOUND)
+                redirectAttributes.addFlashAttribute("error", "Utilisateur ou code PIN non trouvé");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Une erreur inattendue est survenue");
+        }
+
+        return "redirect:/verification-code-pin";
     }
 
     private Map<String, Object> parseErrors(String responseBody) {
