@@ -123,7 +123,7 @@
         <script th:inline="javascript">
             /*<![CDATA[*/
             const ctx = document.getElementById('cryptoChart').getContext('2d');
-            const chartData = /*[[${chartData}]]*/ [];
+            const chartData = JSON.parse(/*[[${chartData}]]*/'[]');
 
             const chart = new Chart(ctx, {
                 type: 'line',
