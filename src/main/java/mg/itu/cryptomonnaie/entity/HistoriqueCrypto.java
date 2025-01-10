@@ -17,10 +17,10 @@ public class HistoriqueCrypto {
     @Column(name = "date_action", nullable = false)
     private LocalDateTime dateAction;
 
-    @Column(precision = 15, scale = 2, nullable = false)
+    @Column(nullable = false)
     private Double cours;
 
-    @Column(precision = 15, scale = 2, nullable = false)
+    @Column(nullable = false)
     private Double quantite;
 
     @ManyToOne(optional = false)

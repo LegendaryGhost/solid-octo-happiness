@@ -17,7 +17,7 @@ public class HistoriqueFond {
     @Column(name = "date_transaction", nullable = false)
     private LocalDateTime dateTransaction;
 
-    @Column(precision = 15, scale = 2, nullable = false)
+    @Column(nullable = false)
     private Double montant;
 
     @ManyToOne(optional = false)

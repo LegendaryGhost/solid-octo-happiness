@@ -121,16 +121,17 @@ public class AuthController {
     @GetMapping("/verification-code-pin")
     public String pageVerificationCodePin(HttpSession httpSession) {
         String pendingUserEmail = (String) httpSession.getAttribute(PENDING_USER_EMAIL_KEY);
-        if (pendingUserEmail == null)
-            return "redirect:/connexion";
-
-        // TODO: Call API
-
-        return "auth/confirmation/pin_confirmation";
+        return pendingUserEmail == null ? "redirect:/connexion" : "auth/confirmation/pin_confirmation";
     }
 
     @PostMapping("/verification-code-pin")
-    public String verificationCodePin(@RequestParam Integer codePin) {
+    public String verificationCodePin(
+        HttpSession httpSession,
+        @RequestParam Integer codePin
+    ) {
+        String pendingUserEmail = (String) httpSession.getAttribute(PENDING_USER_EMAIL_KEY);
+        if (pendingUserEmail == null) return "redirect:/connexion";
+
         // TODO: Utilisation de l'API identity-flow
 
         return null;
