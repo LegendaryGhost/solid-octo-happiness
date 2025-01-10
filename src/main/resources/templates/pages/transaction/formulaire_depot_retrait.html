@@ -111,24 +111,23 @@
 <div class="container" th:fragment="body">
     <div class="transaction-card">
         <h2>Formulaire de transaction des fonds (dépot ou retratit)</h2>
-        <form action="#" method="post">
+        <form th:action="@{/historique-fond/ajouter}" method="post" th:object="${historique}">
             <div class="form-group">
                 <label for="carte_banquaire">Numéro de carte bancaire</label>
-                <input type="number" name="carte_banquaire" id="carte_banquaire"
+                <input type="number" id="carte_banquaire" th:field="*{numCarteBancaire}"
                        placeholder="XXXX XXXX XXXX XXXX" maxlength="16">
             </div>
 
             <div class="form-group">
                 <label for="montant">Montant</label>
-                <input type="number" name="montant" id="montant"
+                <input type="number" id="montant" th:field="*{montant}"
                        placeholder="0.00" step="0.01" min="0">
             </div>
 
             <div class="form-group">
                 <label for="type_transaction">Type de transaction</label>
-                <select id="type_transaction" name="type_transaction">
-                    <option value="depot">Dépôt</option>
-                    <option value="retrait">Retrait</option>
+                <select id="type_transaction" th:field="*{idTypeTransaction}">
+                    <option th:each="type :${types}" th:value="${type.id}" th:text="${type.designation}"></option>
                 </select>
             </div>
 
