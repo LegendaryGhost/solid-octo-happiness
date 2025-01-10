@@ -20,7 +20,7 @@ public class Profil {
     @Column(length = 250, nullable = false)
     private String email;
 
-    @Column(precision = 15, scale = 2, nullable = false)
+    @Column(nullable = false)
     private Double fondActuel;
 
 }
