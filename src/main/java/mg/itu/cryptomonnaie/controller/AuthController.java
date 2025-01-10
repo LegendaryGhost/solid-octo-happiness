@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.Utils;
 import mg.itu.cryptomonnaie.request.ConnexionRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,7 @@ public class AuthController {
 
     @GetMapping("/inscription")
     public String formulaireInscription(Model model) {
+
         model.addAttribute("inscriptionRequest", new InscriptionRequest());
         return "auth/inscription";
     }
