@@ -2,7 +2,7 @@ package mg.itu.cryptomonnaie.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +15,7 @@ public class HistoriqueCrypto {
     private Long id;
 
     @Column(name = "date_action", nullable = false)
-    private LocalDate dateAction;
+    private LocalDateTime dateAction;
 
     @Column(precision = 15, scale = 2, nullable = false)
     private Double cours;

@@ -18,7 +18,7 @@ public class HistoriqueFond {
     private LocalDateTime dateTransaction;
 
     @Column(precision = 15, scale = 2, nullable = false)
-    private BigDecimal montant;
+    private Double montant;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_profil")
