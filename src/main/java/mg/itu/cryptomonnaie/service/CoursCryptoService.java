@@ -22,12 +22,13 @@ public class CoursCryptoService {
     private CryptomonnaieRepository cryptomonnaieRepository;
     private Random random;
 
-    @Scheduled(fixedRate = 10000)
+    // @Scheduled(fixedRate = 10000)
     public void generateRandomCours() {
         List<Cryptomonnaie> cryptomonnaies = cryptomonnaieRepository.findAll();
 
         for (Cryptomonnaie crypto : cryptomonnaies) {
-            CoursCrypto coursActuel = coursCryptoRepository.findCoursActuel(crypto.getId());
+            CoursCrypto coursActuel = coursCryptoRepository
+                    .findFirstByCryptomonnaieIdOrderByDateCoursDesc(crypto.getId());
             Double dernierCours = coursActuel.getCoursActuel();
             CoursCrypto coursCrypto = new CoursCrypto();
             coursCrypto.setCryptomonnaie(crypto);
