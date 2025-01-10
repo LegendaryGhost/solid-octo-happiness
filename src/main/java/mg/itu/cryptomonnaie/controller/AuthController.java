@@ -126,7 +126,7 @@ public class AuthController {
 
         // TODO: Call API
 
-        return "auth/verification_code_pin";
+        return "auth/confirmation/pin_confirmation";
     }
 
     @PostMapping("/verification-code-pin")
