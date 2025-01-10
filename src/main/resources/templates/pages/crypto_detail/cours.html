@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="_layout::layout(title, body, styles, scripts)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Courbe de fluctuation du crypto</title>
+    <style th:fragment="styles">
+        :root {
+            --primary-bg: #1a1f2c;
+            --secondary-bg: #2d3748;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --accent-gradient: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+            --input-bg: rgba(45, 55, 72, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: #0f172a;
+            color: var(--text-primary);
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        select {
+            width: 100%;
+            max-width: 300px;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1em;
+        }
+
+        button {
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            background: var(--accent-gradient);
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .history-card {
+            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            margin-top: 2rem;
+            height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .history-card {
+                padding: 1rem;
+                height: 300px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            select {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<div class="container" th:fragment="body">
+    <h1>Courbe de fluctuation du crypto</h1>
+    <form method="post" action="#" th:action="@{/crypto/chart}">
+        <div class="form-group">
+            <label for="crypto">Crypto-monnaie</label>
+            <select id="crypto" name="crypto">
+                <option th:each="c : ${crypto}" th:value="${c.id}" th:text="${c.nom}"></option>
+            </select>
+        </div>
+        <button type="submit">Rechercher</button>
+    </form>
+    <div class="history-card">
+        <canvas id="cryptoChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const ctx = document.getElementById('cryptoChart').getContext('2d');
+        const chartData = /*[[${chartData}]]*/ [];
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartData.map(data => data.date),
+                datasets: [{
+                    label: 'Prix en EUR',
+                    data: chartData.map(data => data.price),
+                    borderColor: '#4facfe',
+                    backgroundColor: 'rgba(79, 172, 254, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#a0aec0'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#a0aec0'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#a0aec0'
+                        }
+                    }
+                }
+            }
+        });
+        /*]]>*/
+    </script>
+</div>
+</html>
