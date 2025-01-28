@@ -4,11 +4,11 @@ import java.util.List;
 
 import jakarta.mail.MessagingException;
 import mg.itu.cryptomonnaie.repository.ProfilRepository;
+import mg.itu.cryptomonnaie.utils.Utils;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import mg.itu.cryptomonnaie.Utils;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;

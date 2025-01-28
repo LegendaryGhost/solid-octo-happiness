@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
-import mg.itu.cryptomonnaie.Utils;
+import mg.itu.cryptomonnaie.utils.Utils;
 import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.HistoriqueCrypto;
