@@ -105,11 +105,11 @@
 </head>
 <div class="container" th:fragment="body">
     <h1>Courbe de fluctuation du crypto</h1>
-    <form method="post" action="#" th:action="@{/crypto/chart}">
+    <form method="get" th:action="@{/cours/chart/traitement/}">
         <div class="form-group">
             <label for="crypto">Crypto-monnaie</label>
             <select id="crypto" name="crypto">
-                <option th:each="c : ${crypto}" th:value="${c.id}" th:text="${c.nom}"></option>
+                <option th:each="c : ${cryptomonnaies}" th:value="${c.id}" th:text="${c.designation}"></option>
             </select>
         </div>
         <button type="submit">Rechercher</button>
@@ -123,15 +123,15 @@
         <script th:inline="javascript">
             /*<![CDATA[*/
             const ctx = document.getElementById('cryptoChart').getContext('2d');
-            const chartData = JSON.parse(/*[[${chartData}]]*/'[]');
+            const chartData = /*[[${coursCryptoos}]]*/ '[]';
 
             const chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: chartData.map(data => data.date),
+                    labels: chartData.map(data => data.dateCours),
                     datasets: [{
                         label: 'Prix en EUR',
-                        data: chartData.map(data => data.price),
+                        data: chartData.map(data => data.coursActuel),
                         borderColor: '#4facfe',
                         backgroundColor: 'rgba(79, 172, 254, 0.1)',
                         tension: 0.4,

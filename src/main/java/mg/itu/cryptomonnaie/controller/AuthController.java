@@ -3,7 +3,7 @@ package mg.itu.cryptomonnaie.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import mg.itu.cryptomonnaie.Utils;
+import mg.itu.cryptomonnaie.utils.Utils;
 import mg.itu.cryptomonnaie.request.ConnexionRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationPinRequest;

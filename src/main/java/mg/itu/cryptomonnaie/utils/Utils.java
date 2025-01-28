@@ -1,4 +1,4 @@
-package mg.itu.cryptomonnaie;
+package mg.itu.cryptomonnaie.utils;
 
 import jakarta.servlet.http.HttpSession;
 import mg.itu.cryptomonnaie.entity.Profil;

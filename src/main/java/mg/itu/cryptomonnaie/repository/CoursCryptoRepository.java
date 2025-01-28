@@ -13,8 +13,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Long> {
-    @Query("SELECT c FROM CoursCrypto c WHERE c.cryptomonnaie.id = :idCrypto ORDER BY c.dateCours DESC")
-    CoursCrypto findCoursActuel(@Param("idCrypto") Long idCrypto);
+    CoursCrypto findFirstByCryptomonnaieIdOrderByDateCoursDesc(Long idCrypto);
 
     @Query("SELECT c FROM CoursCrypto c WHERE c.cryptomonnaie.id = :idCrypto")
     List<CoursCrypto> findCoursParCryptomonnaie(@Param("idCrypto") Long idCrypto);
