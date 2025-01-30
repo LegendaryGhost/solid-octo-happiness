@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body}, ~{::styles}, _)}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique des transactions</title>
+    <style th:fragment="styles">
+        :root {
+            --primary-bg: #1a1f2c;
+            --secondary-bg: #2d3748;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --accent-gradient: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+            --input-bg: rgba(45, 55, 72, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            background-color: #0f172a;
+            color: var(--text-primary);
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .history-card {
+            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        th {
+            background: var(--input-bg);
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-align: left;
+            padding: 1rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        th:first-child {
+            border-top-left-radius: 0.5rem;
+        }
+
+        th:last-child {
+            border-top-right-radius: 0.5rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .action-cell {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .action-buy {
+            color: #10B981;
+        }
+
+        .action-sell {
+            color: #EF4444;
+        }
+
+        .date-cell {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .quantity-cell {
+            font-family: monospace;
+            font-size: 0.925rem;
+        }
+
+        .crypto-cell {
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .history-card {
+                padding: 1rem;
+                margin: 0 -1rem;
+                border-radius: 0;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            th {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<div class="container" th:fragment="body">
+    <div class="history-card">
+        <h1>Historique des transactions de fond</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Date & Heure</th>
+                <th>Carte bancaire</th>
+                <th>Montant</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td class="date-cell" th:text="${#temporals.format(transaction.getDateTransaction(), 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
+                <td class="quantity-cell" th:text="${transaction.getNumCarteBancaire()}">CRT0000000001</td>
+                <td th:text="${#numbers.formatDecimal(transaction.getMontant(), 0, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
+                <td class="action-cell" th:classappend="${transaction.getTypeTransaction().getDesignation() == 'Dépôt' ? 'action-buy' : 'action-sell'}"
+                    th:text="${transaction.getTypeTransaction().getDesignation()}">ACHAT</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</html>

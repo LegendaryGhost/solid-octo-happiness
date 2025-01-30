@@ -28,20 +28,18 @@ public class HistoriqueFondService {
     private final CacheManager cacheManager;
     private final HistoriqueFondRepository historiqueFondRepository;
     private final EmailService emailService;
-    private final ProfilRepository profilRepository;
 
     public List<HistoriqueFond> transactionProfil(HttpSession session) {
         Profil profil = Utils.getUser(session);
-        return historiqueFondRepository.findTransactionsProfil(profil.getId());
+	assert profil != null;
+	return historiqueFondRepository.findTransactionsProfil(profil.getId());
     }
 
-    public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request) throws MessagingException {
+    public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request, Profil profil) throws MessagingException {
         HistoriqueFond historiqueFond = new HistoriqueFond();
         historiqueFond.setMontant(request.getMontant());
         historiqueFond.setNumCarteBancaire(request.getNumCarteBancaire());
 
-        // TODO: récupérer l'ID de l'utilisateur connecté
-        Profil profil = profilRepository.findById(1L).orElseThrow(() -> new RuntimeException("Profil introuvable"));
         historiqueFond.setProfil(profil);
 
         TypeTransaction typeTransaction = typeTransactionRepository.findById(

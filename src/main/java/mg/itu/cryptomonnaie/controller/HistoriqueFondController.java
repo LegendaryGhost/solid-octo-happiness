@@ -1,10 +1,13 @@
 package mg.itu.cryptomonnaie.controller;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.service.HistoriqueFondService;
 import mg.itu.cryptomonnaie.service.TypeTransactionService;
+import mg.itu.cryptomonnaie.utils.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +32,9 @@ public class HistoriqueFondController {
     }
 
     @PostMapping("/ajouter")
-    public String ajouter(HistoriqueFondRequest historique) throws MessagingException {
-	historiqueFondService.creerHistoriqueFondTemporaire(historique);
+    public String ajouter(HistoriqueFondRequest historique, HttpSession session) throws MessagingException {
+	Profil profil = Utils.getUser(session);
+	historiqueFondService.creerHistoriqueFondTemporaire(historique, profil);
 	return "redirect:/historique-fond/form";
     }
 
@@ -38,6 +42,13 @@ public class HistoriqueFondController {
     public String validerTransaction(@RequestParam("token") String token) {
 	historiqueFondService.confirmerTransaction(token);
 	return "redirect:/historique-fond/form";
+    }
+
+    @GetMapping("/utilisateur")
+    public String transactionsUtilisateurCourant(Model model, HttpSession httpSession) {
+	model.addAttribute("transactions", historiqueFondService.transactionProfil(httpSession));
+
+	return "pages/portefeuille/historique_fond";
     }
 
 }
