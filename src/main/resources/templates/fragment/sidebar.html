@@ -1,37 +1,85 @@
 <div th:fragment="sidebar">
-    <button class="toggle-btn">☰</button>
-    <nav class="sidebar">
-        <div class="sidebar-header">
-            <h2>Navigation</h2>
+    <div id="sidebar">
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header position-relative">
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="index.html">
+                            <img src="/assets/compiled/jpg/logo.jpg" alt="Logo" style="width: 60px; height: 50px;">
+                        </a>
+                    </div>
+                    <div class="sidebar-toggler x">
+                        <a href="#" class="sidebar-hide d-xl-none d-block">
+                            <i class="bi bi-x bi-middle"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <ul class="menu">
+                    <li class="sidebar-title">Navigation</li>
+
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-person-fill"></i>
+                            <span>Profil</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-wallet2"></i>
+                            <span>Portefeuille</span>
+                            <i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li class="submenu-item">
+                                <a href="#" class="submenu-link">Historique</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="#" class="submenu-link">État</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-cash-stack"></i>
+                            <span>Gestion de fond</span>
+                            <i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li class="submenu-item">
+                                <a href="#" class="submenu-link">Retrait/Dépôt</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="#" class="submenu-link">Historique</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-graph-up"></i>
+                            <span>Cours</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-clock-history"></i>
+                            <span>Historique global</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <ul class="nav-list">
-            <li class="nav-item">
-                <a href="#" class="nav-link">Profil</a>
-            </li>
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle">Portefeuille</a>
-                <div class="dropdown-content">
-                    <a href="#" class="nav-link">Historique</a>
-                    <a href="#" class="nav-link">État</a>
-                </div>
-            </li>
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle">Gestion de fond</a>
-                <div class="dropdown-content">
-                    <a href="#" class="nav-link">Retrait/Dépôt</a>
-                    <a href="#" class="nav-link">Historique</a>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a href="#" class="nav-link">Cours</a>
-            </li>
-
-            <li class="nav-item">
-                <a href="#" class="nav-link">Historique global</a>
-            </li>
-        </ul>
-    </nav>
+    </div>
 </div>
+<header class="mb-3">
+    <a href="#" class="burger-btn d-block d-xl-none">
+        <i class="bi bi-justify fs-3"></i>
+    </a>
+</header>
