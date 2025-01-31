@@ -1,86 +1,108 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body}, ~{::scripts})}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Courbe de fluctuation du crypto</title>
 </head>
-<body class="bg-gray-900 text-white">
+<body>
+<!-- Sidebar -->
+<th:block th:replace="~{fragment/sidebar}"/>
 
-<div class="container mx-auto p-4">
-    <h1 class="text-4xl font-bold text-transparent bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text mb-8">
-        Courbe de fluctuation du crypto
-    </h1>
-
-    <form method="get" th:action="@{/cours/chart/traitement/}" class="mb-6">
-        <div class="form-group">
-            <label for="crypto" class="block text-gray-400 mb-2">Crypto-monnaie</label>
-            <select id="crypto" name="crypto" class="w-full max-w-xs p-3 bg-gray-800 border border-gray-600 rounded-md text-white">
-                <option th:each="c : ${cryptomonnaies}" th:value="${c.id}" th:text="${c.designation}"></option>
-            </select>
+<!-- Contenu principal -->
+<div id="main" class="main-content">
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h1>Courbe de fluctuation du crypto</h1>
+                    <p class="text-subtitle text-muted">Visualisez les fluctuations des crypto-monnaies.</p>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="mt-4 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-md hover:opacity-90 transition">
-            Rechercher
-        </button>
-    </form>
 
-    <div class="bg-gradient-to-br from-gray-700 to-gray-800 p-6 rounded-lg shadow-lg mb-8">
-        <div id="cryptoChart"></div>
+        <!-- Formulaire de sélection -->
+        <section class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Sélectionnez une crypto-monnaie</h4>
+                </div>
+                <div class="card-body">
+                    <form method="get" th:action="@{/cours/chart/traitement/}">
+                        <div class="form-group">
+                            <label for="crypto">Crypto-monnaie</label>
+                            <select id="crypto" name="crypto" class="form-select">
+                                <option th:each="c : ${cryptomonnaies}" th:value="${c.id}" th:text="${c.designation}"></option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="bi bi-search me-2"></i>Rechercher
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Graphique -->
+        <section class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Graphique des fluctuations</h4>
+                </div>
+                <div class="card-body">
+                    <div id="cryptoChart"></div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    const chartData = /*[[${coursCryptoos}]]*/ '[]';
+    <script src="/assets/extensions/jquery/jquery.min.js"></script>
+    <!-- ApexCharts -->
+    <script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>
 
-    const options = {
-        chart: {
-            type: 'line',
-            height: 350
-        },
-        series: [{
-            name: 'Prix en EUR',
-            data: chartData.map(data => data.coursActuel)
-        }],
-        xaxis: {
-            categories: chartData.map(data => data.dateCours),
-            labels: {
-                style: {
-                    colors: '#a0aec0'
-                }
-            },
-            axisBorder: {
-                color: 'rgba(255, 255, 255, 0.1)'
+    <script src="/assets/static/js/pages/dashboard.js"></script>
+
+    <!-- Script personnalisé -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Vérification de l'élément avant création du graphique
+            const chartElement = document.querySelector("#cryptoChart");
+            if (!chartElement) {
+                console.error("Element #cryptoChart not found");
+                return;
+            }else {
+                console.error("found");
             }
-        },
-        yaxis: {
-            labels: {
-                style: {
-                    colors: '#a0aec0'
+
+            const options = {
+                chart: {
+                    type: 'line',
+                    height: 350,
+                    background: 'transparent',
+                    toolbar: {
+                        show: true
+                    }
+                },
+                series: [{
+                    name: 'Prix en EUR',
+                    data: [30000, 31000, 32000, 33000, 34000]
+                }],
+                xaxis: {
+                    categories: ['2025-01-01', '2025-01-02', '2025-01-03', '2025-01-04', '2025-01-05']
+                },
+                stroke: {
+                    curve: 'smooth'
                 }
-            },
-            axisBorder: {
-                color: 'rgba(255, 255, 255, 0.1)'
+            };
+
+            try {
+                const chart = new ApexCharts(chartElement, options);
+                chart.render();
+            } catch (error) {
+                console.error("Error rendering chart:", error);
             }
-        },
-        stroke: {
-            curve: 'smooth',
-            width: 2
-        },
-        fill: {
-            opacity: 0.1
-        },
-        grid: {
-            borderColor: 'rgba(255, 255, 255, 0.1)'
-        },
-        tooltip: {
-            theme: 'dark'
-        }
-    };
-
-    var chart = new ApexCharts(document.querySelector("#cryptoChart"), options);
-    chart.render();
-    /*]]>*/
-</script>
-
+        });
+    </script>
 </body>
 </html>
