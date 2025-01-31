@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr" th:fragment="layout(title, body, styles, scripts)" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" th:fragment="layout(title, body)" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:replace="${title}">Cryptomonnaie</title>
-    <th:block th:replace="${styles}"/>
     <link rel="shortcut icon" href="/assets/compiled/svg/favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="/assets/compiled/css/table-datatable-jquery.css">
@@ -16,10 +15,9 @@
 </head>
 <body>
 
-<th:block th:replace="~{fragment/sidebar}"/>
+
 
 <div class="main" th:insert="${body}"></div>
-<th:block th:insert="${scripts}"/>
 <script src="/assets/static/js/components/dark.js"></script>
 <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="/assets/compiled/js/app.js"></script>
