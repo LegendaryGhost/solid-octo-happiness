@@ -5,105 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:replace="${title}">Cryptomonnaie</title>
     <th:block th:replace="${styles}"/>
-    <style>
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 250px;
-            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
-            padding: 1rem;
-            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-header {
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 1rem;
-        }
-
-        .nav-item {
-            margin: 0.5rem 0;
-            list-style: none;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 0.75rem 1rem;
-            color: var(--text-primary);
-            text-decoration: none;
-            border-radius: 0.5rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background: var(--accent-gradient);
-        }
-
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-content {
-            display: none;
-            padding-left: 1.5rem;
-        }
-
-        .dropdown.active .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-toggle {
-            cursor: pointer;
-            position: relative;
-        }
-
-        .dropdown-toggle::after {
-            content: '▼';
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.8rem;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .toggle-btn {
-                position: fixed;
-                left: 1rem;
-                top: 1rem;
-                z-index: 1000;
-                background: var(--accent-gradient);
-                border: none;
-                padding: 0.5rem;
-                border-radius: 0.5rem;
-                color: var(--text-primary);
-                cursor: pointer;
-            }
-        }
-
-        .main-content {
-            margin-left: 250px;
-            padding: 2rem;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-            }
-        }
-    </style>
+    <link rel="shortcut icon" href="/assets/compiled/svg/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/compiled/css/table-datatable-jquery.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
+    <link rel="stylesheet" href="/assets/compiled/css/iconly.css">
+    <link rel="stylesheet" href="/assets/extensions/choices.js/public/assets/styles/choices.css">
+    <script src="/assets/static/js/initTheme.js"></script>
 </head>
 <body>
 
