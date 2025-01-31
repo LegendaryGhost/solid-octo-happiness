@@ -36,4 +36,10 @@ public class HistoriqueCryptoController {
         return "pages/historique/historique_transactions";
     }
 
+    @GetMapping("/historique-global")
+    public String historiqueGlobal(Model model) {
+        model.addAttribute("historiques", historiqueCryptoService.historiqueGlobale());
+        return "pages/historique/historique_global";
+    }
+
 }

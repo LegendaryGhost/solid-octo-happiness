@@ -105,6 +105,10 @@
             font-weight: 500;
         }
 
+        .text-end {
+            text-align: end;
+        }
+
         @media (max-width: 768px) {
             .history-card {
                 padding: 1rem;
@@ -142,13 +146,13 @@
             </thead>
             <tbody>
             <tr th:each="historique : ${historiques}">
-                <td class="crypto-cell" th:text="${}">21415311</td>
-                <td class="crypto-cell" th:text="${historique.getCrypto().getNom()}">Bitcoin</td>
-                <td class="date-cell" th:text="${#temporals.format(historique.getDateHeure(), 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
-                <td th:text="${#numbers.formatDecimal(historique.getCours(), 0, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
-                <td class="quantity-cell" th:text="${#numbers.formatDecimal(historique.getQuantite(), 0, 'COMMA', 8, 'POINT')}">0.00000000</td>
-                <td class="action-cell" th:classappend="${historique.getAction() == 'ACHAT' ? 'action-buy' : 'action-sell'}"
-                    th:text="${historique.getAction()}">ACHAT</td>
+                <td class="crypto-cell" th:text="${historique.profil.email}">21415311</td>
+                <td class="crypto-cell" th:text="${historique.cryptomonnaie.designation}">Bitcoin</td>
+                <td class="date-cell" th:text="${#temporals.format(historique.dateAction, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
+                <td class="text-end" th:text="${#numbers.formatDecimal(historique.cours, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
+                <td class="quantity-cell text-end" th:text="${#numbers.formatDecimal(historique.quantite, 1, 'COMMA', 8, 'POINT')}">0.00000000</td>
+                <td class="action-cell" th:classappend="${historique.typeAction.designation == 'Achat' ? 'action-buy' : 'action-sell'}"
+                    th:text="${historique.typeAction.designation}">ACHAT</td>
             </tr>
             </tbody>
         </table>

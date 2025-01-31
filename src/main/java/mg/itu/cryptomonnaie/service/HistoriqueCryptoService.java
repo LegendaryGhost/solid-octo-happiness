@@ -71,4 +71,8 @@ public class HistoriqueCryptoService {
         return historiqueCryptoRepository.findAllByProfil(profil.getId());
     }
 
+    public List<HistoriqueCrypto> historiqueGlobale() {
+        return historiqueCryptoRepository.findAllByOrderByDateActionDesc();
+    }
+
 }

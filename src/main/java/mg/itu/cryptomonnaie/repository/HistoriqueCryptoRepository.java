@@ -15,4 +15,6 @@ public interface HistoriqueCryptoRepository extends JpaRepository<HistoriqueCryp
     @Query("select hc from HistoriqueCrypto hc where hc.profil.id = :idProfil order by hc.dateAction desc")
     List<HistoriqueCrypto> findAllByProfil(@Param("idProfil") Long idProfil);
 
+    List<HistoriqueCrypto> findAllByOrderByDateActionDesc();
+
 }
