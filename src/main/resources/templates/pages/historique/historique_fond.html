@@ -142,7 +142,7 @@
             <tr th:each="transaction : ${transactions}">
                 <td class="date-cell" th:text="${#temporals.format(transaction.getDateTransaction(), 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
                 <td class="quantity-cell" th:text="${transaction.getNumCarteBancaire()}">CRT0000000001</td>
-                <td th:text="${#numbers.formatDecimal(transaction.getMontant(), 0, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
+                <td th:text="${#numbers.formatDecimal(transaction.getMontant(), 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
                 <td class="action-cell" th:classappend="${transaction.getTypeTransaction().getDesignation() == 'Dépôt' ? 'action-buy' : 'action-sell'}"
                     th:text="${transaction.getTypeTransaction().getDesignation()}">ACHAT</td>
             </tr>

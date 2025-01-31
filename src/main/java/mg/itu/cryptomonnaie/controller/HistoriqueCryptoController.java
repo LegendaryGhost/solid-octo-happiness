@@ -2,6 +2,8 @@ package mg.itu.cryptomonnaie.controller;
 
 import java.util.List;
 
+import mg.itu.cryptomonnaie.entity.Profil;
+import mg.itu.cryptomonnaie.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,4 +27,13 @@ public class HistoriqueCryptoController {
         model.addAttribute("etatPortefeuilles", etatPortefeuilles);
         return "pages/portefeuille/etat_protefeuille";
     }
+
+    @GetMapping("/historique")
+    public String historiquePortefeuille(Model model, HttpSession session) {
+        Profil profil = Utils.getUser(session);
+	assert profil != null;
+	model.addAttribute("historiques", historiqueCryptoService.historiqueUtilisateur(profil));
+        return "pages/historique/historique_transactions";
+    }
+
 }

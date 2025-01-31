@@ -67,4 +67,8 @@ public class HistoriqueCryptoService {
         return valActue - (qtt * pAchat);
     }
 
+    public List<HistoriqueCrypto> historiqueUtilisateur(Profil profil) {
+        return historiqueCryptoRepository.findAllByProfil(profil.getId());
+    }
+
 }

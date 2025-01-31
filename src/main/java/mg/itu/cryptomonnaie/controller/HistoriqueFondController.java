@@ -48,7 +48,7 @@ public class HistoriqueFondController {
     public String transactionsUtilisateurCourant(Model model, HttpSession httpSession) {
 	model.addAttribute("transactions", historiqueFondService.transactionProfil(httpSession));
 
-	return "pages/portefeuille/historique_fond";
+	return "pages/historique/historique_fond";
     }
 
 }
