@@ -1,12 +1,10 @@
 package mg.itu.cryptomonnaie.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class ConnexionRequest {
+@EqualsAndHashCode(callSuper = true)
+public class ConnexionRequest extends AbstractPasswordInput {
     private String email;
-
-    @JsonProperty("mot_de_passe")
-    private String motDePasse;
 }

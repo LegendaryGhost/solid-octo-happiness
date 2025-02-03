@@ -17,6 +17,21 @@ public final class Utils {
         return httpHeaders;
     }
 
+    public static String snakeToCamelCase(String string) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        boolean nextUpperCase = false;
+
+        for (char c : string.toCharArray()) {
+            if (c == '_') nextUpperCase = true;
+            else {
+                stringBuilder.append(nextUpperCase ? Character.toUpperCase(c) : c);
+                nextUpperCase = false;
+            }
+        }
+
+        return stringBuilder.toString();
+    }
+
     public static void login(
         String email,
         ProfilService profilService,
@@ -29,20 +44,5 @@ public final class Utils {
     @Nullable
     public static Profil getUser(HttpSession httpSession) {
         return (Profil) httpSession.getAttribute(USER_KEY);
-    }
-
-    public static String toCamelCase(String snakeCase) {
-        StringBuilder stringBuilder = new StringBuilder();
-        boolean nextUpperCase = false;
-
-        for (char c : snakeCase.toCharArray()) {
-            if (c == '_') nextUpperCase = true;
-            else {
-                stringBuilder.append(nextUpperCase ? Character.toUpperCase(c) : c);
-                nextUpperCase = false;
-            }
-        }
-
-        return stringBuilder.toString();
     }
 }

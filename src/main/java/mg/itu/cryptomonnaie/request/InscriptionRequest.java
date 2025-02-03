@@ -2,11 +2,13 @@ package mg.itu.cryptomonnaie.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 
 @Data
-public class InscriptionRequest {
+@EqualsAndHashCode(callSuper = true)
+public class InscriptionRequest extends AbstractPasswordInput {
     private String email;
 
     private String nom;
@@ -15,7 +17,4 @@ public class InscriptionRequest {
 
     @JsonProperty("date_naissance")
     private LocalDate dateNaissance;
-
-    @JsonProperty("mot_de_passe")
-    private String motDePasse;
 }

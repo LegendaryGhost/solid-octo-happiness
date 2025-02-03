@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -44,7 +45,9 @@ public class AuthenticationController {
 
     @GetMapping("/inscription")
     public String formulaireInscription(Model model) {
-        model.addAttribute("inscriptionRequest", new InscriptionRequest());
+        if (!model.containsAttribute("inscriptionRequest"))
+            model.addAttribute("inscriptionRequest", new InscriptionRequest());
+
         return "auth/inscription";
     }
 
@@ -61,27 +64,15 @@ public class AuthenticationController {
                 mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful())
-                redirectAttributes.addFlashAttribute("message",
+                redirectAttributes.addFlashAttribute("success",
                     Objects.requireNonNull(responseEntity.getBody()).get("message"));
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            if (e.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY) {
-                Map<String, Object> responseBody = e.getResponseBodyAs(mapTypeReference);
-                if (responseBody == null || !responseBody.containsKey("errors"))
-                    throw new RuntimeException();
-
-                @SuppressWarnings("unchecked")
-                Map<String, List<String>> errors = (Map<String, List<String>>) responseBody.get("errors");
-                errors.forEach((field, fieldErrors) ->
-                    fieldErrors.forEach(error -> bindingResult.rejectValue(field, "error.", error))
-                );
-
-            } else bindingResult.reject("error",
-                (String) Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
+            handleHttpStatusCodeException(e, bindingResult);
         }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.inscriptionRequest", bindingResult);
-            redirectAttributes.addFlashAttribute("inscriptionRequest", inscriptionRequest);
+            redirectAttributes.addFlashAttribute("inscriptionRequest", inscriptionRequest.unsetMotDePasse());
 
             return "redirect:/inscription";
         }
@@ -91,7 +82,9 @@ public class AuthenticationController {
 
     @GetMapping("/connexion")
     public String formulaireConnexion(Model model) {
-        model.addAttribute("connexionRequest", new ConnexionRequest());
+        if (!model.containsAttribute("connexionRequest"))
+            model.addAttribute("connexionRequest", new ConnexionRequest());
+
         return "auth/connexion";
     }
 
@@ -110,15 +103,13 @@ public class AuthenticationController {
 
             if (responseEntity.getStatusCode().is2xxSuccessful())
                 httpSession.setAttribute(PENDING_USER_EMAIL_KEY, connexionRequest.getEmail());
-        } catch (HttpClientErrorException e) {
-            // TODO : Handle this shit
-        } catch (HttpServerErrorException e) {
-            // TODO : Handle this shit
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            handleHttpStatusCodeException(e, bindingResult);
         }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.connexionRequest", bindingResult);
-            redirectAttributes.addFlashAttribute("connexionRequest", connexionRequest);
+            redirectAttributes.addFlashAttribute("connexionRequest", connexionRequest.unsetMotDePasse());
 
             return "redirect:/connexion";
         }
@@ -164,5 +155,22 @@ public class AuthenticationController {
         }
 
         return "redirect:/verification-code-pin";
+    }
+
+    private void handleHttpStatusCodeException(HttpStatusCodeException e, BindingResult bindingResult) {
+        if (e.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY) {
+            Map<String, Object> responseBody = e.getResponseBodyAs(mapTypeReference);
+            if (responseBody == null || !responseBody.containsKey("errors"))
+                throw new RuntimeException("Le corps de la réponse est invalide");
+
+            @SuppressWarnings("unchecked")
+            Map<String, List<String>> errors = (Map<String, List<String>>) responseBody.get("errors");
+            errors.forEach((field, errorMessages) -> errorMessages
+                .forEach(errorMessage ->
+                    bindingResult.rejectValue(Utils.snakeToCamelCase(field), "error.", errorMessage)
+                ));
+
+        } else bindingResult.reject("error",
+            (String) Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
     }
 }
