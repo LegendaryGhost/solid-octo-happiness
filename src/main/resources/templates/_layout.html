@@ -2,31 +2,24 @@
 <html lang="fr" th:fragment="layout(title, body)" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <title th:replace="${title}">Cryptomonnaie</title>
-    <link rel="shortcut icon" href="/assets/compiled/svg/favicon.svg" type="image/x-icon">
-    <link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="/assets/compiled/css/table-datatable-jquery.css">
-    <link rel="stylesheet" href="/assets/compiled/css/app.css">
-    <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
-    <link rel="stylesheet" href="/assets/compiled/css/iconly.css">
-    <link rel="stylesheet" href="/assets/extensions/choices.js/public/assets/styles/choices.css">
+    <link href="/assets/compiled/svg/favicon.svg" rel="shortcut icon" type="image/x-icon">
+    <link href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="/assets/compiled/css/table-datatable-jquery.css" rel="stylesheet">
+    <link href="/assets/compiled/css/app.css" rel="stylesheet">
+    <link href="/assets/compiled/css/app-dark.css" rel="stylesheet">
+    <link href="/assets/compiled/css/iconly.css" rel="stylesheet">
+    <link href="/assets/extensions/choices.js/public/assets/styles/choices.css" rel="stylesheet">
     <script src="/assets/static/js/initTheme.js"></script>
 </head>
 <body>
-
-
 
 <div class="main" th:insert="${body}"></div>
 
 <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="/assets/compiled/js/app.js"></script>
 
-
-
-
-
-<!-- Autres scripts nécessaires -->
 <script src="/assets/extensions/jquery/jquery.min.js"></script>
 <script src="/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>

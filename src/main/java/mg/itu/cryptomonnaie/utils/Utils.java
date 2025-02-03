@@ -3,10 +3,19 @@ package mg.itu.cryptomonnaie.utils;
 import jakarta.servlet.http.HttpSession;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.service.ProfilService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 
 public final class Utils {
     public static final String USER_KEY = "connected_user";
+
+    public static HttpHeaders createJsonHttpHeaders() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        return httpHeaders;
+    }
 
     public static void login(
         String email,
