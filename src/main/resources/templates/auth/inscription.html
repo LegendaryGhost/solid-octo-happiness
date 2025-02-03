@@ -16,31 +16,38 @@
             <div class="form-group mb-3">
                 <label for="nom" class="form-label">Nom</label>
                 <input type="text" id="nom" th:field="*{nom}" class="form-control" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('nom')}"></div>
+                <div class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
             </div>
 
             <div class="form-group mb-3">
                 <label for="prenom" class="form-label">Prénom</label>
                 <input type="text" id="prenom" th:field="*{prenom}" class="form-control" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('prenom')}"></div>
+                <div class="text-danger" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></div>
             </div>
 
             <div class="form-group mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input type="email" id="email" th:field="*{email}" class="form-control" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('email')}"></div>
+                <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
             <div class="form-group mb-3">
                 <label for="dateNaissance" class="form-label">Date de naissance</label>
                 <input type="date" id="dateNaissance" th:field="*{dateNaissance}" class="form-control" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('dateNaissance')}"></div>
+                <div class="text-danger" th:if="${#fields.hasErrors('dateNaissance')}" th:errors="*{dateNaissance}"></div>
             </div>
 
             <div class="form-group mb-3">
                 <label for="motDePasse" class="form-label">Mot de passe</label>
                 <input type="password" id="motDePasse" th:field="*{motDePasse}" class="form-control" required>
-                <div class="text-danger" th:if="${#fields.hasErrors('motDePasse')}"></div>
+                <div class="text-danger" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></div>
+            </div>
+
+            <!-- Afficher les erreurs globales -->
+            <div class="text-danger" th:if="${#fields.hasGlobalErrors()}">
+                <ul>
+                    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+                </ul>
             </div>
 
             <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
