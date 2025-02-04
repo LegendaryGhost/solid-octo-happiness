@@ -1,14 +1,7 @@
 package mg.itu.cryptomonnaie.service;
 
-import java.util.List;
-
 import jakarta.mail.MessagingException;
-import mg.itu.cryptomonnaie.repository.ProfilRepository;
-import mg.itu.cryptomonnaie.utils.Utils;
-import org.springframework.stereotype.Service;
-
-import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;
@@ -17,10 +10,12 @@ import mg.itu.cryptomonnaie.repository.TypeTransactionRepository;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.utils.SecureTokenGenerator;
 import org.springframework.cache.CacheManager;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class HistoriqueFondService {
 
@@ -29,10 +24,8 @@ public class HistoriqueFondService {
     private final HistoriqueFondRepository historiqueFondRepository;
     private final EmailService emailService;
 
-    public List<HistoriqueFond> transactionProfil(HttpSession session) {
-        Profil profil = Utils.getUser(session);
-	assert profil != null;
-	return historiqueFondRepository.findTransactionsProfil(profil.getId());
+    public List<HistoriqueFond> transactionProfil(final Profil profil) {
+        return historiqueFondRepository.findTransactionsProfil(profil.getId());
     }
 
     public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request, Profil profil) throws MessagingException {
@@ -44,7 +37,7 @@ public class HistoriqueFondService {
 
         TypeTransaction typeTransaction = typeTransactionRepository.findById(
                 Long.valueOf(request.getIdTypeTransaction()))
-                .orElseThrow(() -> new RuntimeException("Type de transaction introuvable"));
+            .orElseThrow(() -> new RuntimeException("Type de transaction introuvable"));
         historiqueFond.setTypeTransaction(typeTransaction);
 
         String token = SecureTokenGenerator.generateToken(20);

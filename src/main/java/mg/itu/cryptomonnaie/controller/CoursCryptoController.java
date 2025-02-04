@@ -2,31 +2,24 @@ package mg.itu.cryptomonnaie.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
 import mg.itu.cryptomonnaie.service.CoursCryptoService;
 import mg.itu.cryptomonnaie.service.CryptomonnaieService;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/cours")
 public class CoursCryptoController {
-    @Autowired
-    private CoursCryptoService coursCryptosService;
-
-    @Autowired
-    private CryptomonnaieService cryptomonnaieService;
+    private final CoursCryptoService coursCryptosService;
+    private final CryptomonnaieService cryptomonnaieService;
 
     @GetMapping("/chart")
     public String afficherEtatPortefeuille(Model model) {
@@ -44,5 +37,4 @@ public class CoursCryptoController {
         model.addAttribute("cryptomonnaies", cryptomonnaies);
         return "pages/crypto_detail/cours";
     }
-
 }

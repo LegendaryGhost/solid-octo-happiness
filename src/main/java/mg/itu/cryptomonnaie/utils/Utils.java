@@ -2,10 +2,8 @@ package mg.itu.cryptomonnaie.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import mg.itu.cryptomonnaie.entity.Profil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.lang.Nullable;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -41,16 +39,5 @@ public final class Utils {
 
     public static HttpSession getCurrentSession() {
         return getCurrentRequest().getSession();
-    }
-
-    /**
-     * From now on, use AuthenticationManager instead
-     * @param httpSession
-     * @return
-     */
-    @Deprecated
-    @Nullable
-    public static Profil getUser(HttpSession httpSession) {
-        return (Profil) httpSession.getAttribute(USER_KEY);
     }
 }
