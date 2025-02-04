@@ -3,8 +3,8 @@ package mg.itu.cryptomonnaie.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mg.itu.cryptomonnaie.request.EmailAndPasswordRequest;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
-import mg.itu.cryptomonnaie.request.ConnexionRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,14 +84,14 @@ public class AuthenticationController {
     @GetMapping("/connexion")
     public String formulaireConnexion(Model model) {
         if (!model.containsAttribute("connexionRequest"))
-            model.addAttribute("connexionRequest", new ConnexionRequest());
+            model.addAttribute("connexionRequest", new EmailAndPasswordRequest());
 
         return "auth/connexion";
     }
 
     @PostMapping("/connexion")
     public String connexion(
-        @ModelAttribute ConnexionRequest connexionRequest,
+        @ModelAttribute EmailAndPasswordRequest connexionRequest,
         BindingResult bindingResult,
         RedirectAttributes redirectAttributes,
         HttpSession httpSession
