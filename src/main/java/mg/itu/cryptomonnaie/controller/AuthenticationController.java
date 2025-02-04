@@ -36,6 +36,7 @@ import static mg.itu.cryptomonnaie.utils.Utils.*;
 public class AuthenticationController {
     private static final String PENDING_VERIFICATION_EMAIL_KEY = "_pending_verification_email";
 
+    private final AuthenticationManager authenticationManager;
     private final RestTemplate restTemplate;
     private final ParameterizedTypeReference<Map<String, Object>> mapTypeReference;
 
@@ -133,8 +134,7 @@ public class AuthenticationController {
         @RequestParam(name = "codePin") String codePin,
         HttpSession httpSession,
         @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail,
-        RedirectAttributes redirectAttributes,
-        AuthenticationManager authenticationManager
+        RedirectAttributes redirectAttributes
     ) {
         if (pendingVerificationEmail == null) return "redirect:/connexion";
 
