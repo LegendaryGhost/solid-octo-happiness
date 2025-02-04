@@ -8,9 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class InscriptionRequest extends AbstractPasswordInput {
-    private String email;
-
+public class InscriptionRequest extends AbstractEmailAndPasswordRequest {
     private String nom;
 
     private String prenom;

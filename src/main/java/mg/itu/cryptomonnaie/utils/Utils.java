@@ -2,13 +2,13 @@ package mg.itu.cryptomonnaie.utils;
 
 import jakarta.servlet.http.HttpSession;
 import mg.itu.cryptomonnaie.entity.Profil;
-import mg.itu.cryptomonnaie.service.ProfilService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 
 public final class Utils {
     public static final String USER_KEY = "connected_user";
+    public static final String BINDING_RESULT_KEY_PREFIX = "org.springframework.validation.BindingResult.";
 
     public static HttpHeaders createJsonHttpHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -32,15 +32,7 @@ public final class Utils {
         return stringBuilder.toString();
     }
 
-    public static void login(
-        String email,
-        ProfilService profilService,
-        HttpSession httpSession
-    ) {
-        Profil profil = profilService.getByEmail(email);
-        httpSession.setAttribute(USER_KEY, profil);
-    }
-
+    @Deprecated
     @Nullable
     public static Profil getUser(HttpSession httpSession) {
         return (Profil) httpSession.getAttribute(USER_KEY);

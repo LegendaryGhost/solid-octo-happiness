@@ -5,6 +5,4 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ConnexionRequest extends AbstractPasswordInput {
-    private String email;
-}
+public class ConnexionRequest extends AbstractEmailAndPasswordRequest { }

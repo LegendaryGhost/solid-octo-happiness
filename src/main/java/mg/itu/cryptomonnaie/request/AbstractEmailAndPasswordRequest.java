@@ -6,11 +6,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractPasswordInput {
+public abstract class AbstractEmailAndPasswordRequest {
+    private String email;
+
     @JsonProperty("mot_de_passe")
     private String motDePasse;
 
-    public AbstractPasswordInput unsetMotDePasse() {
+    public AbstractEmailAndPasswordRequest unsetMotDePasse() {
         motDePasse = null;
         return this;
     }
