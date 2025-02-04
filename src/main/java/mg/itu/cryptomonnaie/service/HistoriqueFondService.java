@@ -18,7 +18,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Service
 public class HistoriqueFondService {
-
     private final TypeTransactionRepository typeTransactionRepository;
     private final CacheManager cacheManager;
     private final HistoriqueFondRepository historiqueFondRepository;
