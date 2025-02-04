@@ -24,6 +24,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -126,8 +127,16 @@ public class AuthenticationController {
 
     @GetMapping("/verification-code-pin")
     public String pageVerificationCodePin(
-        @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail
+        HttpSession httpSession
     ) {
+        Enumeration<String> attributeNames = httpSession.getAttributeNames();
+        int i = 0;
+        while (attributeNames.hasMoreElements()) {
+            System.out.println(httpSession.getAttribute(attributeNames.nextElement()));
+            i++;
+        }
+        System.out.println("Number off attributes: " + i);
+        String pendingVerificationEmail = (String) httpSession.getAttribute(PENDING_VERIFICATION_EMAIL_KEY);
         return pendingVerificationEmail == null ? "redirect:/connexion" : "auth/confirmation/pin_confirmation";
     }
 
