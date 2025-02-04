@@ -1,16 +1,8 @@
 package mg.itu.cryptomonnaie.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class ConnexionRequest {
-    private String email;
-
-    @JsonProperty("mot_de_passe")
-    private String motDePasse;
-}
+@EqualsAndHashCode(callSuper = true)
+public class ConnexionRequest extends AbstractEmailAndPasswordRequest { }
