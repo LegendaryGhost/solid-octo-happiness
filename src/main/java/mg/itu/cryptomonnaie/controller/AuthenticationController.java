@@ -3,6 +3,7 @@ package mg.itu.cryptomonnaie.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.request.ConnexionRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
@@ -132,7 +133,8 @@ public class AuthenticationController {
         @RequestParam Integer codePin,
         HttpSession httpSession,
         @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail,
-        RedirectAttributes redirectAttributes
+        RedirectAttributes redirectAttributes,
+        AuthenticationManager authenticationManager
     ) {
         if (pendingVerificationEmail == null) return "redirect:/connexion";
 
@@ -147,6 +149,7 @@ public class AuthenticationController {
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 httpSession.removeAttribute(PENDING_VERIFICATION_EMAIL_KEY);
+                authenticationManager.authenticate(pendingVerificationEmail);
 
                 return ""; // TODO : Redirection vers la page d'accueil
             }

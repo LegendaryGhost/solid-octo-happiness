@@ -1,11 +1,8 @@
 package mg.itu.cryptomonnaie.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import mg.itu.cryptomonnaie.entity.Profil;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
 public interface ProfilRepository extends JpaRepository<Profil, Long> {
 
     Profil findByEmail(String email);

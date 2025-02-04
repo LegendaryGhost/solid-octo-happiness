@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class ProfilService {
     private final ProfilRepository profilRepository;
 
-    public Profil getByEmail(String email) {
+    public Profil getByEmail(final String email) {
         return profilRepository.findByEmail(email);
     }
 }
