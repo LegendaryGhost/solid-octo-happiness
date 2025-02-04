@@ -10,5 +10,5 @@ public class VerificationCodePinRequest {
     private String email;
 
     @JsonProperty("code_pin")
-    private Integer codePin;
+    private String codePin;
 }

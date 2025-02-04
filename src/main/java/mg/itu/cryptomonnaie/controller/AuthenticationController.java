@@ -133,7 +133,7 @@ public class AuthenticationController {
 
     @PostMapping("/verification-code-pin")
     public String verificationCodePin(
-        @RequestParam Integer codePin,
+        @RequestParam(name = "codePin") String codePin,
         HttpSession httpSession,
         @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail,
         RedirectAttributes redirectAttributes,
@@ -154,7 +154,7 @@ public class AuthenticationController {
                 httpSession.removeAttribute(PENDING_VERIFICATION_EMAIL_KEY);
                 authenticationManager.authenticate(pendingVerificationEmail);
 
-                return ""; // TODO : Redirection vers la page d'accueil
+                return "redirect:/portefeuille/etat";
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             redirectAttributes.addFlashAttribute("error",

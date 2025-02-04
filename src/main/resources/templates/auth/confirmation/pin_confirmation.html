@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body}, ~{::styles}, _)}" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Code PIN</title>
@@ -128,10 +128,10 @@
     <div class="pin-card">
         <div class="pin-header">
             <h1>Code PIN</h1>
-            <p class="pin-description">Veuillez entrer votre code PIN à 4 chiffres</p>
+            <p class="pin-description">Veuillez entrer votre code PIN à 6 chiffres</p>
         </div>
 
-        <form th:action="@{/verify-pin}" method="post">
+        <form th:action="@{/verification-code-pin}" method="post">
             <div class="pin-input-group">
                 <input type="text"
                        class="pin-input"
@@ -177,7 +177,7 @@
                        autocomplete="off">
             </div>
 
-            <input type="hidden" id="fullPin" name="pin">
+            <input type="hidden" id="fullPin" name="codePin">
 
             <button type="submit" class="submit-btn">Valider</button>
         </form>
