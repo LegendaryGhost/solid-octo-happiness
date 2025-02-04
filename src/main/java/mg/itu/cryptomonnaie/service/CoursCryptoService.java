@@ -20,9 +20,9 @@ public class CoursCryptoService {
 
     @Autowired
     private CryptomonnaieRepository cryptomonnaieRepository;
-    private Random random;
+    private Random random = new Random();;
 
-    // @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 10000)
     public void generateRandomCours() {
         List<Cryptomonnaie> cryptomonnaies = cryptomonnaieRepository.findAll();
 
@@ -56,13 +56,14 @@ public class CoursCryptoService {
     }
 
     public Double analyse(
-        String typeAnalyse,
-        List<Long> idCryptos,
-        LocalDateTime dateHeureMin,
-        LocalDateTime dateHeureMax
-    ) {
-        List<CoursCrypto> coursCryptos = coursCryptoRepository.findParCryptomonnaieEtDate(idCryptos, dateHeureMin, dateHeureMax);
-        if (coursCryptos.isEmpty()) return null;
+            String typeAnalyse,
+            List<Long> idCryptos,
+            LocalDateTime dateHeureMin,
+            LocalDateTime dateHeureMax) {
+        List<CoursCrypto> coursCryptos = coursCryptoRepository.findParCryptomonnaieEtDate(idCryptos, dateHeureMin,
+                dateHeureMax);
+        if (coursCryptos.isEmpty())
+            return null;
 
         return switch (typeAnalyse.toLowerCase()) {
             case "1er-quartile" -> calculerPremierQuartile(coursCryptos);
@@ -76,42 +77,40 @@ public class CoursCryptoService {
 
     private Double calculerPremierQuartile(List<CoursCrypto> coursCryptos) {
         List<Double> coursValues = coursCryptos.stream()
-            .map(CoursCrypto::getCoursActuel)
-            .sorted()
-            .toList();
+                .map(CoursCrypto::getCoursActuel)
+                .sorted()
+                .toList();
 
         return coursValues.get(
-            (int) (Math.floor(0.25 * (coursValues.size() + 1)) - 1)
-        );
+                (int) (Math.floor(0.25 * (coursValues.size() + 1)) - 1));
     }
 
     private Double calculerMax(List<CoursCrypto> coursCryptos) {
         return coursCryptos.stream()
-            .map(CoursCrypto::getCoursActuel)
-            .max(Double::compare)
-            .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
+                .map(CoursCrypto::getCoursActuel)
+                .max(Double::compare)
+                .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
     }
 
     private Double calculerMin(List<CoursCrypto> coursCryptos) {
         return coursCryptos.stream()
-            .map(CoursCrypto::getCoursActuel)
-            .min(Double::compare)
-            .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
+                .map(CoursCrypto::getCoursActuel)
+                .min(Double::compare)
+                .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
     }
 
     private Double calculerMoyenne(List<CoursCrypto> coursCryptos) {
         return coursCryptos.stream()
-            .mapToDouble(CoursCrypto::getCoursActuel)
-            .average()
-            .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
+                .mapToDouble(CoursCrypto::getCoursActuel)
+                .average()
+                .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
     }
 
     private Double calculerEcartType(List<CoursCrypto> coursCryptos) {
         return Math.sqrt(
-            coursCryptos.stream()
-                .mapToDouble(c -> Math.pow(c.getCoursActuel() - calculerMoyenne(coursCryptos), 2))
-                .average()
-            .   orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"))
-        );
+                coursCryptos.stream()
+                        .mapToDouble(c -> Math.pow(c.getCoursActuel() - calculerMoyenne(coursCryptos), 2))
+                        .average()
+                        .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé")));
     }
 }
