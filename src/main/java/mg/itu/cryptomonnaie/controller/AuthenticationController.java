@@ -139,15 +139,12 @@ public class AuthenticationController {
         if (pendingVerificationEmail == null) return "redirect:/connexion";
 
         try {
-            VerificationCodePinRequest verificationCodePinRequest = VerificationCodePinRequest.builder()
-                .email(pendingVerificationEmail)
-                .codePin(codePin)
-                .build();
-            System.out.println(verificationCodePinRequest);
-
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                 identityFlowApiUrl + "/auth/verification-pin", HttpMethod.POST,
-                new HttpEntity<>(verificationCodePinRequest, createJsonHttpHeaders()),
+                new HttpEntity<>(VerificationCodePinRequest.builder()
+                    .email(pendingVerificationEmail)
+                    .codePin(codePin)
+                    .build(), createJsonHttpHeaders()),
                 mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
