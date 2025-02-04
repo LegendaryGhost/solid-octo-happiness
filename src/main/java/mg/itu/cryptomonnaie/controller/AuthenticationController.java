@@ -49,19 +49,19 @@ public class AuthenticationController {
 
     @PostMapping("/inscription")
     public String inscription(
-        @ModelAttribute InscriptionRequest inscriptionRequest,
-        BindingResult bindingResult,
-        RedirectAttributes redirectAttributes
+            @ModelAttribute InscriptionRequest inscriptionRequest,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
     ) {
         try {
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
-                identityFlowApiUrl + "/auth/inscription", HttpMethod.POST,
-                new HttpEntity<>(inscriptionRequest, createJsonHttpHeaders()),
-                mapTypeReference);
+                    identityFlowApiUrl + "/auth/inscription", HttpMethod.POST,
+                    new HttpEntity<>(inscriptionRequest, createJsonHttpHeaders()),
+                    mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful())
                 redirectAttributes.addFlashAttribute("success",
-                    Objects.requireNonNull(responseEntity.getBody()).get("message"));
+                        Objects.requireNonNull(responseEntity.getBody()).get("message"));
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("Erreur lors d'une inscription d'un utilisateur", e);
             handleHttpStatusCodeException(e, bindingResult);
@@ -87,21 +87,21 @@ public class AuthenticationController {
 
     @PostMapping("/connexion")
     public String connexion(
-        @ModelAttribute EmailAndPasswordRequest connexionRequest,
-        BindingResult bindingResult,
-        RedirectAttributes redirectAttributes,
-        HttpSession httpSession
+            @ModelAttribute EmailAndPasswordRequest connexionRequest,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            HttpSession httpSession
     ) {
         try {
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
-                identityFlowApiUrl + "/auth/connexion", HttpMethod.POST,
-                new HttpEntity<>(connexionRequest, createJsonHttpHeaders()),
-                mapTypeReference);
+                    identityFlowApiUrl + "/auth/connexion", HttpMethod.POST,
+                    new HttpEntity<>(connexionRequest, createJsonHttpHeaders()),
+                    mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 httpSession.setAttribute(PENDING_VERIFICATION_EMAIL_KEY, connexionRequest.getEmail());
                 redirectAttributes.addFlashAttribute("success",
-                    Objects.requireNonNull(responseEntity.getBody()).get("message"));
+                        Objects.requireNonNull(responseEntity.getBody()).get("message"));
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("Erreur lors d'une tentative de connexion d'un utilisateur", e);
@@ -127,22 +127,25 @@ public class AuthenticationController {
 
     @PostMapping("/verification-code-pin")
     public String verificationCodePin(
-        @RequestParam(name = "codePin") String codePin,
-        HttpSession httpSession,
-        @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail,
-        RedirectAttributes redirectAttributes,
-        AuthenticationManager authenticationManager
+            @RequestParam(name = "codePin") String codePin,
+            HttpSession httpSession,
+            @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail,
+            RedirectAttributes redirectAttributes,
+            AuthenticationManager authenticationManager
     ) {
         if (pendingVerificationEmail == null) return "redirect:/connexion";
 
         try {
-            ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
-                identityFlowApiUrl + "/auth/verification-pin", HttpMethod.POST,
-                new HttpEntity<>(VerificationCodePinRequest.builder()
+            VerificationCodePinRequest verificationCodePinRequest = VerificationCodePinRequest.builder()
                     .email(pendingVerificationEmail)
                     .codePin(codePin)
-                    .build(), createJsonHttpHeaders()
-                ), mapTypeReference);
+                    .build();
+            System.out.println(verificationCodePinRequest);
+
+            ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
+                    identityFlowApiUrl + "/auth/verification-pin", HttpMethod.POST,
+                    new HttpEntity<>(verificationCodePinRequest, createJsonHttpHeaders()
+                    ), mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 httpSession.removeAttribute(PENDING_VERIFICATION_EMAIL_KEY);
@@ -154,7 +157,7 @@ public class AuthenticationController {
             log.error("Erreur lors d'une vérification d'un code pin", e);
 
             redirectAttributes.addFlashAttribute("error",
-                Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
+                    Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
         }
 
         return "redirect:/verification-code-pin";
@@ -169,11 +172,11 @@ public class AuthenticationController {
             @SuppressWarnings("unchecked")
             Map<String, List<String>> errors = (Map<String, List<String>>) responseBody.get("errors");
             errors.forEach((field, errorMessages) -> errorMessages
-                .forEach(errorMessage ->
-                    bindingResult.rejectValue(snakeToCamelCase(field), "error.", errorMessage)
-                ));
+                    .forEach(errorMessage ->
+                            bindingResult.rejectValue(snakeToCamelCase(field), "error.", errorMessage)
+                    ));
 
         } else bindingResult.reject("error",
-            (String) Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
+                (String) Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
     }
 }
