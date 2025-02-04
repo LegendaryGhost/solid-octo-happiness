@@ -28,7 +28,7 @@ public class AuthenticationManager {
 
     public Profil safelyGetCurrentUser() {
         Profil currentUser = getCurrentUser();
-        if (currentUser == null) throw new IllegalStateException("Aucun utilisateur connecté");
+        if (currentUser == null) throw new IllegalStateException("Aucun utilisateur connecté à récupérer");
 
         return currentUser;
     }
