@@ -8,7 +8,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 public final class Utils {
-    public static final String USER_KEY = "connected_user";
     public static final String BINDING_RESULT_KEY_PREFIX = "org.springframework.validation.BindingResult.";
 
     public static HttpHeaders createJsonHttpHeaders() {
