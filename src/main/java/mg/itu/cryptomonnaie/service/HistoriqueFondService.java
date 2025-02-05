@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.HistoriqueFonds;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;
-import mg.itu.cryptomonnaie.repository.HistoriqueFondRepository;
+import mg.itu.cryptomonnaie.repository.HistoriqueFondsRepository;
 import mg.itu.cryptomonnaie.repository.TypeTransactionRepository;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.utils.SecureTokenGenerator;
@@ -20,11 +20,11 @@ import java.util.Objects;
 public class HistoriqueFondService {
     private final TypeTransactionRepository typeTransactionRepository;
     private final CacheManager cacheManager;
-    private final HistoriqueFondRepository historiqueFondRepository;
+    private final HistoriqueFondsRepository historiqueFondsRepository;
     private final EmailService emailService;
 
     public List<HistoriqueFonds> transactionProfil(final Utilisateur utilisateur) {
-        return historiqueFondRepository.findTransactionsProfil(utilisateur.getId());
+        return historiqueFondsRepository.findTransactionsProfil(utilisateur.getId());
     }
 
     public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request, Utilisateur utilisateur) throws MessagingException {
@@ -55,11 +55,11 @@ public class HistoriqueFondService {
     public void confirmerTransaction(String token) {
         HistoriqueFonds historiqueFonds = getCachedHistoriqueFond(token);
         if (historiqueFonds != null) {
-            historiqueFondRepository.save(historiqueFonds);
+            historiqueFondsRepository.save(historiqueFonds);
         }
     }
 
     public List<HistoriqueFonds> listeTransactions() {
-        return historiqueFondRepository.findAll();
+        return historiqueFondsRepository.findAll();
     }
 }

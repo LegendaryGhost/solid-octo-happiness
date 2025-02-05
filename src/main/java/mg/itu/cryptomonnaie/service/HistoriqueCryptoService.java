@@ -11,18 +11,18 @@ import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.HistoriqueTransaction;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
-import mg.itu.cryptomonnaie.repository.HistoriqueCryptoRepository;
+import mg.itu.cryptomonnaie.repository.HistoriqueTransactionRepository;
 
 @RequiredArgsConstructor
 @Service
 public class HistoriqueCryptoService {
-    private final HistoriqueCryptoRepository historiqueCryptoRepository;
+    private final HistoriqueTransactionRepository historiqueTransactionRepository;
     private final CoursCryptoRepository coursCryptoRepository;
 
     public List<HistoriqueCryptoDTO> portefeuilleClientActuel(final Utilisateur utilisateur) {
         List<HistoriqueCryptoDTO> portefeuilles = new ArrayList<>();
 
-        List<HistoriqueTransaction> historiqueTransactions = historiqueCryptoRepository.findAllByProfil(utilisateur.getId());
+        List<HistoriqueTransaction> historiqueTransactions = historiqueTransactionRepository.findAllByProfil(utilisateur.getId());
         for (HistoriqueTransaction historiqueTransaction : historiqueTransactions) {
             HistoriqueCryptoDTO portefeuille = new HistoriqueCryptoDTO();
             portefeuille.setProfil(utilisateur);
@@ -31,7 +31,7 @@ public class HistoriqueCryptoService {
             portefeuille.setDateAction(historiqueTransaction.getDateHeure());
             portefeuille.setQuantite(historiqueTransaction.getQuantite());
             CoursCrypto coursCryptoActuel = coursCryptoRepository
-                    .findFirstByCryptomonnaieIdOrderByDateCoursDesc(portefeuille.getCryptomonnaie().getId());
+                    .findFirstByCryptomonnaieIdOrderByDateHeureDesc(portefeuille.getCryptomonnaie().getId());
             portefeuille.setPrixActuel(coursCryptoActuel.getCoursActuel());
             portefeuille.setPrixAchatU(historiqueTransaction.getCours());
             Double variation = variationCours(portefeuille.getPrixActuel(), portefeuille.getPrixAchatU());
@@ -60,10 +60,10 @@ public class HistoriqueCryptoService {
     }
 
     public List<HistoriqueTransaction> historiqueUtilisateur(Utilisateur utilisateur) {
-        return historiqueCryptoRepository.findAllByProfil(utilisateur.getId());
+        return historiqueTransactionRepository.findAllByProfil(utilisateur.getId());
     }
 
     public List<HistoriqueTransaction> historiqueGlobale() {
-        return historiqueCryptoRepository.findAllByOrderByDateActionDesc();
+        return historiqueTransactionRepository.findAllByOrderByDateHeureDesc();
     }
 }

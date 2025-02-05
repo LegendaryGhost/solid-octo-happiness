@@ -27,7 +27,7 @@ public class CoursCryptoService {
 
         for (Cryptomonnaie crypto : cryptomonnaies) {
             CoursCrypto coursActuel = coursCryptoRepository
-                    .findFirstByCryptomonnaieIdOrderByDateCoursDesc(crypto.getId());
+                    .findFirstByCryptomonnaieIdOrderByDateHeureDesc(crypto.getId());
             Double dernierCours = coursActuel.getCoursActuel();
             CoursCrypto coursCrypto = new CoursCrypto();
             coursCrypto.setCryptomonnaie(crypto);
