@@ -3,14 +3,19 @@ package mg.itu.cryptomonnaie.controller;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.service.HistoriqueFondService;
 import mg.itu.cryptomonnaie.service.TypeTransactionService;
 import mg.itu.cryptomonnaie.utils.Utils;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,30 +30,59 @@ public class HistoriqueFondController {
 
     @GetMapping("/form")
     public String form(Model model) {
-	model.addAttribute("historique", new HistoriqueFondRequest());
-	model.addAttribute("types", typeTransactionService.liste());
+        model.addAttribute("historique", new HistoriqueFondRequest());
+        model.addAttribute("types", typeTransactionService.liste());
 
-	return "pages/transaction/formulaire_depot_retrait";
+        return "pages/transaction/formulaire_depot_retrait";
     }
 
     @PostMapping("/ajouter")
     public String ajouter(HistoriqueFondRequest historique, HttpSession session) throws MessagingException {
-	Profil profil = Utils.getUser(session);
-	historiqueFondService.creerHistoriqueFondTemporaire(historique, profil);
-	return "redirect:/historique-fond/form";
+        Profil profil = Utils.getUser(session);
+        historiqueFondService.creerHistoriqueFondTemporaire(historique, profil);
+        return "redirect:/historique-fond/form";
     }
 
+    // A faire: tester ces methodes sur postman
+    @PostMapping("/ajouter/en-attente")
+    public String ajouterEnAttente(HistoriqueFondRequest historique, HttpSession session) throws MessagingException {
+        Profil profil = Utils.getUser(session);
+        historiqueFondService.creerHistoriqueFondEnAttente(historique, profil);
+        return "redirect:/historique-fond/form";
+    }
+
+    @GetMapping("/liste/en-attente")
+    public String listeEnAttente(Model model) {
+        List<HistoriqueFond> historiqueFonds = historiqueFondService.listeTransactionFondEnAttente();
+        model.addAttribute("historiqueFonds", historiqueFonds);
+        // a faire page pour rediriger ceci!!
+        return "redirect:/historique-fond/form";
+    }
+
+    @GetMapping("/valider/transaction-fond/{id}")
+    public String validerTransactionFond(@PathVariable("id") Long id, Model model) {
+        HistoriqueFond historiqueFond = historiqueFondService.validerTransactionFond(id);
+        return listeEnAttente(model);
+    }
+
+    @GetMapping("/refuser/transaction-fond/{id}")
+    public String refuserTransactionFond(@PathVariable("id") Long id, Model model) {
+        HistoriqueFond historiqueFond = historiqueFondService.refuserTransactionFond(id);
+        return listeEnAttente(model);
+    }
+
+    // Taloha
     @GetMapping("/valider")
     public String validerTransaction(@RequestParam("token") String token) {
-	historiqueFondService.confirmerTransaction(token);
-	return "redirect:/historique-fond/form";
+        historiqueFondService.confirmerTransaction(token);
+        return "redirect:/historique-fond/form";
     }
 
     @GetMapping("/utilisateur")
     public String transactionsUtilisateurCourant(Model model, HttpSession httpSession) {
-	model.addAttribute("transactions", historiqueFondService.transactionProfil(httpSession));
+        model.addAttribute("transactions", historiqueFondService.transactionProfil(httpSession));
 
-	return "pages/historique/historique_fond";
+        return "pages/historique/historique_fond";
     }
 
 }

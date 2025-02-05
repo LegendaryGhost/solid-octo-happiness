@@ -1,5 +1,6 @@
 package mg.itu.cryptomonnaie.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import mg.itu.cryptomonnaie.entity.Profil;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
 import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
@@ -31,13 +33,21 @@ public class HistoriqueCryptoController {
     @GetMapping("/historique")
     public String historiquePortefeuille(Model model, HttpSession session) {
         Profil profil = Utils.getUser(session);
-	assert profil != null;
-	model.addAttribute("historiques", historiqueCryptoService.historiqueUtilisateur(profil));
+        assert profil != null;
+        model.addAttribute("historiques", historiqueCryptoService.historiqueUtilisateur(profil));
         return "pages/historique/historique_transactions";
     }
 
     @GetMapping("/historique-global")
     public String historiqueGlobal(Model model) {
+        model.addAttribute("historiques", historiqueCryptoService.historiqueGlobale());
+        return "pages/historique/historique_global";
+    }
+
+    @GetMapping("/historique-global")
+    public String historiqueGlobalFiltre(Model model, @RequestParam(name = "dateHeureMin") LocalDateTime dateheureMin,
+            @RequestParam(name = "dateHeureMax") LocalDateTime dateheureMax,
+            @RequestParam(name = "idCrypto") Long idCrypto) {
         model.addAttribute("historiques", historiqueCryptoService.historiqueGlobale());
         return "pages/historique/historique_global";
     }

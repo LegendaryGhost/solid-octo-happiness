@@ -1,0 +1,1 @@
+select h.id, e.designation from historique_fond h join etat_fond e on h.id_etat = e.id ;
