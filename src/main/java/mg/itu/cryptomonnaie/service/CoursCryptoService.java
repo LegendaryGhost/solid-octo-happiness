@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
@@ -33,7 +32,7 @@ public class CoursCryptoService {
             CoursCrypto coursCrypto = new CoursCrypto();
             coursCrypto.setCryptomonnaie(crypto);
             coursCrypto.setCoursActuel(generateRandomCoursValue(dernierCours));
-            coursCrypto.setDateCours(LocalDateTime.now());
+            coursCrypto.setDateHeure(LocalDateTime.now());
 
             coursCryptoRepository.save(coursCrypto);
             System.out.println("Cours généré pour " + crypto.getDesignation() + ": " + coursCrypto.getCoursActuel());

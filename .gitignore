@@ -34,3 +34,5 @@ build/
 
 ### Projet ###
 application.properties
+database/LoopingImage.jpg
+*.lo1
