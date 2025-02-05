@@ -18,9 +18,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         @NonNull HttpServletResponse response,
         @NonNull Object handler
     ) throws Exception {
-        if (authenticationManager.isUserConnected()) return true;
+        // Uncomment the code below when pushing to production
+        /* if (authenticationManager.isUserConnected()) return true;
 
         response.sendRedirect("/connexion");
-        return false;
+        return false; */
+
+        if (!authenticationManager.isUserConnected()) authenticationManager.authenticate("example@domain.com");
+        return true;
     }
 }
