@@ -1,11 +1,12 @@
 CREATE TABLE utilisateur
 (
     id                  SERIAL,
-    email               VARCHAR(75) UNIQUE NOT NULL,
-    fonds_actuel        NUMERIC(15, 2)     NOT NULL DEFAULT 0,
+    email               VARCHAR(75)    NOT NULL,
+    fonds_actuel        NUMERIC(15, 2) NOT NULL DEFAULT 0,
     token               VARCHAR(255),
-    date_heure_maj      TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    date_heure_creation TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_heure_maj      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_heure_creation TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (email),
     PRIMARY KEY (id)
 );
 
