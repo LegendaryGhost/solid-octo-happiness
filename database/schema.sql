@@ -37,7 +37,7 @@ CREATE TABLE type_transaction
     PRIMARY KEY (id)
 );
 
-CREATE TABLE historique_transaction_crypto
+CREATE TABLE historique_transaction
 (
     id                  SERIAL,
     cours               NUMERIC(15, 2) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE historique_transaction_crypto
 CREATE TABLE type_operation
 (
     id          SERIAL,
-    designation VARCHAR(100) NOT NULL,
+    designation VARCHAR(50) NOT NULL,
     UNIQUE (designation),
     PRIMARY KEY (id)
 );

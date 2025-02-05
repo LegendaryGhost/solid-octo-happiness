@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
-import mg.itu.cryptomonnaie.entity.HistoriqueCrypto;
-import mg.itu.cryptomonnaie.entity.Utilisateur;
+import mg.itu.cryptomonnaie.entity.HistoriqueTransaction;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.repository.HistoriqueCryptoRepository;
 
@@ -23,24 +22,24 @@ public class HistoriqueCryptoService {
     public List<HistoriqueCryptoDTO> portefeuilleClientActuel(final Utilisateur utilisateur) {
         List<HistoriqueCryptoDTO> portefeuilles = new ArrayList<>();
 
-        List<HistoriqueCrypto> historiqueCryptos = historiqueCryptoRepository.findAllByProfil(utilisateur.getId());
-        for (HistoriqueCrypto historiqueCrypto : historiqueCryptos) {
+        List<HistoriqueTransaction> historiqueTransactions = historiqueCryptoRepository.findAllByProfil(utilisateur.getId());
+        for (HistoriqueTransaction historiqueTransaction : historiqueTransactions) {
             HistoriqueCryptoDTO portefeuille = new HistoriqueCryptoDTO();
             portefeuille.setProfil(utilisateur);
-            portefeuille.setCryptomonnaie(historiqueCrypto.getCryptomonnaie());
-            portefeuille.setTypeAction(historiqueCrypto.getTypeAction());
-            portefeuille.setDateAction(historiqueCrypto.getDateAction());
-            portefeuille.setQuantite(historiqueCrypto.getQuantite());
+            portefeuille.setCryptomonnaie(historiqueTransaction.getCryptomonnaie());
+            portefeuille.setTypeOperation(historiqueTransaction.getTypeAction());
+            portefeuille.setDateAction(historiqueTransaction.getDateHeure());
+            portefeuille.setQuantite(historiqueTransaction.getQuantite());
             CoursCrypto coursCryptoActuel = coursCryptoRepository
                     .findFirstByCryptomonnaieIdOrderByDateCoursDesc(portefeuille.getCryptomonnaie().getId());
             portefeuille.setPrixActuel(coursCryptoActuel.getCoursActuel());
-            portefeuille.setPrixAchatU(historiqueCrypto.getCours());
+            portefeuille.setPrixAchatU(historiqueTransaction.getCours());
             Double variation = variationCours(portefeuille.getPrixActuel(), portefeuille.getPrixAchatU());
             portefeuille.setVariation(variation);
-            Double valActuel = valeurActuelle(historiqueCrypto.getQuantite(), portefeuille.getPrixActuel());
+            Double valActuel = valeurActuelle(historiqueTransaction.getQuantite(), portefeuille.getPrixActuel());
             portefeuille.setValeurActuelle(valActuel);
-            Double profitouPerte = profitOuPerte(valActuel, historiqueCrypto.getQuantite(),
-                    historiqueCrypto.getCours());
+            Double profitouPerte = profitOuPerte(valActuel, historiqueTransaction.getQuantite(),
+                    historiqueTransaction.getCours());
             portefeuille.setProfitOuPerte(profitouPerte);
 
             portefeuilles.add(portefeuille);
@@ -60,11 +59,11 @@ public class HistoriqueCryptoService {
         return valActue - (qtt * pAchat);
     }
 
-    public List<HistoriqueCrypto> historiqueUtilisateur(Utilisateur utilisateur) {
+    public List<HistoriqueTransaction> historiqueUtilisateur(Utilisateur utilisateur) {
         return historiqueCryptoRepository.findAllByProfil(utilisateur.getId());
     }
 
-    public List<HistoriqueCrypto> historiqueGlobale() {
+    public List<HistoriqueTransaction> historiqueGlobale() {
         return historiqueCryptoRepository.findAllByOrderByDateActionDesc();
     }
 }

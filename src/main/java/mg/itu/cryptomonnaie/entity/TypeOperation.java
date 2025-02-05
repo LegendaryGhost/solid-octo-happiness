@@ -7,4 +7,4 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 @Entity
-public class TypeTransaction extends AbstractDesignatedEntity { }
+public class TypeOperation extends AbstractDesignatedEntity { }

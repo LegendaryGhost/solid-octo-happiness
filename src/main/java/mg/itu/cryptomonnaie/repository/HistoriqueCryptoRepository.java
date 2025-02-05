@@ -10,11 +10,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HistoriqueCryptoRepository extends JpaRepository<HistoriqueCrypto, Long> {
+public interface HistoriqueCryptoRepository extends JpaRepository<HistoriqueTransaction, Long> {
 
-    @Query("select hc from HistoriqueCrypto hc where hc.profil.id = :idProfil order by hc.dateAction desc")
-    List<HistoriqueCrypto> findAllByProfil(@Param("idProfil") Long idProfil);
+    @Query("select hc from HistoriqueTransaction hc where hc.profil.id = :idProfil order by hc.dateHeure desc")
+    List<HistoriqueTransaction> findAllByProfil(@Param("idProfil") Long idProfil);
 
-    List<HistoriqueCrypto> findAllByOrderByDateActionDesc();
+    List<HistoriqueTransaction> findAllByOrderByDateActionDesc();
 
 }

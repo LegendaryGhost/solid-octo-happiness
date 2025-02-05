@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface HistoriqueFondRepository extends JpaRepository<HistoriqueFond, Long> {
-    @Query("select hf from HistoriqueFond hf where hf.profil.id = :idProfil")
-    List<HistoriqueFond> findTransactionsProfil(@Param("idProfil") Long idProfil);
+public interface HistoriqueFondRepository extends JpaRepository<HistoriqueFonds, Long> {
+    @Query("select hf from HistoriqueFonds hf where hf.profil.id = :idProfil")
+    List<HistoriqueFonds> findTransactionsProfil(@Param("idProfil") Long idProfil);
 }

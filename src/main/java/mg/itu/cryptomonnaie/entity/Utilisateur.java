@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode
-@ToString
+@ToString(doNotUseGetters = true)
 @Entity
 public class Utilisateur {
     @Id

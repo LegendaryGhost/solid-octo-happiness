@@ -12,20 +12,34 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
-public class CoursCrypto {
+public class HistoriqueTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Setter
     @Column(nullable = false)
-    private Double coursActuel;
+    private Double cours;
+
+    @Setter
+    @Column(nullable = false)
+    private Float quantite;
 
     @Column(nullable = false)
     private LocalDateTime dateHeure;
 
     @Setter
     @ManyToOne(optional = false)
+    @JoinColumn(name = "id_utilisateur")
+    private Utilisateur utilisateur;
+
+    @Setter
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_cryptomonnaie")
     private Cryptomonnaie cryptomonnaie;
+
+    @Setter
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_type_transaction")
+    private TypeTransaction typeTransaction;
 }

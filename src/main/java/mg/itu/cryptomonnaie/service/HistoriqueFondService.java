@@ -2,7 +2,7 @@ package mg.itu.cryptomonnaie.service;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import mg.itu.cryptomonnaie.entity.HistoriqueFond;
+import mg.itu.cryptomonnaie.entity.HistoriqueFonds;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;
 import mg.itu.cryptomonnaie.repository.HistoriqueFondRepository;
@@ -23,43 +23,43 @@ public class HistoriqueFondService {
     private final HistoriqueFondRepository historiqueFondRepository;
     private final EmailService emailService;
 
-    public List<HistoriqueFond> transactionProfil(final Utilisateur utilisateur) {
+    public List<HistoriqueFonds> transactionProfil(final Utilisateur utilisateur) {
         return historiqueFondRepository.findTransactionsProfil(utilisateur.getId());
     }
 
     public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request, Utilisateur utilisateur) throws MessagingException {
-        HistoriqueFond historiqueFond = new HistoriqueFond();
-        historiqueFond.setMontant(request.getMontant());
-        historiqueFond.setNumCarteBancaire(request.getNumCarteBancaire());
+        HistoriqueFonds historiqueFonds = new HistoriqueFonds();
+        historiqueFonds.setMontant(request.getMontant());
+        historiqueFonds.setNumCarteBancaire(request.getNumCarteBancaire());
 
-        historiqueFond.setUtilisateur(utilisateur);
+        historiqueFonds.setUtilisateur(utilisateur);
 
         TypeTransaction typeTransaction = typeTransactionRepository.findById(
                 Long.valueOf(request.getIdTypeTransaction()))
             .orElseThrow(() -> new RuntimeException("Type de transaction introuvable"));
-        historiqueFond.setTypeTransaction(typeTransaction);
+        historiqueFonds.setTypeTransaction(typeTransaction);
 
         String token = SecureTokenGenerator.generateToken(20);
         System.out.println("Token: " + token);
         // Stocker l'objet dans le cache
-        Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).put(token, historiqueFond);
+        Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).put(token, historiqueFonds);
 
         // Envoyer email de validation
         emailService.envoyerValidationHistoFondEmail(utilisateur.getEmail(), token);
     }
 
-    public HistoriqueFond getCachedHistoriqueFond(String token) {
-        return Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).get(token, HistoriqueFond.class);
+    public HistoriqueFonds getCachedHistoriqueFond(String token) {
+        return Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).get(token, HistoriqueFonds.class);
     }
 
     public void confirmerTransaction(String token) {
-        HistoriqueFond historiqueFond = getCachedHistoriqueFond(token);
-        if (historiqueFond != null) {
-            historiqueFondRepository.save(historiqueFond);
+        HistoriqueFonds historiqueFonds = getCachedHistoriqueFond(token);
+        if (historiqueFonds != null) {
+            historiqueFondRepository.save(historiqueFonds);
         }
     }
 
-    public List<HistoriqueFond> listeTransactions() {
+    public List<HistoriqueFonds> listeTransactions() {
         return historiqueFondRepository.findAll();
     }
 }
