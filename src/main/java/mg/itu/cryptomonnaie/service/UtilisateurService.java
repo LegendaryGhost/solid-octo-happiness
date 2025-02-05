@@ -1,5 +1,6 @@
 package mg.itu.cryptomonnaie.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.repository.UtilisateurRepository;
@@ -11,7 +12,19 @@ import org.springframework.stereotype.Service;
 public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
 
-    public void updateOrCreate(final String email, final String token) {
+    @Nullable
+    @Transactional
+    public Utilisateur getByEmail(final String email) {
+        return utilisateurRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public Utilisateur save(final Utilisateur utilisateur) {
+        return utilisateurRepository.save(utilisateur);
+    }
+
+    @Transactional
+    public Utilisateur updateOrCreate(final String email, final String token) {
         Utilisateur utilisateur = getByEmail(email);
         if (utilisateur == null) {
             utilisateur = new Utilisateur();
@@ -19,11 +32,6 @@ public class UtilisateurService {
         }
 
         utilisateur.setToken(token);
-        utilisateurRepository.save(utilisateur);
-    }
-
-    @Nullable
-    public Utilisateur getByEmail(final String email) {
-        return utilisateurRepository.findByEmail(email);
+        return save(utilisateur);
     }
 }
