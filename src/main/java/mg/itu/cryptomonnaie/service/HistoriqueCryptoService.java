@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import mg.itu.cryptomonnaie.entity.Utilisateur;
 import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.HistoriqueCrypto;
-import mg.itu.cryptomonnaie.entity.Profil;
+import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.repository.HistoriqueCryptoRepository;
 
@@ -19,13 +20,13 @@ public class HistoriqueCryptoService {
     private final HistoriqueCryptoRepository historiqueCryptoRepository;
     private final CoursCryptoRepository coursCryptoRepository;
 
-    public List<HistoriqueCryptoDTO> portefeuilleClientActuel(final Profil profil) {
+    public List<HistoriqueCryptoDTO> portefeuilleClientActuel(final Utilisateur utilisateur) {
         List<HistoriqueCryptoDTO> portefeuilles = new ArrayList<>();
 
-        List<HistoriqueCrypto> historiqueCryptos = historiqueCryptoRepository.findAllByProfil(profil.getId());
+        List<HistoriqueCrypto> historiqueCryptos = historiqueCryptoRepository.findAllByProfil(utilisateur.getId());
         for (HistoriqueCrypto historiqueCrypto : historiqueCryptos) {
             HistoriqueCryptoDTO portefeuille = new HistoriqueCryptoDTO();
-            portefeuille.setProfil(profil);
+            portefeuille.setProfil(utilisateur);
             portefeuille.setCryptomonnaie(historiqueCrypto.getCryptomonnaie());
             portefeuille.setTypeAction(historiqueCrypto.getTypeAction());
             portefeuille.setDateAction(historiqueCrypto.getDateAction());
@@ -59,8 +60,8 @@ public class HistoriqueCryptoService {
         return valActue - (qtt * pAchat);
     }
 
-    public List<HistoriqueCrypto> historiqueUtilisateur(Profil profil) {
-        return historiqueCryptoRepository.findAllByProfil(profil.getId());
+    public List<HistoriqueCrypto> historiqueUtilisateur(Utilisateur utilisateur) {
+        return historiqueCryptoRepository.findAllByProfil(utilisateur.getId());
     }
 
     public List<HistoriqueCrypto> historiqueGlobale() {

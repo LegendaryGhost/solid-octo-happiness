@@ -5,12 +5,13 @@ import java.time.LocalDateTime;
 
 import lombok.Data;
 import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
-import mg.itu.cryptomonnaie.entity.Profil;
+import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.entity.TypeAction;
+import mg.itu.cryptomonnaie.entity.Utilisateur;
 
 @Data
 public class HistoriqueCryptoDTO {
-    private Profil profil;
+    private Utilisateur utilisateur;
     private Cryptomonnaie cryptomonnaie;
     private TypeAction typeAction;
     private LocalDateTime dateAction;

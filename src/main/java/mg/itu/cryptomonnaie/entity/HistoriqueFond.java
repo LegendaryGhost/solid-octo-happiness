@@ -25,7 +25,7 @@ public class HistoriqueFond {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_profil")
-    private Profil profil;
+    private Utilisateur utilisateur;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_type_transaction")

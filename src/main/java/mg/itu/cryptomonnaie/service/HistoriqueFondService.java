@@ -3,7 +3,7 @@ package mg.itu.cryptomonnaie.service;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
-import mg.itu.cryptomonnaie.entity.Profil;
+import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;
 import mg.itu.cryptomonnaie.repository.HistoriqueFondRepository;
 import mg.itu.cryptomonnaie.repository.TypeTransactionRepository;
@@ -23,16 +23,16 @@ public class HistoriqueFondService {
     private final HistoriqueFondRepository historiqueFondRepository;
     private final EmailService emailService;
 
-    public List<HistoriqueFond> transactionProfil(final Profil profil) {
-        return historiqueFondRepository.findTransactionsProfil(profil.getId());
+    public List<HistoriqueFond> transactionProfil(final Utilisateur utilisateur) {
+        return historiqueFondRepository.findTransactionsProfil(utilisateur.getId());
     }
 
-    public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request, Profil profil) throws MessagingException {
+    public void creerHistoriqueFondTemporaire(HistoriqueFondRequest request, Utilisateur utilisateur) throws MessagingException {
         HistoriqueFond historiqueFond = new HistoriqueFond();
         historiqueFond.setMontant(request.getMontant());
         historiqueFond.setNumCarteBancaire(request.getNumCarteBancaire());
 
-        historiqueFond.setProfil(profil);
+        historiqueFond.setUtilisateur(utilisateur);
 
         TypeTransaction typeTransaction = typeTransactionRepository.findById(
                 Long.valueOf(request.getIdTypeTransaction()))
@@ -45,7 +45,7 @@ public class HistoriqueFondService {
         Objects.requireNonNull(cacheManager.getCache("historiqueFondCache")).put(token, historiqueFond);
 
         // Envoyer email de validation
-        emailService.envoyerValidationHistoFondEmail(profil.getEmail(), token);
+        emailService.envoyerValidationHistoFondEmail(utilisateur.getEmail(), token);
     }
 
     public HistoriqueFond getCachedHistoriqueFond(String token) {

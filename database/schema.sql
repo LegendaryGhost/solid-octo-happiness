@@ -1,8 +1,11 @@
-CREATE TABLE profil
+CREATE TABLE utilisateur
 (
-    id          SERIAL,
-    email       VARCHAR(250),
-    fond_actuel NUMERIC(15, 2),
+    id                  SERIAL,
+    email               VARCHAR(75) UNIQUE NOT NULL,
+    fonds_actuel        NUMERIC(15, 2)     NOT NULL DEFAULT 0,
+    token               VARCHAR(255),
+    date_heure_maj      TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_heure_creation TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 
@@ -67,6 +70,11 @@ CREATE TABLE historique_fond
 
 CREATE TABLE crypto_favoris
 (
-    id_profil        INTEGER,
-    id_cryptomonnaie INTEGER
+    id               SERIAL,
+    id_profil        INTEGER NOT NULL,
+    id_cryptomonnaie INTEGER NOT NULL,
+    UNIQUE (id_profil, id_cryptomonnaie),
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_profil) REFERENCES profil (id),
+    FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id)
 );

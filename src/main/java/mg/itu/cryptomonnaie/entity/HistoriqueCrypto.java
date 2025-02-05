@@ -25,7 +25,7 @@ public class HistoriqueCrypto {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_profil")
-    private Profil profil;
+    private Utilisateur utilisateur;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cryptomonnaie")

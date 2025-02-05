@@ -154,6 +154,10 @@ public class AuthenticationController {
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 httpSession.removeAttribute(PENDING_VERIFICATION_EMAIL_KEY);
+
+                @SuppressWarnings("unchecked")
+                Map<String, String> data = (Map<String, String>) Objects.requireNonNull(responseEntity.getBody()).get("data");
+                authenticationManager.getUtilisateurService().updateOrCreate(pendingVerificationEmail, data.get("token"));
                 authenticationManager.authenticate(pendingVerificationEmail);
 
                 return "redirect:/portefeuille/etat";
