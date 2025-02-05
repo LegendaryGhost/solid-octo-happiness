@@ -146,10 +146,7 @@ public class AuthenticationController {
         try {
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                 identityFlowApiUrl + "/auth/verification-pin", HttpMethod.POST,
-                new HttpEntity<>(VerificationCodePinRequest.builder()
-                    .email(pendingVerificationEmail)
-                    .codePin(codePin)
-                    .build(), createJsonHttpHeaders()),
+                new HttpEntity<>(new VerificationCodePinRequest(pendingVerificationEmail, codePin), createJsonHttpHeaders()),
                 mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {

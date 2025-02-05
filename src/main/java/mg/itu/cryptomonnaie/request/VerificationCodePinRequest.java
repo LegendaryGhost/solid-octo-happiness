@@ -1,10 +1,10 @@
 package mg.itu.cryptomonnaie.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Builder
+@AllArgsConstructor
 @Data
 public class VerificationCodePinRequest {
     private String email;
