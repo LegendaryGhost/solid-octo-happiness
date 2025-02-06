@@ -3,14 +3,14 @@ services:
     image: postgres:15-alpine
     container_name: cryptomonnaie-database
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: phoenix_coin
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: phoenix_coin
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5434:5432"
     volumes:
-      - identity-flow_postgres_data:/var/lib/postgresql/data
-      - ./init-scripts:/docker-entrypoint-initdb.d
+      - cryptomonnaie_postgres_data:/var/lib/postgresql/data
+      - ./database/init-scripts:/docker-entrypoint-initdb.d
 
   app:
     build:
@@ -32,5 +32,4 @@ services:
       - database
 
 volumes:
-  identity-flow_postgres_data:
-    external: true  # Indique que le volume existe déjà
+  cryptomonnaie_postgres_data: {}
