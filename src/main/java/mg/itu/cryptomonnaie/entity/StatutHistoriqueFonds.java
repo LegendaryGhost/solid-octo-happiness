@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id_historique_fonds", "statut"}))
 public class StatutHistoriqueFonds {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

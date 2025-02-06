@@ -82,6 +82,7 @@ CREATE TABLE statut_historique_fonds
     statut              VARCHAR(10) NOT NULL,
     date_heure          TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_historique_fonds INTEGER     NOT NULL,
+    UNIQUE (id_historique_fonds, statut),
     PRIMARY KEY (id),
     FOREIGN KEY (id_historique_fonds) REFERENCES historique_fonds (id)
 );
