@@ -36,10 +36,10 @@
                         </a>
                         <ul class="submenu">
                             <li class="submenu-item">
-                                <a href="#" class="submenu-link">Historique</a>
+                                <a th:href="@{/portefeuille/historique}" class="submenu-link">Historique</a>
                             </li>
                             <li class="submenu-item">
-                                <a href="#" class="submenu-link">État</a>
+                                <a th:href="@{/portefeuille/etat}" class="submenu-link">État</a>
                             </li>
                         </ul>
                     </li>
@@ -52,23 +52,23 @@
                         </a>
                         <ul class="submenu">
                             <li class="submenu-item">
-                                <a href="#" class="submenu-link">Retrait/Dépôt</a>
+                                <a th:href="@{/historique-fond/form}" class="submenu-link">Retrait/Dépôt</a>
                             </li>
                             <li class="submenu-item">
-                                <a href="#" class="submenu-link">Historique</a>
+                                <a th:href="@{/historique-fond/utilisateur}" class="submenu-link">Historique</a>
                             </li>
                         </ul>
                     </li>
 
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
+                        <a th:href="@{/cours/chart}" class="sidebar-link">
                             <i class="bi bi-graph-up"></i>
                             <span>Cours</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
+                        <a th:href="@{/portefeuille/historique-global}" class="sidebar-link">
                             <i class="bi bi-clock-history"></i>
                             <span>Historique global</span>
                         </a>

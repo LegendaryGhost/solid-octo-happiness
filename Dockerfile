@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./target/cryptomonnaie-0.0.1-SNAPSHOT.jar application.jar
 
-EXPOSE 8082
+EXPOSE 8080
 
 # Démarrer l'application
 ENTRYPOINT ["java", "-jar", "application.jar"]

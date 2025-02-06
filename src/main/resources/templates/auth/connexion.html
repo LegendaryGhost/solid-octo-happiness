@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:fragment="title">Connexion</title>
+    <title>Connexion</title>
 </head>
-<body>
-<!-- Section d'authentification -->
-<div id="auth" class="d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%">
-        <div class="text-center mb-4">
-            <h3 class="text-primary">Connexion</h3>
+
+<th:block th:fragment="body">
+    <div class="d-flex justify-content-center align-items-center min-vh-100" id="auth">
+        <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%">
+            <div class="text-center mb-4">
+                <h3 class="text-primary">Connexion</h3>
+            </div>
+            <form method="post" th:action="@{/connexion}" th:object="${connexionRequest}">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" class="form-control" id="email"
+                           th:field="*{email}"
+                           th:value="*{email}"
+                           required
+                    >
+                    <span th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label" for="mot-de-passe">Mot de passe</label>
+                    <input type="password" class="form-control" id="mot-de-passe" th:field="*{motDePasse}" required>
+                </div>
+
+                <button class="btn btn-primary w-100" type="submit">Se connecter</button>
+
+                <div class="text-center mt-3">
+                    <span>Pas encore de compte ?</span>
+                    <a class="text-primary" href="/inscription">S'inscrire</a>
+                </div>
+            </form>
         </div>
-        <form th:action="@{/connexion}" method="post">
-            <div class="form-group mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
-
-            <div class="form-group mb-3">
-                <label for="motDePasse" class="form-label">Mot de passe</label>
-                <input type="password" id="motDePasse" name="motDePasse" class="form-control" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-
-            <div class="text-center mt-3">
-                <span>Pas encore de compte ?</span>
-                <a href="/inscription" class="text-primary">S'inscrire</a>
-            </div>
-        </form>
     </div>
-</div>
+</th:block>
 
-</body>
 </html>

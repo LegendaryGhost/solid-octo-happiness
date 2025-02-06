@@ -1,32 +1,27 @@
 package mg.itu.cryptomonnaie.utils;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import mg.itu.cryptomonnaie.entity.Profil;
-import mg.itu.cryptomonnaie.service.ProfilService;
-import org.springframework.lang.Nullable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 public final class Utils {
-    public static final String USER_KEY = "connected_user";
+    public static final String BINDING_RESULT_KEY_PREFIX = "org.springframework.validation.BindingResult.";
 
-    public static void login(
-        String email,
-        ProfilService profilService,
-        HttpSession httpSession
-    ) {
-        Profil profil = profilService.getByEmail(email);
-        httpSession.setAttribute(USER_KEY, profil);
+    public static HttpHeaders createJsonHttpHeaders() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        return httpHeaders;
     }
 
-    @Nullable
-    public static Profil getUser(HttpSession httpSession) {
-        return (Profil) httpSession.getAttribute(USER_KEY);
-    }
-
-    public static String toCamelCase(String snakeCase) {
-        StringBuilder stringBuilder = new StringBuilder();
+    public static String snakeToCamelCase(String string) {
+        final StringBuilder stringBuilder = new StringBuilder();
         boolean nextUpperCase = false;
 
-        for (char c : snakeCase.toCharArray()) {
+        for (char c : string.toCharArray()) {
             if (c == '_') nextUpperCase = true;
             else {
                 stringBuilder.append(nextUpperCase ? Character.toUpperCase(c) : c);
@@ -35,5 +30,13 @@ public final class Utils {
         }
 
         return stringBuilder.toString();
+    }
+
+    public static HttpServletRequest getCurrentRequest() {
+        return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    }
+
+    public static HttpSession getCurrentSession() {
+        return getCurrentRequest().getSession();
     }
 }

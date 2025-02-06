@@ -35,13 +35,13 @@
                             </thead>
                             <tbody>
                             <tr th:each="historique : ${historiques}">
-                                <td th:text="${historique.getCrypto().getNom()}">Bitcoin</td>
-                                <td th:text="${#temporals.format(historique.getDateHeure(), 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
-                                <td th:text="${#numbers.formatDecimal(historique.getCours(), 0, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
-                                <td th:text="${#numbers.formatDecimal(historique.getQuantite(), 0, 'COMMA', 8, 'POINT')}">0.00000000</td>
+                                <td th:text="${historique.cryptomonnaie.designation}">Bitcoin</td>
+                                <td th:text="${#temporals.format(historique.dateAction, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
+                                <td th:text="${#numbers.formatDecimal(historique.cours, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
+                                <td th:text="${#numbers.formatDecimal(historique.quantite, 1, 'COMMA', 8, 'POINT')}">0.00000000</td>
                                 <td>
-                                            <span th:class="${historique.getAction() == 'ACHAT' ? 'badge bg-success' : 'badge bg-danger'}"
-                                                  th:text="${historique.getAction()}">ACHAT</span>
+                                            <span th:class="${historique.typeAction.designation == 'Achat' ? 'badge bg-success' : 'badge bg-danger'}"
+                                                  th:text="${historique.typeAction.designation}">ACHAT</span>
                                 </td>
                             </tr>
                             </tbody>

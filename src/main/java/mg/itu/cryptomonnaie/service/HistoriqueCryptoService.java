@@ -3,11 +3,9 @@ package mg.itu.cryptomonnaie.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpSession;
-import mg.itu.cryptomonnaie.utils.Utils;
 import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.HistoriqueCrypto;
@@ -15,20 +13,14 @@ import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.repository.HistoriqueCryptoRepository;
 
+@RequiredArgsConstructor
 @Service
 public class HistoriqueCryptoService {
-    @Autowired
-    private HistoriqueCryptoRepository historiqueCryptoRepository;
+    private final HistoriqueCryptoRepository historiqueCryptoRepository;
+    private final CoursCryptoRepository coursCryptoRepository;
 
-    @Autowired
-    private CoursCryptoRepository coursCryptoRepository;
-
-    @Autowired
-    private ProfilService profilService;
-
-    public List<HistoriqueCryptoDTO> portefeuilleClientActuel(HttpSession session) {
+    public List<HistoriqueCryptoDTO> portefeuilleClientActuel(final Profil profil) {
         List<HistoriqueCryptoDTO> portefeuilles = new ArrayList<>();
-        Profil profil = Utils.getUser(session);
 
         List<HistoriqueCrypto> historiqueCryptos = historiqueCryptoRepository.findAllByProfil(profil.getId());
         for (HistoriqueCrypto historiqueCrypto : historiqueCryptos) {
@@ -67,4 +59,11 @@ public class HistoriqueCryptoService {
         return valActue - (qtt * pAchat);
     }
 
+    public List<HistoriqueCrypto> historiqueUtilisateur(Profil profil) {
+        return historiqueCryptoRepository.findAllByProfil(profil.getId());
+    }
+
+    public List<HistoriqueCrypto> historiqueGlobale() {
+        return historiqueCryptoRepository.findAllByOrderByDateActionDesc();
+    }
 }

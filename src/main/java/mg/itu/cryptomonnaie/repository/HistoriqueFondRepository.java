@@ -13,4 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface HistoriqueFondRepository extends JpaRepository<HistoriqueFond, Long> {
     @Query("select hf from HistoriqueFond hf where hf.profil.id = :idProfil")
     List<HistoriqueFond> findTransactionsProfil(@Param("idProfil") Long idProfil);
+
+    @Query("SELECT h FROM HistoriqueFond h WHERE h.etatFond.designation = :etat")
+    List<HistoriqueFond> findByEtat(@Param("etat") String etat);
 }

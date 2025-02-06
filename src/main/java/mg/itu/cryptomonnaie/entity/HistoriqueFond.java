@@ -30,4 +30,8 @@ public class HistoriqueFond {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_type_transaction")
     private TypeTransaction typeTransaction;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_etat")
+    private EtatFond etatFond;
 }
