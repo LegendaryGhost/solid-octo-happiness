@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import static mg.itu.cryptomonnaie.utils.Utils.*;
 
@@ -13,6 +14,8 @@ public class AuthenticationManager {
     public static final String AUTHENTICATED_USER_KEY = "security.auth.user";
 
     public void authenticate(final Utilisateur utilisateur) {
+        Assert.notNull(utilisateur, "L'utilisateur à authentifier ne peut pas être \"null\"");
+
         log.debug("Authentification d'utilisateur avec l'email : {}", utilisateur.getEmail());
         getCurrentSession().setAttribute(AUTHENTICATED_USER_KEY, utilisateur);
     }
