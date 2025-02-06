@@ -3,7 +3,6 @@ package mg.itu.cryptomonnaie.controller;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.dto.HistoriqueFondDTO;
-import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.service.HistoriqueFondService;
@@ -48,7 +47,7 @@ public class HistoriqueFondController {
 
     // A faire: tester ces methodes sur postman
     @PostMapping("/ajouter/en-attente")
-    public String ajouterEnAttente(@RequestBody HistoriqueFondRequest historique) throws MessagingException {
+    public String ajouterEnAttente(HistoriqueFondRequest historique) throws MessagingException {
         historiqueFondService.creerHistoriqueFondEnAttente(historique, authenticationManager.safelyGetCurrentUser());
         return "redirect:/historique-fond/form";
     }
