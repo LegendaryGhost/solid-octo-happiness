@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <title th:replace="${title}">Phoenix Coin</title>
-    <link href="/assets/compiled/svg/favicon.svg" rel="shortcut icon" type="image/x-icon">
-    <link href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-    <link href="/assets/compiled/css/table-datatable-jquery.css" rel="stylesheet">
-    <link href="/assets/compiled/css/app.css" rel="stylesheet">
-    <link href="/assets/compiled/css/app-dark.css" rel="stylesheet">
-    <link href="/assets/compiled/css/iconly.css" rel="stylesheet">
-    <link href="/assets/extensions/choices.js/public/assets/styles/choices.css" rel="stylesheet">
-    <script src="/assets/static/js/initTheme.js"></script>
+    <link rel="shortcut icon" href="/assets/compiled/svg/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/compiled/css/table-datatable-jquery.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="/assets/compiled/css/app-dark.css">
+    <link rel="stylesheet" href="/assets/compiled/css/iconly.css">
+    <link rel="stylesheet" href="/assets/extensions/choices.js/public/assets/styles/choices.css">
 </head>
 <body>
 
@@ -19,16 +18,23 @@
 <th:block th:replace="~{fragment/sidebar}"/>
 
 <div id="main" th:include="${body}"></div>
-
+<script src="/assets/static/js/components/dark.js"></script>
 <script src="/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+
 <script src="/assets/compiled/js/app.js"></script>
 
+
+<script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>
+<script src="/assets/static/js/pages/dashboard.js"></script>
 <script src="/assets/extensions/jquery/jquery.min.js"></script>
 <script src="/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="/assets/static/js/pages/datatables.js"></script>
 <script src="/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
 <script src="/assets/static/js/pages/form-element-select.js"></script>
+
+<script src="/assets/extensions/jquery/jquery.min.js"></script>
 <script src="/assets/extensions/parsleyjs/parsley.min.js"></script>
 <script src="/assets/static/js/pages/parsley.js"></script>
 
