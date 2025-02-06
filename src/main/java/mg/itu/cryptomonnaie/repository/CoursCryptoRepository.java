@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
 public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Integer> {
+
     CoursCrypto findFirstByCryptomonnaieIdOrderByDateHeureDesc(Integer idCryptomonnaie);
 
     List<CoursCrypto> findByCryptomonnaieId(Integer idCryptomonnaie);

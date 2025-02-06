@@ -72,7 +72,18 @@ CREATE TABLE taux_commission
 (
     id           SERIAL,
     valeur_achat NUMERIC(5, 2) NOT NULL,
-    valeur_vente NUMERIC(5, 2) NOT NULL
+    valeur_vente NUMERIC(5, 2) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE statut_historique_fonds
+(
+    id                  SERIAL,
+    statut              VARCHAR(10) NOT NULL,
+    date_heure          TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_historique_fonds INTEGER     NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_historique_fonds) REFERENCES historique_fonds (id)
 );
 
 CREATE TABLE crypto_favoris

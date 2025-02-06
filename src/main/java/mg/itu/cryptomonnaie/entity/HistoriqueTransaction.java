@@ -31,6 +31,7 @@ public class HistoriqueTransaction {
 
     @Setter
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TypeTransaction typeTransaction;
 
     @Setter

@@ -31,6 +31,7 @@ public class HistoriqueFonds {
 
     @Setter
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TypeOperation typeOperation;
 
     @Setter
