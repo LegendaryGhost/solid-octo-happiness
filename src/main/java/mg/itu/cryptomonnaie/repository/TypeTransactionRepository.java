@@ -1,10 +1,6 @@
 package mg.itu.cryptomonnaie.repository;
 
-import mg.itu.cryptomonnaie.entity.*;
+import mg.itu.cryptomonnaie.entity.TypeTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface TypeTransactionRepository extends JpaRepository<TypeTransaction, Long> {
-
-}
+public interface TypeTransactionRepository extends JpaRepository<TypeTransaction, Integer> { }

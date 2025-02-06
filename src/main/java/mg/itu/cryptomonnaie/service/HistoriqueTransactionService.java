@@ -2,6 +2,7 @@ package mg.itu.cryptomonnaie.service;
 
 import java.util.List;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class HistoriqueTransactionService {
         return historiqueTransactionRepository.findHistoriqueGlobale();
     }
 
+    @Transactional
     public List<HistoriqueTransaction> getAllByUtilisateurIdOrderByDateHeureDesc(final Integer idUtilisateur) {
         return historiqueTransactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur);
     }

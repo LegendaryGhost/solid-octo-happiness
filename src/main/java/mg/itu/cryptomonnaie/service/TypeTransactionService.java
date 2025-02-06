@@ -10,11 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class TypeTransactionService {
-
     private final TypeTransactionRepository typeTransactionRepository;
 
     public List<TypeTransaction> liste() {
-	return typeTransactionRepository.findAll();
+        return typeTransactionRepository.findAll();
     }
-
 }
