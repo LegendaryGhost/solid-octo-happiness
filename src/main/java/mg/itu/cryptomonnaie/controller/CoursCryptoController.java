@@ -31,7 +31,7 @@ public class CoursCryptoController {
     @GetMapping("/chart/traitement/")
     public String traitementChart(Model model, @RequestParam("crypto") Long idCryptomonnaie) {
         Cryptomonnaie crypto = cryptomonnaieService.getById(Math.toIntExact(idCryptomonnaie));
-        List<CoursCrypto> coursCryptos = coursCryptosService.listeCoursParCryptomonnaie(crypto);
+        List<CoursCrypto> coursCryptos = coursCryptosService.getByCryptomonnaie(crypto);
         model.addAttribute("coursCryptoos", coursCryptos);
         List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.getAll();
         model.addAttribute("cryptomonnaies", cryptomonnaies);
