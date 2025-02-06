@@ -34,12 +34,20 @@ public class HistoriqueTransaction {
     private TypeTransaction typeTransaction;
 
     @Setter
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_utilisateur")
-    private Utilisateur utilisateur;
+    @Column(nullable = false)
+    private Double tauxCommissionAchat;
+
+    @Setter
+    @Column(nullable = false)
+    private Double tauxCommissionVente;
 
     @Setter
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cryptomonnaie")
     private Cryptomonnaie cryptomonnaie;
+
+    @Setter
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_utilisateur")
+    private Utilisateur utilisateur;
 }

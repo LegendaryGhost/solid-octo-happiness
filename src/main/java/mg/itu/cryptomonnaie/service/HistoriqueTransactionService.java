@@ -47,8 +47,8 @@ public class HistoriqueTransactionService {
         historiqueTransaction.setCours(coursCryptoService
             .getCoursCryptoActuelByCryptomonnaie(idCryptomonnaie).getCoursActuel());
         historiqueTransaction.setTypeTransaction(typeTransaction);
-        historiqueTransaction.setUtilisateur(utilisateur);
         historiqueTransaction.setCryptomonnaie(cryptomonnaie);
+        historiqueTransaction.setUtilisateur(utilisateur);
 
         // Mise à jour du portefeuille
         Portefeuille portefeuille  = portefeuilleService.getByUtilisateurAndCryptomonnaieOrCreate(utilisateur, cryptomonnaie);
