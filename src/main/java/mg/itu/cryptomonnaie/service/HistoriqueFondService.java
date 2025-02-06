@@ -1,16 +1,7 @@
 package mg.itu.cryptomonnaie.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import jakarta.mail.MessagingException;
-import mg.itu.cryptomonnaie.repository.ProfilRepository;
-import mg.itu.cryptomonnaie.utils.Utils;
-import org.springframework.stereotype.Service;
-
-import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
-import mg.itu.cryptomonnaie.entity.EtatFond;
+import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;
@@ -20,22 +11,21 @@ import mg.itu.cryptomonnaie.repository.TypeTransactionRepository;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.utils.SecureTokenGenerator;
 import org.springframework.cache.CacheManager;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class HistoriqueFondService {
-
     private final TypeTransactionRepository typeTransactionRepository;
     private final CacheManager cacheManager;
     private final HistoriqueFondRepository historiqueFondRepository;
     private final EmailService emailService;
     private final EtatFondRepository etatFondRepository;
 
-    public List<HistoriqueFond> transactionProfil(HttpSession session) {
-        Profil profil = Utils.getUser(session);
-        assert profil != null;
+    public List<HistoriqueFond> transactionProfil(final Profil profil) {
         return historiqueFondRepository.findTransactionsProfil(profil.getId());
     }
 

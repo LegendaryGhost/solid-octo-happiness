@@ -1,188 +1,48 @@
 <!DOCTYPE html>
 <html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Code PIN</title>
-    <style th:fragment="styles">
-        :root {
-            --primary-bg: #1a1f2c;
-            --secondary-bg: #2d3748;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --text-primary: #ffffff;
-            --text-secondary: #a0aec0;
-            --accent-gradient: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-            --error-color: #ff4e4e;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: #0f172a;
-            color: var(--text-primary);
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .pin-card {
-            background: linear-gradient(135deg, var(--primary-bg), var(--secondary-bg));
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-            text-align: center;
-        }
-
-        .pin-header {
-            margin-bottom: 2rem;
-        }
-
-        .pin-header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .pin-description {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 2rem;
-        }
-
-        .pin-input-group {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .pin-input {
-            width: 3rem;
-            height: 3.5rem;
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            text-align: center;
-            transition: border-color 0.3s ease;
-        }
-
-        .pin-input:focus {
-            outline: none;
-            border-color: #4facfe;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 0.75rem;
-            background: var(--accent-gradient);
-            border: none;
-            border-radius: 0.5rem;
-            color: var(--text-primary);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-            margin-bottom: 1rem;
-        }
-
-        .submit-btn:hover {
-            opacity: 0.9;
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .pin-card {
-                padding: 1.5rem;
-            }
-
-            .pin-input {
-                width: 2.5rem;
-                height: 3rem;
-            }
-        }
-    </style>
 </head>
-<div class="container" th:fragment="body">
-    <div class="pin-card">
-        <div class="pin-header">
-            <h1>Code PIN</h1>
-            <p class="pin-description">Veuillez entrer votre code PIN à 6 chiffres</p>
-        </div>
 
-        <form th:action="@{/verification-code-pin}" method="post">
-            <div class="pin-input-group">
-                <input type="text"
-                       class="pin-input"
-                       maxlength="1"
-                       pattern="\d"
-                       inputmode="numeric"
-                       required
-                       autocomplete="off">
-                <input type="text"
-                       class="pin-input"
-                       maxlength="1"
-                       pattern="\d"
-                       inputmode="numeric"
-                       required
-                       autocomplete="off">
-                <input type="text"
-                       class="pin-input"
-                       maxlength="1"
-                       pattern="\d"
-                       inputmode="numeric"
-                       required
-                       autocomplete="off">
-                <input type="text"
-                       class="pin-input"
-                       maxlength="1"
-                       pattern="\d"
-                       inputmode="numeric"
-                       required
-                       autocomplete="off">
-                <input type="text"
-                       class="pin-input"
-                       maxlength="1"
-                       pattern="\d"
-                       inputmode="numeric"
-                       required
-                       autocomplete="off">
-                <input type="text"
-                       class="pin-input"
-                       maxlength="1"
-                       pattern="\d"
-                       inputmode="numeric"
-                       required
-                       autocomplete="off">
+<div class="container" th:fragment="body">
+    <div class="card mt-5">
+        <div class="card-header">
+            <h4 class="card-title">Vérification par Code PIN</h4>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-5">
+                <h3>Authentification</h3>
+                <p>Veuillez entrer votre code PIN à 6 chiffres</p>
             </div>
 
-            <input type="hidden" id="fullPin" name="codePin">
+            <form th:action="@{/verification-code-pin}" method="post">
+                <div class="pin-input-container d-flex justify-content-center gap-2 mb-4">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                </div>
 
-            <button type="submit" class="submit-btn">Valider</button>
-        </form>
+                <input type="hidden" id="fullPin" name="codePin">
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary me-1 mb-1">
+                        <span class="bi bi-shield-lock"></span> Valider
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const inputs = document.querySelectorAll('.pin-input');
@@ -219,9 +79,13 @@
             // Mise à jour de l'input caché avec le PIN complet
             function updateHiddenInput() {
                 const pin = Array.from(inputs).map(input => input.value).join('');
+                console.log(pin);
                 hiddenInput.value = pin;
             }
         });
     </script>
 </div>
+
+
+
 </html>

@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.request.EmailAndPasswordRequest;
-import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
+import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,16 +36,12 @@ import static mg.itu.cryptomonnaie.utils.Utils.*;
 public class AuthenticationController {
     private static final String PENDING_VERIFICATION_EMAIL_KEY = "_pending_verification_email";
 
+    private final AuthenticationManager authenticationManager;
     private final RestTemplate restTemplate;
     private final ParameterizedTypeReference<Map<String, Object>> mapTypeReference;
 
     @Value("${identity-flow.api.url}")
     private String identityFlowApiUrl;
-
-    @GetMapping("/")
-    public String index() {
-        return "redirect:/connexion";
-    }
 
     @GetMapping("/inscription")
     public String formulaireInscription(Model model) {
@@ -68,6 +67,7 @@ public class AuthenticationController {
                 redirectAttributes.addFlashAttribute("success",
                     Objects.requireNonNull(responseEntity.getBody()).get("message"));
         } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("Erreur lors d'une inscription d'un utilisateur", e);
             handleHttpStatusCodeException(e, bindingResult);
         }
 
@@ -108,6 +108,7 @@ public class AuthenticationController {
                     Objects.requireNonNull(responseEntity.getBody()).get("message"));
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("Erreur lors d'une tentative de connexion d'un utilisateur", e);
             handleHttpStatusCodeException(e, bindingResult);
         }
 
@@ -123,7 +124,7 @@ public class AuthenticationController {
 
     @GetMapping("/verification-code-pin")
     public String pageVerificationCodePin(
-            @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail
+        @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail
     ) {
         return pendingVerificationEmail == null ? "redirect:/connexion" : "auth/confirmation/pin_confirmation";
     }
@@ -133,8 +134,7 @@ public class AuthenticationController {
         @RequestParam(name = "codePin") String codePin,
         HttpSession httpSession,
         @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail,
-        RedirectAttributes redirectAttributes,
-        AuthenticationManager authenticationManager
+        RedirectAttributes redirectAttributes
     ) {
         if (pendingVerificationEmail == null) return "redirect:/connexion";
 
@@ -144,8 +144,8 @@ public class AuthenticationController {
                 new HttpEntity<>(VerificationCodePinRequest.builder()
                     .email(pendingVerificationEmail)
                     .codePin(codePin)
-                    .build(), createJsonHttpHeaders()
-                ), mapTypeReference);
+                    .build(), createJsonHttpHeaders()),
+                mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 httpSession.removeAttribute(PENDING_VERIFICATION_EMAIL_KEY);
@@ -154,6 +154,8 @@ public class AuthenticationController {
                 return "redirect:/portefeuille/etat";
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("Erreur lors d'une vérification d'un code pin", e);
+
             redirectAttributes.addFlashAttribute("error",
                 Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
         }

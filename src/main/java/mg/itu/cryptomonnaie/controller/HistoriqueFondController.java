@@ -1,17 +1,11 @@
 package mg.itu.cryptomonnaie.controller;
 
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
-import mg.itu.cryptomonnaie.entity.HistoriqueFond;
-import mg.itu.cryptomonnaie.entity.Profil;
+import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
+import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.service.HistoriqueFondService;
 import mg.itu.cryptomonnaie.service.TypeTransactionService;
-import mg.itu.cryptomonnaie.utils.Utils;
-
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,26 +14,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@AllArgsConstructor
-@RequestMapping("/historique-fond")
+@RequiredArgsConstructor
 @Controller
+@RequestMapping("/historique-fond")
 public class HistoriqueFondController {
 
     private final TypeTransactionService typeTransactionService;
     private final HistoriqueFondService historiqueFondService;
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/form")
     public String form(Model model) {
-        model.addAttribute("historique", new HistoriqueFondRequest());
-        model.addAttribute("types", typeTransactionService.liste());
+        model.addAttribute("historique", new HistoriqueFondRequest())
+                .addAttribute("types", typeTransactionService.liste());
 
         return "pages/transaction/formulaire_depot_retrait";
     }
 
     @PostMapping("/ajouter")
-    public String ajouter(HistoriqueFondRequest historique, HttpSession session) throws MessagingException {
-        Profil profil = Utils.getUser(session);
-        historiqueFondService.creerHistoriqueFondTemporaire(historique, profil);
+    public String ajouter(HistoriqueFondRequest historique) throws MessagingException {
+        historiqueFondService.creerHistoriqueFondTemporaire(historique, authenticationManager.safelyGetCurrentUser());
         return "redirect:/historique-fond/form";
     }
 
@@ -79,8 +73,9 @@ public class HistoriqueFondController {
     }
 
     @GetMapping("/utilisateur")
-    public String transactionsUtilisateurCourant(Model model, HttpSession httpSession) {
-        model.addAttribute("transactions", historiqueFondService.transactionProfil(httpSession));
+    public String transactionsUtilisateurCourant(Model model) {
+        model.addAttribute("transactions",
+                historiqueFondService.transactionProfil(authenticationManager.safelyGetCurrentUser()));
 
         return "pages/historique/historique_fond";
     }
