@@ -6,9 +6,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class CryptoMonnaieApplication {
+public class CryptomonnaieApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CryptoMonnaieApplication.class, args);
+		SpringApplication.run(CryptomonnaieApplication.class, args);
 	}
 }
