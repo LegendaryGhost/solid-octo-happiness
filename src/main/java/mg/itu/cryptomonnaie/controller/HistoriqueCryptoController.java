@@ -44,12 +44,4 @@ public class HistoriqueCryptoController {
         return "pages/historique/historique_global";
     }
 
-    @GetMapping("/historique-global")
-    public String historiqueGlobalFiltre(Model model, @RequestParam(name = "dateHeureMin") LocalDateTime dateheureMin,
-            @RequestParam(name = "dateHeureMax") LocalDateTime dateheureMax,
-            @RequestParam(name = "idCrypto") Long idCrypto) {
-        model.addAttribute("historiques", historiqueCryptoService.historiqueGlobale());
-        return "pages/historique/historique_global";
-    }
-
 }
