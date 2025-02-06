@@ -5,20 +5,24 @@
     <title>Gestion des fonds</title>
 </head>
 <body>
+    <th:block th:replace="~{fragment/sidebar}"/>
 
-    <div class="page-heading">
+    <div id="main">
+<!-- <div class="page-heading" style="text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center; height: 20vh;"> -->
+    <div class="page-heading" >
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Gestion des fonds</h3>
-                    <p class="text-subtitle text-muted">Effectuez vos dépôts et retraits</p>
+                    <h3 style="white-space: nowrap;">Gestion des fonds</h3>
+                    <p class="text-subtitle text-muted" style="white-space: nowrap;">Effectuez vos dépôts et retraits</p>
                 </div>
             </div>
         </div>
 
-        <section class="section">
+        <section class="section" style="display: flex; justify-content: center; align-items: center; min-height: 80vh; ">
+        <!-- <section class="section" >  -->
             <div class="col-md-6 col-12">
-                <div class="card">
+                <div class="card" >
                     <div class="card-header">
                         <h4 class="card-title">Transaction de fonds</h4>
                     </div>
@@ -82,6 +86,7 @@
                 </div>
             </div>
         </section>
+    </div>
     </div>
 </body>
 </html>

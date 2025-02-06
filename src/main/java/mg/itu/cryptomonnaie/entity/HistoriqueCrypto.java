@@ -32,6 +32,6 @@ public class HistoriqueCrypto {
     private Cryptomonnaie cryptomonnaie;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_etat")
+    @JoinColumn(name = "id_type_action")
     private TypeAction typeAction;
 }
