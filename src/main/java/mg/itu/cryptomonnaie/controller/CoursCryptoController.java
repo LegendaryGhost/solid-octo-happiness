@@ -23,17 +23,17 @@ public class CoursCryptoController {
 
     @GetMapping("/chart")
     public String afficherEtatPortefeuille(Model model) {
-        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.listeCryptomonnaie();
+        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.getAll();
         model.addAttribute("cryptomonnaies", cryptomonnaies);
         return "pages/crypto_detail/cours";
     }
 
     @GetMapping("/chart/traitement/")
     public String traitementChart(Model model, @RequestParam("crypto") Long idCryptomonnaie) {
-        Cryptomonnaie crypto = cryptomonnaieService.getById(idCryptomonnaie);
+        Cryptomonnaie crypto = cryptomonnaieService.getById(Math.toIntExact(idCryptomonnaie));
         List<CoursCrypto> coursCryptos = coursCryptosService.listeCoursParCryptomonnaie(crypto);
         model.addAttribute("coursCryptoos", coursCryptos);
-        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.listeCryptomonnaie();
+        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.getAll();
         model.addAttribute("cryptomonnaies", cryptomonnaies);
         return "pages/crypto_detail/cours";
     }

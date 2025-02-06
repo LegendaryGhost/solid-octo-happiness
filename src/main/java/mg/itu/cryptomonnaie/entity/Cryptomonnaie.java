@@ -1,14 +1,19 @@
 package mg.itu.cryptomonnaie.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true, doNotUseGetters = true)
+@Getter
+@EqualsAndHashCode
+@ToString(doNotUseGetters = true)
 @Entity
-public class Cryptomonnaie extends AbstractDesignatedEntity {
+public class Cryptomonnaie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Column(length = 150, nullable = false, unique = true)
     private String designation;
 }

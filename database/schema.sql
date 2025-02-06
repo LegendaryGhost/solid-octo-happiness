@@ -28,28 +28,18 @@ CREATE TABLE cours_crypto
     FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id)
 );
 
--- Achat / Vente
-CREATE TABLE type_transaction
-(
-    id          SERIAL,
-    designation VARCHAR(50) NOT NULL,
-    UNIQUE (designation),
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE historique_transaction
 (
-    id                  SERIAL,
-    quantite            REAL           NOT NULL,
-    cours               NUMERIC(15, 2) NOT NULL,
-    date_heure          TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id_utilisateur      INTEGER        NOT NULL,
-    id_cryptomonnaie    INTEGER        NOT NULL,
-    id_type_transaction INTEGER        NOT NULL,
+    id               SERIAL,
+    quantite         REAL           NOT NULL,
+    cours            NUMERIC(15, 2) NOT NULL,
+    date_heure       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    type_transaction VARCHAR(5)     NOT NULL, -- Achat / Vente
+    id_utilisateur   INTEGER        NOT NULL,
+    id_cryptomonnaie INTEGER        NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id),
-    FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id),
-    FOREIGN KEY (id_type_transaction) REFERENCES type_transaction (id)
+    FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id)
 );
 
 CREATE TABLE historique_fonds

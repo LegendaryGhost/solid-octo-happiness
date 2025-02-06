@@ -2,22 +2,25 @@ package mg.itu.cryptomonnaie.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
 import mg.itu.cryptomonnaie.repository.CryptomonnaieRepository;
+import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
 public class CryptomonnaieService {
-    @Autowired
-    private CryptomonnaieRepository cryptomonnaieRepository;
+    private final CryptomonnaieRepository cryptomonnaieRepository;
 
-    public List<Cryptomonnaie> listeCryptomonnaie() {
+    public List<Cryptomonnaie> getAll() {
         return cryptomonnaieRepository.findAll();
     }
 
-    public Cryptomonnaie getById(Long idCrypto) {
-        return cryptomonnaieRepository.findById(idCrypto).orElse(null);
+    @Transactional
+    public Cryptomonnaie getById(final Integer id) {
+        return cryptomonnaieRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Aucune cryptomonnaie trouvée avec l'identifiant : " + id));
     }
 }

@@ -4,22 +4,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.repository.CryptomonnaieRepository;
+import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
 public class CoursCryptoService {
-    @Autowired
-    private CoursCryptoRepository coursCryptoRepository;
-
-    @Autowired
-    private CryptomonnaieRepository cryptomonnaieRepository;
+    private final CoursCryptoRepository coursCryptoRepository;
+    private final CryptomonnaieRepository cryptomonnaieRepository;
     private Random random;
+
+    @Transactional
+    public CoursCrypto getCoursCryptoActuelByCryptomonnaie(final Integer idCryptomonnaie) {
+        return coursCryptoRepository.findFirstByCryptomonnaieIdOrderByDateHeureDesc(idCryptomonnaie);
+    }
 
     // @Scheduled(fixedRate = 10000)
     public void generateRandomCours() {

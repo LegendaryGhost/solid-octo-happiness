@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Integer> {
 
+    Portefeuille findByUtilisateurIdAndCryptomonnaieId(Integer idUtilisateur, Integer idCryptomonnaie);
+
     @Query("""
         SELECT NEW mg.itu.cryptomonnaie.dto.PortefeuilleAvecCoursDTO(
             u.id,
@@ -29,5 +31,5 @@ public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Inte
         )
         AND u.id = :idUtilisateur
     """)
-    List<PortefeuilleAvecCoursDTO> findAvecCoursActuel(Integer idUtilisateur);
+    List<PortefeuilleAvecCoursDTO> findAvecCoursActuelByUtilisateur(Integer idUtilisateur);
 }

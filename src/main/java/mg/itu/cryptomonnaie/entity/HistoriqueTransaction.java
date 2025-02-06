@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import mg.itu.cryptomonnaie.enums.TypeTransaction;
 
 import java.time.LocalDateTime;
 
@@ -29,6 +30,10 @@ public class HistoriqueTransaction {
     private LocalDateTime dateHeure;
 
     @Setter
+    @Enumerated(EnumType.STRING)
+    private TypeTransaction typeTransaction;
+
+    @Setter
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_utilisateur")
     private Utilisateur utilisateur;
@@ -37,9 +42,4 @@ public class HistoriqueTransaction {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cryptomonnaie")
     private Cryptomonnaie cryptomonnaie;
-
-    @Setter
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_type_transaction")
-    private TypeTransaction typeTransaction;
 }

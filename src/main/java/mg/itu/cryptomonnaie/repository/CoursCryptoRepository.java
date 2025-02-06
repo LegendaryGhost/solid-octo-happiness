@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Integer> {
-    CoursCrypto findFirstByCryptomonnaieIdOrderByDateHeureDesc(Integer idCrypto);
+    CoursCrypto findFirstByCryptomonnaieIdOrderByDateHeureDesc(Integer idCryptomonnaie);
 
     @Query("SELECT c FROM CoursCrypto c WHERE c.cryptomonnaie.id = :idCrypto")
     List<CoursCrypto> findCoursParCryptomonnaie(@Param("idCrypto") Long idCrypto);

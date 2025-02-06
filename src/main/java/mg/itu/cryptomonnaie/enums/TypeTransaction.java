@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum TypeOperation {
-    DEPOT("Dépôt"),
-    RETRAIT("Retrait");
+public enum TypeTransaction {
+    ACHAT("Achat"),
+    VENTE("Vente");
 
     private final String value;
 }
