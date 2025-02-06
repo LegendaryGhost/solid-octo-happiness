@@ -25,7 +25,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         // For this to work, create a profile with the below email
         if (!authenticationManager.isUserConnected())
-            authenticationManager.authenticate("test@example.com");
+            authenticationManager.authenticate("alice@example.com");
         return true;
     }
 }

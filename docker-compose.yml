@@ -1,7 +1,13 @@
+networks:
+  shared_network:
+    external: true
+
 services:
-  database:
+  postgres_phoenix_coin:
     image: postgres:15-alpine
-    container_name: cryptomonnaie-database
+    container_name: postgres_phoenix_coin
+    networks:
+      - shared_network
     environment:
       POSTGRES_DB: phoenix_coin
       POSTGRES_USER: postgres
@@ -12,24 +18,19 @@ services:
       - cryptomonnaie_postgres_data:/var/lib/postgresql/data
       - ./database/init-scripts:/docker-entrypoint-initdb.d
 
-  app:
+  spring_boot_phoenix_coin:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: cryptomonnaie-app
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://cryptomonnaie-database:5432/phoenix_coin
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SERVER_PORT: 8080
-      SPRING_MAIL_HOST: smtp.gmail.com
-      SPRING_MAIL_PORT: 587
-      SPRING_MAIL_USERNAME: gestionsender@gmail.com
-      SPRING_MAIL_PASSWORD: crgyvlhzmezpqdkc
+    container_name: spring_boot_phoenix_coin
+    networks:
+      - shared_network
+    env_file:
+      - .env
     ports:
       - "8080:8080"
     depends_on:
-      - database
+      - postgres_phoenix_coin
 
 volumes:
   cryptomonnaie_postgres_data: {}

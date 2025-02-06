@@ -2,7 +2,6 @@ package mg.itu.cryptomonnaie.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -32,6 +31,6 @@ public class HistoriqueCrypto {
     private Cryptomonnaie cryptomonnaie;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_etat")
+    @JoinColumn(name = "id_type_action")
     private TypeAction typeAction;
 }

@@ -2,6 +2,7 @@ package mg.itu.cryptomonnaie.service;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import mg.itu.cryptomonnaie.entity.EtatFond;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;
@@ -13,6 +14,7 @@ import mg.itu.cryptomonnaie.utils.SecureTokenGenerator;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 

@@ -2,6 +2,8 @@ package mg.itu.cryptomonnaie.controller;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import mg.itu.cryptomonnaie.entity.HistoriqueFond;
+import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.service.HistoriqueFondService;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -39,8 +43,8 @@ public class HistoriqueFondController {
 
     // A faire: tester ces methodes sur postman
     @PostMapping("/ajouter/en-attente")
-    public String ajouterEnAttente(HistoriqueFondRequest historique, HttpSession session) throws MessagingException {
-        Profil profil = Utils.getUser(session);
+    public String ajouterEnAttente(HistoriqueFondRequest historique) {
+        Profil profil = authenticationManager.safelyGetCurrentUser();
         historiqueFondService.creerHistoriqueFondEnAttente(historique, profil);
         return "redirect:/historique-fond/form";
     }
