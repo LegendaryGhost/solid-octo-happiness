@@ -114,7 +114,7 @@ public class CoursCryptoService {
             coursCryptos.stream()
                 .mapToDouble(c -> Math.pow(c.getCoursActuel() - calculerMoyenne(coursCryptos), 2))
                 .average()
-            .   orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"))
+                .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"))
         );
     }
 }
