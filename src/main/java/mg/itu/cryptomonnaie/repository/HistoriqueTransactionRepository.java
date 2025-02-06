@@ -1,14 +1,37 @@
 package mg.itu.cryptomonnaie.repository;
 
+import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
 import mg.itu.cryptomonnaie.entity.*;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface HistoriqueTransactionRepository extends JpaRepository<HistoriqueTransaction, Integer> {
 
     List<HistoriqueTransaction> findAllByUtilisateurIdOrderByDateHeureDesc(Integer idUtilisateur);
 
-    List<HistoriqueTransaction> findAllByOrderByDateHeureDesc();
+    @Query("""
+        SELECT NEW mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO(
+            ht.utilisateur.id,
+            ht.utilisateur.email,
+            ht.cryptomonnaie.id,
+            ht.cryptomonnaie.designation,
+            ht.typeTransaction.designation,
+            ht.quantite,
+            ht.dateHeure,
+            ht.cours,
+            cc.coursActuel
+        )
+        FROM HistoriqueTransaction ht
+        LEFT JOIN CoursCrypto cc ON cc.cryptomonnaie.id = ht.cryptomonnaie.id
+        AND cc.dateHeure = (
+            SELECT MAX(cc2.dateHeure)
+            FROM CoursCrypto cc2
+            WHERE cc2.cryptomonnaie.id = ht.cryptomonnaie.id
+        ) 
+        ORDER BY ht.dateHeure DESC
+    """)
+    List<HistoriqueTransactionDTO> findHistoriqueGlobale();
 }

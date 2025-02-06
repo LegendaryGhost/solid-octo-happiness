@@ -29,5 +29,5 @@ public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Inte
         )
         AND u.id = :idUtilisateur
     """)
-    List<PortefeuilleAvecCoursDTO> findSituationPortefeuilleActuelle(Integer idUtilisateur);
+    List<PortefeuilleAvecCoursDTO> findAvecCoursActuel(Integer idUtilisateur);
 }
