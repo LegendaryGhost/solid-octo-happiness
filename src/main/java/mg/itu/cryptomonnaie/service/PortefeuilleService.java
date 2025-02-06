@@ -45,6 +45,7 @@ public class PortefeuilleService {
     public SituationPortefeuilleDTO getSituationPortefeuilleActuelle(final Utilisateur utilisateur) {
         final Integer idUtilisateur = utilisateur.getId();
 
+        // Récupération de la liste des cryptos dans le portefeuille avec leur cours actuel
         List<PortefeuilleAvecCoursDTO> portefeuilleAvecCoursDTOList = portefeuilleRepository.findAvecCoursActuelByUtilisateur(idUtilisateur);
         Map<Integer, Double> coursCryptoActuelMap = portefeuilleAvecCoursDTOList.stream()
             .collect(Collectors.toMap(
@@ -53,6 +54,7 @@ public class PortefeuilleService {
                 (existing, replacement) -> existing
             ));
 
+        // Récupération de l'historique des transactions
         List<HistoriqueTransactionDTO> historiquesTransactionDTO = new ArrayList<>();
         historiqueTransactionService.getAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur)
             .forEach(historiqueTransaction -> {

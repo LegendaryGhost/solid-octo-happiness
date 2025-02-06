@@ -11,7 +11,6 @@ public class AnalyseCommissionRequest {
     @NotNull
     private TypeAnalyseCommission typeAnalyse;
 
-    @NotNull
     private Integer idCryptomonnaie;
 
     private LocalDateTime dateHeureMin;

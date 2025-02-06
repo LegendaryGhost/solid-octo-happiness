@@ -1,9 +1,9 @@
 package mg.itu.cryptomonnaie.dto;
 
-public record ResumeHistoriqueTransactionUtilisateurDTO(
+public record ResumeHistoriqueTransactionDTO(
     Integer idUtilisateur,
     String  emailUtilisateur,
-    Double  sommeAchats,
-    Double  sommeVentes,
+    Double  totalAchats,
+    Double  totalVentes,
     Double  valeurPortefeuille
 ) { }

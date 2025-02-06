@@ -5,9 +5,11 @@ import java.util.List;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
-import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
+import mg.itu.cryptomonnaie.dto.ResultatAnalyseCommissionDTO;
+import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionDTO;
 import mg.itu.cryptomonnaie.entity.*;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
+import mg.itu.cryptomonnaie.request.AnalyseCommissionRequest;
 import mg.itu.cryptomonnaie.request.HistoriqueTransactionRequest;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,8 @@ public class HistoriqueTransactionService {
         return historiqueTransactionRepository.findHistoriqueGlobale();
     }
 
-    public List<ResumeHistoriqueTransactionUtilisateurDTO> getResumeTransactionGroupByUtilisateur() {
-        return historiqueTransactionRepository.findResumeTransactionGroupByUtilisateur();
+    public List<ResumeHistoriqueTransactionDTO> getResumesHistoriquesTransactionGroupByUtilisateur() {
+        return historiqueTransactionRepository.findResumesHistoriquesTransactionGroupByUtilisateur();
     }
 
     @Transactional
@@ -66,5 +68,10 @@ public class HistoriqueTransactionService {
 
         portefeuilleService.save(portefeuille);
         historiqueTransactionRepository.save(historiqueTransaction);
+    }
+
+    public ResultatAnalyseCommissionDTO analyserCommission(final AnalyseCommissionRequest request) {
+        return historiqueTransactionRepository.analyserCommission(
+            request.getTypeAnalyse(), request.getIdCryptomonnaie(), request.getDateHeureMin(), request.getDateHeureMax());
     }
 }
