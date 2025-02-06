@@ -69,8 +69,8 @@ public interface HistoriqueTransactionRepository extends JpaRepository<Historiqu
         FROM HistoriqueTransaction ht
             JOIN ht.cryptomonnaie c
         WHERE (:idCryptomonnaie IS NULL OR c.id = :idCryptomonnaie)
-            AND (:dateHeureMin IS NULL OR ht.dateHeure >= :dateHeureMin)
-            AND (:dateHeureMax IS NULL OR ht.dateHeure <= :dateHeureMax)
+            AND (:dateHeureMin  IS NULL OR ht.dateHeure >= :dateHeureMin)
+            AND (:dateHeureMax  IS NULL OR ht.dateHeure <= :dateHeureMax)
         GROUP BY c.id
     """)
     ResultatAnalyseCommissionDTO analyserCommission(
