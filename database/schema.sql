@@ -40,8 +40,8 @@ CREATE TABLE type_transaction
 CREATE TABLE historique_transaction
 (
     id                  SERIAL,
-    cours               NUMERIC(15, 2) NOT NULL,
     quantite            REAL           NOT NULL,
+    cours               NUMERIC(15, 2) NOT NULL,
     date_heure          TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_utilisateur      INTEGER        NOT NULL,
     id_cryptomonnaie    INTEGER        NOT NULL,
@@ -72,6 +72,18 @@ CREATE TABLE historique_fonds
     PRIMARY KEY (id),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id),
     FOREIGN KEY (id_type_operation) REFERENCES type_operation (id)
+);
+
+CREATE TABLE portefeuille
+(
+    id               SERIAL,
+    quantite         REAL    NOT NULL DEFAULT 0,
+    id_utilisateur   INTEGER NOT NULL,
+    id_cryptomonnaie INTEGER NOT NULL,
+    UNIQUE (id_utilisateur, id_cryptomonnaie),
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id),
+    FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id)
 );
 
 CREATE TABLE crypto_favoris

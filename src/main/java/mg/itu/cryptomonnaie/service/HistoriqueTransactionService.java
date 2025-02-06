@@ -15,17 +15,17 @@ import mg.itu.cryptomonnaie.repository.HistoriqueTransactionRepository;
 
 @RequiredArgsConstructor
 @Service
-public class HistoriqueCryptoService {
+public class HistoriqueTransactionService {
     private final HistoriqueTransactionRepository historiqueTransactionRepository;
     private final CoursCryptoRepository coursCryptoRepository;
 
-    public List<HistoriqueCryptoDTO> portefeuilleClientActuel(final Utilisateur utilisateur) {
+    public List<HistoriqueCryptoDTO> etatPortefeuilleActuel(final Utilisateur utilisateur) {
         List<HistoriqueCryptoDTO> portefeuilles = new ArrayList<>();
 
-        List<HistoriqueTransaction> historiqueTransactions = historiqueTransactionRepository.findAllByProfil(utilisateur.getId());
+        List<HistoriqueTransaction> historiqueTransactions = historiqueTransactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(utilisateur.getId());
         for (HistoriqueTransaction historiqueTransaction : historiqueTransactions) {
             HistoriqueCryptoDTO portefeuille = new HistoriqueCryptoDTO();
-            portefeuille.setProfil(utilisateur);
+            portefeuille.setUtilisateur(utilisateur);
             portefeuille.setCryptomonnaie(historiqueTransaction.getCryptomonnaie());
             portefeuille.setTypeOperation(historiqueTransaction.getTypeAction());
             portefeuille.setDateAction(historiqueTransaction.getDateHeure());
@@ -60,7 +60,7 @@ public class HistoriqueCryptoService {
     }
 
     public List<HistoriqueTransaction> historiqueUtilisateur(Utilisateur utilisateur) {
-        return historiqueTransactionRepository.findAllByProfil(utilisateur.getId());
+        return historiqueTransactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(utilisateur.getId());
     }
 
     public List<HistoriqueTransaction> historiqueGlobale() {

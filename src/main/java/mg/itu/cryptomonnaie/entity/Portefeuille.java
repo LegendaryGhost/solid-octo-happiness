@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Getter
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
-public class HistoriqueTransaction {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id_utilisateur", "id_cryptomonnaie"}))
+public class Portefeuille {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,13 +19,6 @@ public class HistoriqueTransaction {
     @Setter
     @Column(nullable = false)
     private Float quantite;
-
-    @Setter
-    @Column(nullable = false)
-    private Double cours;
-
-    @Column(nullable = false)
-    private LocalDateTime dateHeure;
 
     @Setter
     @ManyToOne(optional = false)
@@ -37,9 +29,4 @@ public class HistoriqueTransaction {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cryptomonnaie")
     private Cryptomonnaie cryptomonnaie;
-
-    @Setter
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_type_transaction")
-    private TypeTransaction typeTransaction;
 }
