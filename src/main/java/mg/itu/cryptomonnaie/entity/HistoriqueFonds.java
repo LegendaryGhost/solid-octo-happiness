@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import mg.itu.cryptomonnaie.enums.TypeOperation;
 
 import java.time.LocalDateTime;
 
@@ -29,12 +30,11 @@ public class HistoriqueFonds {
     private LocalDateTime dateHeure;
 
     @Setter
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_utilisateur")
-    private Utilisateur utilisateur;
+    @Enumerated(EnumType.STRING)
+    private TypeOperation typeOperation;
 
     @Setter
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_type_operation")
-    private TypeOperation typeOperation;
+    @JoinColumn(name = "id_utilisateur")
+    private Utilisateur utilisateur;
 }

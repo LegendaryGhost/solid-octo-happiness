@@ -23,4 +23,8 @@ public class HistoriqueTransactionService {
     public List<HistoriqueTransaction> getAllByUtilisateurIdOrderByDateHeureDesc(final Integer idUtilisateur) {
         return historiqueTransactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur);
     }
+
+    public void save() {
+
+    }
 }

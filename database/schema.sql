@@ -52,26 +52,16 @@ CREATE TABLE historique_transaction
     FOREIGN KEY (id_type_transaction) REFERENCES type_transaction (id)
 );
 
--- Dépôt / Retrait
-CREATE TABLE type_operation
-(
-    id          SERIAL,
-    designation VARCHAR(50) NOT NULL,
-    UNIQUE (designation),
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE historique_fonds
 (
     id                 SERIAL,
     num_carte_bancaire VARCHAR(50)    NOT NULL,
     montant            NUMERIC(15, 2) NOT NULL,
     date_heure         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    type_operation     VARCHAR(7)     NOT NULL, -- Dépôt / Retrait
     id_utilisateur     INTEGER        NOT NULL,
-    id_type_operation  INTEGER        NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id),
-    FOREIGN KEY (id_type_operation) REFERENCES type_operation (id)
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id)
 );
 
 CREATE TABLE portefeuille

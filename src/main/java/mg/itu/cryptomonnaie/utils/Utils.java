@@ -58,8 +58,8 @@ public final class Utils {
             .collect(Collectors.joining());
     }
 
-    public static Cache safelyGetCache(final String name, final CacheManager cacheManager) {
-        Cache cache = cacheManager.getCache(name);
+    public static Cache safelyGetCache(final String name) {
+        Cache cache = SpringContextUtil.cacheManager().getCache(name);
         if (cache == null) throw new RuntimeException("Aucune cache trouvée avec le nom : " + name);
 
         return cache;

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import mg.itu.cryptomonnaie.enums.TypeOperation;
 
 @Data
 public class HistoriqueFondsRequest {
@@ -16,5 +17,5 @@ public class HistoriqueFondsRequest {
     private Double montant;
 
     @NotNull
-    private Integer idTypeOperation;
+    private TypeOperation typeOperation;
 }
