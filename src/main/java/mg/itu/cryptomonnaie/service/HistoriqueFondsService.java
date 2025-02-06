@@ -19,7 +19,7 @@ public class HistoriqueFondsService {
 
     private final HistoriqueFondsRepository historiqueFondsRepository;
     private final UtilisateurService utilisateurService;
-    // private final EmailService emailService;
+    private final EmailService emailService;
 
     public List<HistoriqueFonds> transactionProfil(final Utilisateur utilisateur) {
         return historiqueFondsRepository.findTransactionsProfil(Long.valueOf(utilisateur.getId()));
@@ -38,7 +38,7 @@ public class HistoriqueFondsService {
         System.out.println("Token : " + token);
 
         safelyGetCache(HISTORIQUES_FONDS_TEMPORAIRES_CACHE_KEY).put(token, historiqueFonds);
-        // emailService.envoyerEmailValidationHistoFonds(utilisateur.getEmail(), token);
+        emailService.envoyerEmailValidationHistoFonds(utilisateur.getEmail(), token);
     }
 
     public void confirmerOperation(final Utilisateur utilisateur, final String token) {

@@ -18,7 +18,7 @@ public interface HistoriqueTransactionRepository extends JpaRepository<Historiqu
             ht.utilisateur.email,
             ht.cryptomonnaie.id,
             ht.cryptomonnaie.designation,
-            ht.typeTransaction.designation,
+            ht.typeTransaction,
             ht.quantite,
             ht.dateHeure,
             ht.cours,

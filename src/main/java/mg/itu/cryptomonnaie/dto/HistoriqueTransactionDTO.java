@@ -1,6 +1,7 @@
 package mg.itu.cryptomonnaie.dto;
 
 import lombok.Data;
+import mg.itu.cryptomonnaie.enums.TypeTransaction;
 
 import java.time.LocalDateTime;
 
@@ -10,8 +11,8 @@ public final class HistoriqueTransactionDTO {
     private final String  emailUtilisateur;
     private final Integer idCryptomonnaie;
     private final String  designationCryptomonnaie;
-    private final String  typeTransaction;
-    private final Float   quantite;
+    private final TypeTransaction typeTransaction;
+    private final Float quantite;
     private final LocalDateTime dateHeure;
     private final Double cours;
     private final Double coursActuel;
@@ -24,8 +25,8 @@ public final class HistoriqueTransactionDTO {
         final String  emailUtilisateur,
         final Integer idCryptomonnaie,
         final String  designationCryptomonnaie,
-        final String  typeTransaction,
-        final Float   quantite,
+        final TypeTransaction typeTransaction,
+        final Float quantite,
         final LocalDateTime dateHeure,
         final Double cours,
         final Double coursActuel

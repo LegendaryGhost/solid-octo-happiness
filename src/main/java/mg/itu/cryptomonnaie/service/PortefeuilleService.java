@@ -27,20 +27,18 @@ public class PortefeuilleService {
         final Utilisateur utilisateur, final Cryptomonnaie cryptomonnaie
     ) {
         Portefeuille portefeuille = portefeuilleRepository.findByUtilisateurIdAndCryptomonnaieId(utilisateur.getId(), cryptomonnaie.getId());
-        if (portefeuille == null) {
-            portefeuille = new Portefeuille();
-            portefeuille.setUtilisateur(utilisateur);
-            portefeuille.setCryptomonnaie(cryptomonnaie);
+        if (portefeuille != null) return portefeuille;
 
-            save(portefeuille);
-        }
+        portefeuille = new Portefeuille();
+        portefeuille.setUtilisateur(utilisateur);
+        portefeuille.setCryptomonnaie(cryptomonnaie);
 
-        return portefeuille;
+        return save(portefeuille);
     }
 
     @Transactional
-    public void save(Portefeuille portefeuille) {
-        portefeuilleRepository.save(portefeuille);
+    public Portefeuille save(Portefeuille portefeuille) {
+        return portefeuilleRepository.save(portefeuille);
     }
 
     public SituationPortefeuilleDTO getSituationPortefeuilleActuelle(final Utilisateur utilisateur) {
@@ -65,7 +63,7 @@ public class PortefeuilleService {
                     utilisateur.getEmail(),
                     idCryptomonnaie,
                     cryptomonnaie.getDesignation(),
-                    historiqueTransaction.getTypeTransaction().getValue(),
+                    historiqueTransaction.getTypeTransaction(),
                     historiqueTransaction.getQuantite(),
                     historiqueTransaction.getDateHeure(),
                     historiqueTransaction.getCours(),
