@@ -34,4 +34,19 @@ public class HistoriqueFond {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_etat")
     private EtatFond etatFond;
+
+    // @JsonIgnore // Ajout de @JsonIgnore
+    // public Profil getProfil() {
+    // return profil;
+    // }
+
+    // @JsonIgnore
+    // public TypeTransaction getTypeTransaction() {
+    // return typeTransaction;
+    // }
+
+    // // @JsonIgnore
+    // // public EtatFond getEtatFond() {
+    // // return etatFond;
+    // // }
 }

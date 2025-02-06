@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction en attente</title>
+</head>
+<body>
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Transaction de Fonds</h3>
+                    <p class="text-subtitle text-muted">Liste des transactions en attentes de validation</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Transactions de fonds en attente </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-lg">
+                            <thead>
+                            <tr>
+                                <th>Date Transaction</th>
+                                <th>Montant</th>
+                                <th>Carte bancaire</th>
+                                <th>Email utilisateur</th>
+                                <th>Fond utilisateur</th>
+                                <th>Type de transaction</th>
+                                <th>Statut transaction</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="historiqueFond : ${historiqueFonds}">
+                                <td class="fw-bold" th:text="${#temporals.format(historiqueFond.dateTransaction, 'dd/MM/yyyy')}"></td>
+                                <td class="font-monospace" th:text="${#numbers.formatDecimal(historiqueFond.montant, 1, 8)}"></td>
+                                <td class="font-monospace" th:text="${historiqueFond.numCarteBancaire}"></td>
+                                <td class="font-monospace" th:text="${historiqueFond.email}"></td>
+                                <td class="font-monospace" th:text="${#numbers.formatDecimal(historiqueFond.fondActuel, 1, 8)}"></td>
+                                <td class="font-monospace" th:text="${historiqueFond.typeTransaction}"></td>
+                                <td class="font-monospace" th:text="${historiqueFond.etatFond}"></td>
+                                <td>
+                                    <a th:href="@{/historique-fond/valider/transaction-fond/{id}(id=${historiqueFond.id})}">
+                                        <img th:src="@{/assets/compiled/png/validate.png}" width="24" height="24" style="margin-right: 10px;">
+                                    </a>
+                                    <a th:href="@{/historique-fond/refuser/transaction-fond/{id}(id=${historiqueFond.id})}">
+                                        <img th:src="@{/assets/compiled/png/refuse.png}" width="18" height="18" style="margin-left: 7px;">
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

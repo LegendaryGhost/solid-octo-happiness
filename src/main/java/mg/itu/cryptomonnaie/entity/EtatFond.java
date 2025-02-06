@@ -18,6 +18,6 @@ public class EtatFond {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date_action", nullable = false)
+    @Column(name = "designation", nullable = false)
     private String designation;
 }

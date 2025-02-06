@@ -22,7 +22,7 @@ public class CoursCryptoService {
     private CryptomonnaieRepository cryptomonnaieRepository;
     private Random random = new Random();;
 
-    @Scheduled(fixedRate = 10000)
+    // @Scheduled(fixedRate = 10000)
     public void generateRandomCours() {
         List<Cryptomonnaie> cryptomonnaies = cryptomonnaieRepository.findAll();
 
