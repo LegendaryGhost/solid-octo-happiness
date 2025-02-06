@@ -25,36 +25,30 @@
                     <h4>Filtrer les transactions</h4>
                 </div>
                 <div class="card-body">
-                    <form class="row g-3" method="get" th:action="@{/historique-fond/filtrer}">
-                        <!-- Champ Date Heure Min -->
+                    <form class="row g-3" method="get" th:action="@{/portefeuille/filtrer}">
                         <div class="col-md-3">
                             <label for="dateHeureMin" class="form-label">Date Heure Min</label>
                             <input type="datetime-local" id="dateHeureMin" name="dateHeureMin" class="form-control">
                         </div>
 
-                        <!-- Champ Date Heure Max -->
                         <div class="col-md-3">
                             <label for="dateHeureMax" class="form-label">Date Heure Max</label>
                             <input type="datetime-local" id="dateHeureMax" name="dateHeureMax" class="form-control">
                         </div>
 
-                        <!-- Liste déroulante Type de transaction -->
                         <div class="col-md-3">
-                            <label for="typeTransaction" class="form-label">Type de transaction</label>
-                            <select id="typeTransaction" name="typeTransaction" class="form-select">
-                                <option value="">Tous</option>
-                                <option value="achat">Achat</option>
-                                <option value="vente">Vente</option>
+                            <label for="idCrypto" class="form-label">Cryptomonnaie</label>
+                            <select id="idCrypto" name="idCrypto" class="form-select">
+                                <option value="">Choisir</option>
+                                <option th:each="cryptomonnaie : ${cryptomonnaies}" th:value="${cryptomonnaie.id}" th:text="${cryptomonnaie.designation}">cryptomonnaie</option>
                             </select>
                         </div>
 
-                        <!-- Liste déroulante Statut -->
                         <div class="col-md-3">
-                            <label for="statut" class="form-label">Statut</label>
-                            <select id="statut" name="statut" class="form-select">
-                                <option value="">Tous</option>
-                                <option value="valide">Validé</option>
-                                <option value="refuse">Refusé</option>
+                            <label for="idProfil" class="form-label">Utilisateur</label>
+                            <select id="idProfil" name="idProfil" class="form-select">
+                                <option value="">Choisir</option>
+                                <option th:each="profil : ${profils}" th:value="${profil.id}" th:text="${profil.email}">profil</option>
                             </select>
                         </div>
 

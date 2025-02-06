@@ -3,6 +3,9 @@ package mg.itu.cryptomonnaie.service;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.repository.ProfilRepository;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -12,5 +15,9 @@ public class ProfilService {
 
     public Profil getByEmail(final String email) {
         return profilRepository.findByEmail(email);
+    }
+
+    public List<Profil> listeProfils() {
+        return profilRepository.findAll();
     }
 }

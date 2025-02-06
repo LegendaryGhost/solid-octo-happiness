@@ -1,9 +1,12 @@
 package mg.itu.cryptomonnaie.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.dto.HistoriqueCryptoDTO;
@@ -12,6 +15,7 @@ import mg.itu.cryptomonnaie.entity.HistoriqueCrypto;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.repository.HistoriqueCryptoRepository;
+import mg.itu.cryptomonnaie.specifications.HistoriqueCryptoSpecification;
 
 @RequiredArgsConstructor
 @Service
@@ -65,5 +69,12 @@ public class HistoriqueCryptoService {
 
     public List<HistoriqueCrypto> historiqueGlobale() {
         return historiqueCryptoRepository.findAllByOrderByDateActionDesc();
+    }
+
+    public List<HistoriqueCrypto> filtrerHistorique(LocalDateTime dateHeureMin, LocalDateTime dateHeureMax,
+            Long idCrypto, Long idProfil) {
+        Specification<HistoriqueCrypto> spec = HistoriqueCryptoSpecification.filtrerHistorique(dateHeureMin,
+                dateHeureMax, idCrypto, idProfil);
+        return historiqueCryptoRepository.findAll(spec);
     }
 }
