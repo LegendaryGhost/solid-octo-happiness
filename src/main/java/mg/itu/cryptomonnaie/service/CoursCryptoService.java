@@ -58,7 +58,7 @@ public class CoursCryptoService {
         if (coursCrypto.isEmpty()) return null;
 
         List<Double> valeursCours = coursCrypto.stream().map(CoursCrypto::getCoursActuel).toList();
-        return switch (request.getTypeAnalyseCoursCrypto()) {
+        return switch (request.getTypeAnalyse()) {
             case PREMIER_QUARTILE -> premierQuartile(valeursCours);
             case MAX -> valeursCours.stream().max(Double::compare).orElse(0.0);
             case MIN -> valeursCours.stream().min(Double::compare).orElse(0.0);

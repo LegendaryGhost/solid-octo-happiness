@@ -1,6 +1,7 @@
 package mg.itu.cryptomonnaie.repository;
 
 import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
+import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
 import mg.itu.cryptomonnaie.entity.*;
 
 import java.util.List;
@@ -34,4 +35,18 @@ public interface HistoriqueTransactionRepository extends JpaRepository<Historiqu
         ORDER BY ht.dateHeure DESC
     """)
     List<HistoriqueTransactionDTO> findHistoriqueGlobale();
+
+    @Query("""
+        SELECT NEW mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO(
+            u.id,
+            u.email,
+            CAST(SUM(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.ACHAT THEN ht.quantite * ht.cours ELSE 0 END) AS Double),
+            CAST(SUM(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.VENTE THEN ht.quantite * ht.cours ELSE 0 END) AS Double),
+            u.fondsActuel
+        )
+        FROM HistoriqueTransaction ht
+            JOIN ht.utilisateur u
+        GROUP BY u.id
+    """)
+    List<ResumeHistoriqueTransactionUtilisateurDTO> findResumeTransactionGroupByUtilisateur();
 }

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum TypeTransaction implements ValuedEnum {
-    ACHAT("Achat"),
-    VENTE("Vente");
+public enum TypeAnalyseCommission implements ValuedEnum {
+    SOMME("Somme"),
+    MOYENNE("Moyenne");
 
     private final String value;
 }

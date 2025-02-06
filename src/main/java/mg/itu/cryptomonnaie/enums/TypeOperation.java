@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum TypeOperation {
+public enum TypeOperation implements ValuedEnum {
     DEPOT("Dépôt"),
     RETRAIT("Retrait");
 

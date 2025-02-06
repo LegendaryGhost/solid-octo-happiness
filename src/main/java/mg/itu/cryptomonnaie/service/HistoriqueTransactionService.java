@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
+import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
 import mg.itu.cryptomonnaie.entity.*;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
 import mg.itu.cryptomonnaie.request.HistoriqueTransactionRequest;
@@ -23,6 +24,10 @@ public class HistoriqueTransactionService {
 
     public List<HistoriqueTransactionDTO> getHistoriqueGlobale() {
         return historiqueTransactionRepository.findHistoriqueGlobale();
+    }
+
+    public List<ResumeHistoriqueTransactionUtilisateurDTO> getResumeTransactionGroupByUtilisateur() {
+        return historiqueTransactionRepository.findResumeTransactionGroupByUtilisateur();
     }
 
     @Transactional

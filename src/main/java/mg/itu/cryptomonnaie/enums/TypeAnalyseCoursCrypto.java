@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum TypeAnalyseCoursCrypto {
+public enum TypeAnalyseCoursCrypto implements ValuedEnum {
     PREMIER_QUARTILE("Premier quartile"),
     MAX("Max"),
     MIN("Min"),

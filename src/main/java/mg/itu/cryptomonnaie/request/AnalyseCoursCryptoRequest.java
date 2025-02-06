@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class AnalyseCoursCryptoRequest {
     @NotNull
-    private TypeAnalyseCoursCrypto typeAnalyseCoursCrypto;
+    private TypeAnalyseCoursCrypto typeAnalyse;
 
     @NotNull
     @NotEmpty
