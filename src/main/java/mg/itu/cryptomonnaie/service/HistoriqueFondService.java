@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.entity.TypeTransaction;
+import mg.itu.cryptomonnaie.repository.EtatFondRepository;
 import mg.itu.cryptomonnaie.repository.HistoriqueFondRepository;
 import mg.itu.cryptomonnaie.repository.TypeTransactionRepository;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
@@ -22,6 +23,7 @@ public class HistoriqueFondService {
     private final CacheManager cacheManager;
     private final HistoriqueFondRepository historiqueFondRepository;
     private final EmailService emailService;
+    private final EtatFondRepository etatFondRepository;
 
     public List<HistoriqueFond> transactionProfil(final Profil profil) {
         return historiqueFondRepository.findTransactionsProfil(profil.getId());
@@ -36,7 +38,7 @@ public class HistoriqueFondService {
 
         TypeTransaction typeTransaction = typeTransactionRepository.findById(
                 Long.valueOf(request.getIdTypeTransaction()))
-            .orElseThrow(() -> new RuntimeException("Type de transaction introuvable"));
+                .orElseThrow(() -> new RuntimeException("Type de transaction introuvable"));
         historiqueFond.setTypeTransaction(typeTransaction);
 
         String token = SecureTokenGenerator.generateToken(20);
@@ -61,5 +63,63 @@ public class HistoriqueFondService {
 
     public List<HistoriqueFond> listeTransactions() {
         return historiqueFondRepository.findAll();
+    }
+
+    public HistoriqueFond creerHistoriqueFondEnAttente(HistoriqueFondRequest historique, Profil profil) {
+        HistoriqueFond historiqueFond = new HistoriqueFond();
+        historiqueFond.setMontant(historique.getMontant());
+        historiqueFond.setNumCarteBancaire(historique.getNumCarteBancaire());
+        historiqueFond.setProfil(profil);
+
+        TypeTransaction typeTransaction = typeTransactionRepository.findById(
+                Long.valueOf(historique.getIdTypeTransaction()))
+                .orElseThrow(() -> new RuntimeException("Type de transaction introuvable"));
+        historiqueFond.setTypeTransaction(typeTransaction);
+
+        // Tokony asiana champ ana date amle form depot-retrait
+        historiqueFond.setDateTransaction(LocalDateTime.now());
+
+        // Statut de transaction de fond En attente id = 3
+        EtatFond etatFond = etatFondRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Etat de transaction de fond introuvable"));
+        historiqueFond.setEtatFond(etatFond);
+
+        return historiqueFondRepository.save(historiqueFond);
+    }
+
+    public List<HistoriqueFond> listeTransactionFondEnAttente() {
+        List<HistoriqueFond> historiques = historiqueFondRepository.findByEtat("En attente");
+
+        if (historiques == null || historiques.isEmpty()) {
+            throw new RuntimeException("Aucune transaction en attente disponible");
+        }
+
+        return historiques;
+    }
+
+    public HistoriqueFond validerTransactionFond(Long id) {
+        HistoriqueFond historiqueFond = historiqueFondRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction de fond introuvable pour cet id"));
+
+        // Statut de transaction de fond Refusée id = 2
+        EtatFond etatFond = etatFondRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("Etat de transaction de fond introuvable"));
+
+        historiqueFond.setEtatFond(etatFond);
+
+        return historiqueFondRepository.save(historiqueFond);
+    }
+
+    public HistoriqueFond refuserTransactionFond(Long id) {
+        HistoriqueFond historiqueFond = historiqueFondRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction de fond introuvable pour cet id"));
+
+        // Statut de transaction de fond Refusée id = 2
+        EtatFond etatFond = etatFondRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Etat de transaction de fond introuvable"));
+
+        historiqueFond.setEtatFond(etatFond);
+
+        return historiqueFondRepository.save(historiqueFond);
     }
 }

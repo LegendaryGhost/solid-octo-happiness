@@ -52,6 +52,12 @@ CREATE TABLE historique_crypto
     FOREIGN KEY (id_type_action) REFERENCES type_action (id)
 );
 
+CREATE TABLE etat_fond(
+    id SERIAL,
+    designation VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE historique_fond
 (
     id                  SERIAL,
@@ -60,7 +66,9 @@ CREATE TABLE historique_fond
     montant             NUMERIC(15, 2),
     id_profil           INTEGER     NOT NULL,
     id_type_transaction INTEGER     NOT NULL,
+    id_etat INTEGER     NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_profil) REFERENCES profil (id),
-    FOREIGN KEY (id_type_transaction) REFERENCES type_transaction (id)
+    FOREIGN KEY (id_type_transaction) REFERENCES type_transaction (id),
+    FOREIGN KEY (id_etat) REFERENCES etat_fond (id)
 );

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class HistoriqueCryptoController {
 
     @GetMapping("/etat")
     public String afficherEtatPortefeuille(Model model) {
-        List<HistoriqueCryptoDTO> etatPortefeuilles = historiqueCryptoService.portefeuilleClientActuel(authenticationManager.safelyGetCurrentUser());
+        List<HistoriqueCryptoDTO> etatPortefeuilles = historiqueCryptoService
+                .portefeuilleClientActuel(authenticationManager.safelyGetCurrentUser());
         model.addAttribute("etatPortefeuilles", etatPortefeuilles);
 
         return "pages/portefeuille/etat_protefeuille";
@@ -28,7 +30,8 @@ public class HistoriqueCryptoController {
 
     @GetMapping("/historique")
     public String historiquePortefeuille(Model model) {
-        model.addAttribute("historiques", historiqueCryptoService.historiqueUtilisateur(authenticationManager.safelyGetCurrentUser()));
+        model.addAttribute("historiques",
+                historiqueCryptoService.historiqueUtilisateur(authenticationManager.safelyGetCurrentUser()));
         return "pages/historique/historique_transactions";
     }
 
