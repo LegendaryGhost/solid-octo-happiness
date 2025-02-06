@@ -71,6 +71,7 @@
                             <thead>
                             <tr>
                                 <th>Utilisateur</th>
+                                <th>Email</th>
                                 <th>Crypto</th>
                                 <th>Date & Heure</th>
                                 <th>Cours</th>
@@ -80,7 +81,18 @@
                             </thead>
                             <tbody>
                             <tr th:each="historique : ${historiques}">
-                                <td th:text="${historique.profil.email}">Utilisateur</td>
+                                <td >
+                                    <img 
+                                        th:src="@{'/assets/compiled/profil/' + ${historique.profil.photo}}" 
+                                        alt="photo" 
+                                        width="50" 
+                                        style="width: 50px;
+                                            height: 50px;
+                                            border-radius: 50%;
+                                            object-fit: cover;
+                                            border: 2px solid #ddd;">
+                                </td>
+                                <td th:text="${historique.profil.email}">Email</td>
                                 <td th:text="${historique.cryptomonnaie.designation}">Bitcoin</td>
                                 <td th:text="${#temporals.format(historique.dateAction, 'dd/MM/yyyy HH:mm')}">
                                     01/01/2024 12:00

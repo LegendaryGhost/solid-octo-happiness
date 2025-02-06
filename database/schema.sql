@@ -3,6 +3,7 @@ CREATE TABLE profil
     id          SERIAL,
     email       VARCHAR(250),
     fond_actuel NUMERIC(15, 2),
+    photo VARCHAR(255),
     PRIMARY KEY (id)
 );
 

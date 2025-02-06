@@ -23,4 +23,7 @@ public class Profil {
     @Column(nullable = false)
     private Double fondActuel;
 
+    @Column(length = 250, nullable = false)
+    private String photo;
+
 }
