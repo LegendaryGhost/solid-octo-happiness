@@ -53,34 +53,33 @@ public class CoursCryptoService {
 
     @Nullable
     public Double analyser(final AnalyseCoursCryptoRequest request) {
-        List<CoursCrypto> coursCrypto = coursCryptoRepository.findAllByCryptomonnaieIdInAndDateHeureBetweenOrderByDateHeureDesc(
+        List<Double> coursCrypto = coursCryptoRepository.findAllCoursActuelInIdsCryptomonnaieForPeriode(
             request.getIdsCryptomonnaie(), request.getDateHeureMin(), request.getDateHeureMax());
         if (coursCrypto.isEmpty()) return null;
 
-        List<Double> valeursCours = coursCrypto.stream().map(CoursCrypto::getCoursActuel).toList();
         return switch (request.getTypeAnalyse()) {
-            case PREMIER_QUARTILE -> premierQuartile(valeursCours);
-            case MAX -> valeursCours.stream().max(Double::compare).orElse(0.0);
-            case MIN -> valeursCours.stream().min(Double::compare).orElse(0.0);
-            case MOYENNE    -> moyenne(valeursCours);
-            case ECART_TYPE -> ecartType(valeursCours);
+            case PREMIER_QUARTILE -> premierQuartile(coursCrypto);
+            case MAX -> coursCrypto.stream().max(Double::compare).orElse(0.0);
+            case MIN -> coursCrypto.stream().min(Double::compare).orElse(0.0);
+            case MOYENNE    -> moyenne(coursCrypto);
+            case ECART_TYPE -> ecartType(coursCrypto);
         };
     }
 
-    private static Double premierQuartile(List<Double> valeursCours) {
-        valeursCours.sort(null);
-        return valeursCours.get((int) Math.ceil(0.25 * valeursCours.size()) - 1);
+    private static Double premierQuartile(List<Double> coursCrypto) {
+        coursCrypto.sort(null);
+        return coursCrypto.get((int) Math.ceil(0.25 * coursCrypto.size()) - 1);
     }
 
-    private static Double moyenne(List<Double> valeursCours) {
-        return valeursCours.stream()
+    private static Double moyenne(List<Double> coursCrypto) {
+        return coursCrypto.stream()
             .mapToDouble(aDouble -> aDouble)
             .average().orElse(0.0);
     }
 
-    private static Double ecartType(List<Double> valeursCours) {
-        Double moyenne = moyenne(valeursCours);
-        return Math.sqrt(valeursCours.stream()
+    private static Double ecartType(List<Double> coursCrypto) {
+        Double moyenne = moyenne(coursCrypto);
+        return Math.sqrt(coursCrypto.stream()
             .mapToDouble(val -> Math.pow(val - moyenne, 2))
             .average().orElse(0.0));
     }

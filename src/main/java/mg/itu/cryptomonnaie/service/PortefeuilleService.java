@@ -8,6 +8,7 @@ import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
 import mg.itu.cryptomonnaie.entity.Portefeuille;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.repository.PortefeuilleRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Lazy))
 @Service
 public class PortefeuilleService {
     private final PortefeuilleRepository portefeuilleRepository;

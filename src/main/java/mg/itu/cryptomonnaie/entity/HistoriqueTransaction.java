@@ -26,7 +26,7 @@ public class HistoriqueTransaction {
     @Column(nullable = false)
     private Double cours;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime dateHeure;
 
     @Setter
