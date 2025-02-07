@@ -2,13 +2,11 @@
 <html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Historique global des transactions des utilisateurs</title>
+    <title>Historique global</title>
 </head>
 <body>
-<!-- Sidebar -->
-<th:block th:replace="~{fragment/sidebar}"/>
 
-<div id="main">
+<th:block th:fragment="body">
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -104,8 +102,8 @@
                                     0.00000000
                                 </td>
                                 <td>
-                                            <span th:class="${historique.typeAction.designation == 'Achat' ? 'badge bg-success' : 'badge bg-danger'}"
-                                                  th:text="${historique.typeAction.designation}">ACHAT</span>
+                                    <span th:class="${historique.typeAction.designation == 'Achat' ? 'badge bg-success' : 'badge bg-danger'}"
+                                          th:text="${historique.typeAction.designation}">ACHAT</span>
                                 </td>
                             </tr>
                             </tbody>
@@ -115,6 +113,6 @@
             </div>
         </section>
     </div>
-</div>
+</th:block>
 </body>
 </html>

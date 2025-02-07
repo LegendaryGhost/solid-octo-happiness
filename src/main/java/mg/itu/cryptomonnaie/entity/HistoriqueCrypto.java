@@ -2,7 +2,6 @@ package mg.itu.cryptomonnaie.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDateTime;
 
 @Entity

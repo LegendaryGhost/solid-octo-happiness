@@ -2,12 +2,12 @@
 
 Lancer les commande suivantes :
 
-```text
-docker build -t cryptomonnaie-app
+```shell
+./mvnw clean package
 ```
 
-```text
-docker-compose up -build
+```shell
+docker-compose up --build
 ```
 
-L'application sera disponible sur l'adresse: `localhost:8082`
+L'application sera disponible sur l'adresse: `localhost:8080`

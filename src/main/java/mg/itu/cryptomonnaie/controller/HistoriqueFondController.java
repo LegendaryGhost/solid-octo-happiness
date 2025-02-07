@@ -2,7 +2,8 @@ package mg.itu.cryptomonnaie.controller;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import mg.itu.cryptomonnaie.dto.HistoriqueFondDTO;
+import mg.itu.cryptomonnaie.entity.HistoriqueFond;
+import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.service.HistoriqueFondService;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
