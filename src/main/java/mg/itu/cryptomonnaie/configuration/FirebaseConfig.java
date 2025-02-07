@@ -9,18 +9,18 @@ import org.springframework.context.annotation.Configuration;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-@Configuration
+//@Configuration
 public class FirebaseConfig {
 
-    @Bean
-    public FirebaseApp initializeFirebase() throws IOException {
-        FileInputStream serviceAccount =
-                new FileInputStream("src/main/resources/firebase-service-account.json");
-
-        FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build();
-
-        return FirebaseApp.initializeApp(options);
-    }
+//    @Bean
+//    public FirebaseApp initializeFirebase() throws IOException {
+//        FileInputStream serviceAccount =
+//                new FileInputStream("src/main/resources/firebase/phoenixcoin-19b13-firebase-adminsdk-fbsvc-1a90d5927d.json");
+//
+//        FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .build();
+//
+//        return FirebaseApp.initializeApp(options);
+//    }
 }
