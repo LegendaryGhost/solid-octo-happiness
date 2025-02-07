@@ -36,11 +36,11 @@ public class HistoriqueTransaction {
 
     @Setter
     @Column(nullable = false)
-    private Double tauxCommissionAchat;
+    private Double tauxCommission;
 
     @Setter
     @Column(nullable = false)
-    private Double tauxCommissionVente;
+    private Double montantCommission;
 
     @Setter
     @ManyToOne(optional = false)

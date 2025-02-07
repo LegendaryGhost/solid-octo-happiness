@@ -2,7 +2,7 @@ package mg.itu.cryptomonnaie.repository;
 
 import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
 import mg.itu.cryptomonnaie.dto.ResultatAnalyseCommissionDTO;
-import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionDTO;
+import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
 import mg.itu.cryptomonnaie.entity.*;
 
 import java.time.LocalDateTime;
@@ -41,7 +41,7 @@ public interface HistoriqueTransactionRepository extends JpaRepository<Historiqu
     List<HistoriqueTransactionDTO> findHistoriqueGlobale();
 
     @Query("""
-        SELECT NEW mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionDTO(
+        SELECT NEW mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO(
             u.id,
             u.email,
             CAST(SUM(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.ACHAT THEN ht.quantite * ht.cours ELSE 0 END) AS Double),
@@ -52,18 +52,18 @@ public interface HistoriqueTransactionRepository extends JpaRepository<Historiqu
             JOIN ht.utilisateur u
         GROUP BY u.id
     """)
-    List<ResumeHistoriqueTransactionDTO> findResumesHistoriquesTransactionGroupByUtilisateur();
+    List<ResumeHistoriqueTransactionUtilisateurDTO> findResumesHistoriquesTransactionGroupByUtilisateur();
 
     @Query("""
         SELECT NEW mg.itu.cryptomonnaie.dto.ResultatAnalyseCommissionDTO(
             c.designation,
             CASE WHEN :typeAnalyse = mg.itu.cryptomonnaie.enums.TypeAnalyseCommission.SOMME 
-                 THEN CAST(SUM(ht.quantite * ht.cours * CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.ACHAT THEN ht.tauxCommissionAchat ELSE ht.tauxCommissionVente END) AS Double)
-                 ELSE CAST(AVG(ht.quantite * ht.cours * CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.ACHAT THEN ht.tauxCommissionAchat ELSE ht.tauxCommissionVente END) AS Double)
+                 THEN CAST(SUM(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.ACHAT THEN ht.montantCommission ELSE 0 END) AS Double)
+                 ELSE CAST(AVG(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.ACHAT THEN ht.montantCommission ELSE 0 END) AS Double)
             END,
             CASE WHEN :typeAnalyse = mg.itu.cryptomonnaie.enums.TypeAnalyseCommission.SOMME 
-                 THEN CAST(SUM(ht.quantite * ht.cours * CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.VENTE THEN ht.tauxCommissionVente ELSE ht.tauxCommissionAchat END) AS Double)
-                 ELSE CAST(AVG(ht.quantite * ht.cours * CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.VENTE THEN ht.tauxCommissionVente ELSE ht.tauxCommissionAchat END) AS Double)
+                 THEN CAST(SUM(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.VENTE THEN ht.montantCommission ELSE 0 END) AS Double)
+                 ELSE CAST(AVG(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.VENTE THEN ht.montantCommission ELSE 0 END) AS Double)
             END
         )
         FROM HistoriqueTransaction ht

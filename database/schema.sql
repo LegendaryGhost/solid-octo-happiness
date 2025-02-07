@@ -30,15 +30,15 @@ CREATE TABLE cours_crypto
 
 CREATE TABLE historique_transaction
 (
-    id                    SERIAL,
-    quantite              REAL           NOT NULL,
-    cours                 NUMERIC(15, 2) NOT NULL,
-    date_heure            TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    type_transaction      VARCHAR(5)     NOT NULL, -- Achat / Vente
-    taux_commission_achat NUMERIC(5, 2)  NOT NULL DEFAULT 0,
-    taux_commission_vente NUMERIC(5, 2)  NOT NULL DEFAULT 0,
-    id_cryptomonnaie      INTEGER        NOT NULL,
-    id_utilisateur        INTEGER        NOT NULL,
+    id                 SERIAL,
+    quantite           REAL           NOT NULL,
+    cours              NUMERIC(15, 2) NOT NULL,
+    date_heure         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    type_transaction   VARCHAR(5)     NOT NULL, -- Achat / Vente
+    taux_commission    NUMERIC(5, 2)  NOT NULL DEFAULT 0,
+    montant_commission NUMERIC(15, 2) NOT NULL,
+    id_cryptomonnaie   INTEGER        NOT NULL,
+    id_utilisateur     INTEGER        NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id)
