@@ -1,11 +1,11 @@
 package mg.itu.cryptomonnaie.repository;
 
-import mg.itu.cryptomonnaie.entity.StatutHistoriqueFonds;
+import mg.itu.cryptomonnaie.entity.SuiviOperation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface StatutHistoriqueFondsRepository extends JpaRepository<StatutHistoriqueFonds, Integer> {
+public interface StatutHistoriqueFondsRepository extends JpaRepository<SuiviOperation, Integer> {
 
-    Optional<StatutHistoriqueFonds> findByHistoriqueFondsIdOrderByDateHeureDesc(Integer idHistoriqueFonds);
+    Optional<SuiviOperation> findByHistoriqueFondsIdOrderByDateHeureDesc(Integer idHistoriqueFonds);
 }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @ToString(doNotUseGetters = true)
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id_historique_fonds", "statut"}))
-public class StatutHistoriqueFonds {
+public class SuiviOperation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,11 +24,12 @@ public class StatutHistoriqueFonds {
     @Column(nullable = false, updatable = false)
     private StatutOperation statut;
 
+    @Setter
     @Column(nullable = false, updatable = false)
     private LocalDateTime dateHeure;
 
     @Setter
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_historique_fonds")
-    private HistoriqueFonds historiqueFonds;
+    private Operation operation;
 }

@@ -33,7 +33,7 @@ public class HistoriqueTransactionService {
     }
 
     @Transactional
-    public List<HistoriqueTransaction> getAllByUtilisateurIdOrderByDateHeureDesc(final Integer idUtilisateur) {
+    public List<Transaction> getAllByUtilisateurIdOrderByDateHeureDesc(final Integer idUtilisateur) {
         return historiqueTransactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur);
     }
 
@@ -44,13 +44,13 @@ public class HistoriqueTransactionService {
         TypeTransaction typeTransaction = request.getTypeTransaction();
         Float requestQuantite = request.getQuantite();
 
-        HistoriqueTransaction historiqueTransaction = new HistoriqueTransaction();
-        historiqueTransaction.setQuantite(requestQuantite);
-        historiqueTransaction.setCours(coursCryptoService
-            .getCoursCryptoActuelByCryptomonnaie(idCryptomonnaie).getCoursActuel());
-        historiqueTransaction.setTypeTransaction(typeTransaction);
-        historiqueTransaction.setCryptomonnaie(cryptomonnaie);
-        historiqueTransaction.setUtilisateur(utilisateur);
+        Transaction transaction = new Transaction();
+        transaction.setQuantite(requestQuantite);
+        transaction.setCours(coursCryptoService
+            .getCoursCryptoActuelByCryptomonnaie(idCryptomonnaie).getCours());
+        transaction.setTypeTransaction(typeTransaction);
+        transaction.setCryptomonnaie(cryptomonnaie);
+        transaction.setUtilisateur(utilisateur);
 
         // Mise à jour du portefeuille
         Portefeuille portefeuille  = portefeuilleService.getByUtilisateurAndCryptomonnaieOrCreate(utilisateur, cryptomonnaie);
@@ -61,13 +61,13 @@ public class HistoriqueTransactionService {
                 portefeuille.setQuantite(portefeuilleQuantite - requestQuantite);
 
                 // La Vente se transforme en fonds
-                utilisateur.setFondsActuel(utilisateur.getFondsActuel() + requestQuantite * historiqueTransaction.getCours());
+                utilisateur.setFondsActuel(utilisateur.getFondsActuel() + requestQuantite * transaction.getCours());
                 utilisateurService.save(utilisateur);
             }
         }
 
         portefeuilleService.save(portefeuille);
-        historiqueTransactionRepository.save(historiqueTransaction);
+        historiqueTransactionRepository.save(transaction);
     }
 
     public ResultatAnalyseCommissionDTO analyserCommission(final AnalyseCommissionRequest request) {

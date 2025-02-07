@@ -50,7 +50,7 @@ CREATE TABLE operation
     id                 SERIAL,
     num_carte_bancaire VARCHAR(50)    NOT NULL,
     montant            NUMERIC(15, 2) NOT NULL,
-    date_heure         TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_heure         TIMESTAMP      NOT NULL,
     type_operation     VARCHAR(7)     NOT NULL, -- Dépôt / Retrait
     id_utilisateur     INTEGER        NOT NULL,
     PRIMARY KEY (id),
@@ -77,11 +77,11 @@ CREATE TABLE taux_commission
     PRIMARY KEY (id)
 );
 
-CREATE TABLE statut_operation
+CREATE TABLE suivi_operation
 (
     id           SERIAL,
     statut       VARCHAR(10) NOT NULL,
-    date_heure   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date_heure   TIMESTAMP   NOT NULL,
     id_operation INTEGER     NOT NULL,
     UNIQUE (id_operation, statut),
     PRIMARY KEY (id),

@@ -13,9 +13,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
-public interface HistoriqueTransactionRepository extends JpaRepository<HistoriqueTransaction, Integer> {
+public interface HistoriqueTransactionRepository extends JpaRepository<Transaction, Integer> {
 
-    List<HistoriqueTransaction> findAllByUtilisateurIdOrderByDateHeureDesc(Integer idUtilisateur);
+    List<Transaction> findAllByUtilisateurIdOrderByDateHeureDesc(Integer idUtilisateur);
 
     @Query("""
         SELECT NEW mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO(
@@ -29,7 +29,7 @@ public interface HistoriqueTransactionRepository extends JpaRepository<Historiqu
             ht.cours,
             cc.coursActuel
         )
-        FROM HistoriqueTransaction ht
+        FROM Transaction ht
         LEFT JOIN CoursCrypto cc ON cc.cryptomonnaie.id = ht.cryptomonnaie.id
         AND cc.dateHeure = (
             SELECT MAX(cc2.dateHeure)
@@ -48,7 +48,7 @@ public interface HistoriqueTransactionRepository extends JpaRepository<Historiqu
             CAST(SUM(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.VENTE THEN ht.quantite * ht.cours ELSE 0 END) AS Double),
             u.fondsActuel
         )
-        FROM HistoriqueTransaction ht
+        FROM Transaction ht
             JOIN ht.utilisateur u
         GROUP BY u.id
     """)
@@ -66,7 +66,7 @@ public interface HistoriqueTransactionRepository extends JpaRepository<Historiqu
                  ELSE CAST(AVG(CASE WHEN ht.typeTransaction = mg.itu.cryptomonnaie.enums.TypeTransaction.VENTE THEN ht.montantCommission ELSE 0 END) AS Double)
             END
         )
-        FROM HistoriqueTransaction ht
+        FROM Transaction ht
             JOIN ht.cryptomonnaie c
         WHERE (:idCryptomonnaie IS NULL OR c.id = :idCryptomonnaie)
             AND (:dateHeureMin  IS NULL OR ht.dateHeure >= :dateHeureMin)

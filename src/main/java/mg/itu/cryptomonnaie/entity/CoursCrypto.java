@@ -19,9 +19,9 @@ public class CoursCrypto {
 
     @Setter
     @Column(nullable = false)
-    private Double coursActuel;
+    private Double cours;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime dateHeure;
 
     @Setter

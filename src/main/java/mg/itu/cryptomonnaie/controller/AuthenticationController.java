@@ -41,7 +41,6 @@ public class AuthenticationController {
     private final UtilisateurService utilisateurService;
     private final RestTemplate restTemplate;
     private final ParameterizedTypeReference<Map<String, Object>> mapTypeReference;
-    private final ProfilService profilService;
 
     @Value("${identity-flow.api.url}")
     private String identityFlowApiUrl;

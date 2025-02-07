@@ -39,7 +39,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="historiqueFond : ${historiqueFonds}">
+                                <tr th:each="historiqueFond : ${operation}">
                                     <td class="fw-bold" th:text="${#temporals.format(historiqueFond.dateTransaction, 'dd/MM/yyyy')}"></td>
                                     <td class="font-monospace" th:text="${#numbers.formatDecimal(historiqueFond.montant, 1, 8)}"></td>
                                     <td class="font-monospace" th:text="${historiqueFond.numCarteBancaire}"></td>

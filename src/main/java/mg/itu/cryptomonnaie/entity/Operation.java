@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
-public class HistoriqueFonds {
+public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,7 +27,7 @@ public class HistoriqueFonds {
     private Double montant;
 
     @Column(nullable = false)
-    private LocalDateTime dateHeure;
+    private LocalDateTime dateHeure = LocalDateTime.now();
 
     @Setter
     @Enumerated(EnumType.STRING)

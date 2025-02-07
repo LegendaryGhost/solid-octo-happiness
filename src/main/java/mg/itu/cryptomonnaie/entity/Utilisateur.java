@@ -26,6 +26,9 @@ public class Utilisateur {
     private String email;
 
     @Setter
+    private String pdp;
+
+    @Setter
     @Column(nullable = false)
     private Double fondsActuel;
 

@@ -36,13 +36,13 @@ public class CoursCryptoService {
         for (Cryptomonnaie crypto : cryptomonnaies) {
             CoursCrypto coursActuel = coursCryptoRepository
                 .findFirstByCryptomonnaieIdOrderByDateHeureDesc(crypto.getId());
-            Double dernierCours = coursActuel.getCoursActuel();
+            Double dernierCours = coursActuel.getCours();
             CoursCrypto coursCrypto = new CoursCrypto();
             coursCrypto.setCryptomonnaie(crypto);
-            coursCrypto.setCoursActuel(generateRandomCoursValue(dernierCours));
+            coursCrypto.setCours(generateRandomCoursValue(dernierCours));
 
             coursCryptoRepository.save(coursCrypto);
-            System.out.println("Cours généré pour " + crypto.getDesignation() + ": " + coursCrypto.getCoursActuel());
+            System.out.println("Cours généré pour " + crypto.getDesignation() + ": " + coursCrypto.getCours());
         }
     }
 

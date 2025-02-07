@@ -2,8 +2,8 @@ package mg.itu.cryptomonnaie.service;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import mg.itu.cryptomonnaie.entity.HistoriqueFonds;
-import mg.itu.cryptomonnaie.entity.StatutHistoriqueFonds;
+import mg.itu.cryptomonnaie.entity.Operation;
+import mg.itu.cryptomonnaie.entity.SuiviOperation;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.enums.StatutOperation;
 import mg.itu.cryptomonnaie.repository.HistoriqueFondsRepository;
@@ -29,11 +29,11 @@ public class HistoriqueFondsService {
     private final EmailService emailService;
     private final SimpleAsyncTaskExecutor applicationTaskExecutor;
 
-    public List<HistoriqueFonds> transactionProfil(final Utilisateur utilisateur) {
+    public List<Operation> transactionProfil(final Utilisateur utilisateur) {
         return historiqueFondsRepository.findTransactionsProfil(Long.valueOf(utilisateur.getId()));
     }
 
-    public List<HistoriqueFonds> getHistoriqueGlobale(final @Nullable LocalDateTime dateHeure) {
+    public List<Operation> getHistoriqueGlobale(final @Nullable LocalDateTime dateHeure) {
         return historiqueFondsRepository.findAllByDateHeureEquals(dateHeure);
     }
 
@@ -41,22 +41,22 @@ public class HistoriqueFondsService {
     public void creerHistoriqueFondsEnAttente(
         final HistoriqueFondsRequest request, final Utilisateur utilisateur
     ) {
-        HistoriqueFonds historiqueFonds = new HistoriqueFonds();
-        historiqueFonds.setNumCarteBancaire(request.getNumCarteBancaire());
-        historiqueFonds.setMontant(request.getMontant());
-        historiqueFonds.setTypeOperation(request.getTypeOperation());
-        historiqueFonds.setUtilisateur(utilisateur);
+        Operation operation = new Operation();
+        operation.setNumCarteBancaire(request.getNumCarteBancaire());
+        operation.setMontant(request.getMontant());
+        operation.setTypeOperation(request.getTypeOperation());
+        operation.setUtilisateur(utilisateur);
 
-        StatutHistoriqueFonds statutHistoriqueFonds = new StatutHistoriqueFonds();
-        statutHistoriqueFonds.setStatut(StatutOperation.defaultValue());
-        statutHistoriqueFonds.setHistoriqueFonds(historiqueFonds);
+        SuiviOperation suiviOperation = new SuiviOperation();
+        suiviOperation.setStatut(StatutOperation.defaultValue());
+        suiviOperation.setOperation(operation);
 
-        statutHistoriqueFondsService.save(statutHistoriqueFonds);
-        historiqueFondsRepository.save(historiqueFonds);
+        statutHistoriqueFondsService.save(suiviOperation);
+        historiqueFondsRepository.save(operation);
     }
 
     public void accepterOperation(final Integer idHistoriqueFonds) {
-        StatutHistoriqueFonds statutHistoriqueFonds = statutHistoriqueFondsService.getByHistoriqueFondsOrderByDateHeureDesc(idHistoriqueFonds);
+        SuiviOperation suiviOperation = statutHistoriqueFondsService.getByHistoriqueFondsOrderByDateHeureDesc(idHistoriqueFonds);
 
         
     }
@@ -69,32 +69,32 @@ public class HistoriqueFondsService {
     public void creerHistoriqueFondsTemporaire(
         final HistoriqueFondsRequest request, final Utilisateur utilisateur
     ) throws MessagingException {
-        HistoriqueFonds historiqueFonds = new HistoriqueFonds();
-        historiqueFonds.setNumCarteBancaire(request.getNumCarteBancaire());
-        historiqueFonds.setMontant(request.getMontant());
-        historiqueFonds.setUtilisateur(utilisateur);
-        historiqueFonds.setTypeOperation(request.getTypeOperation());
+        Operation operation = new Operation();
+        operation.setNumCarteBancaire(request.getNumCarteBancaire());
+        operation.setMontant(request.getMontant());
+        operation.setUtilisateur(utilisateur);
+        operation.setTypeOperation(request.getTypeOperation());
 
         final String token = generateToken(20);
         System.out.println("Token : " + token);
 
-        safelyGetCache(HISTORIQUES_FONDS_TEMPORAIRES_CACHE_KEY).put(token, historiqueFonds);
+        safelyGetCache(HISTORIQUES_FONDS_TEMPORAIRES_CACHE_KEY).put(token, operation);
         emailService.envoyerEmailValidationHistoFonds(utilisateur.getEmail(), token);
     }
 
     public void confirmerOperation(final Utilisateur utilisateur, final String token) {
-        HistoriqueFonds historiqueFonds = safelyGetCache(HISTORIQUES_FONDS_TEMPORAIRES_CACHE_KEY).get(token, HistoriqueFonds.class);
-        if (historiqueFonds != null) {
+        Operation operation = safelyGetCache(HISTORIQUES_FONDS_TEMPORAIRES_CACHE_KEY).get(token, Operation.class);
+        if (operation != null) {
             Double fondsActuel = utilisateur.getFondsActuel();
-            Double montant = historiqueFonds.getMontant();
+            Double montant = operation.getMontant();
 
-            utilisateur.setFondsActuel(switch (historiqueFonds.getTypeOperation()) {
+            utilisateur.setFondsActuel(switch (operation.getTypeOperation()) {
                 case DEPOT   -> fondsActuel + montant;
                 case RETRAIT -> fondsActuel - montant;
             });
             utilisateurService.save(utilisateur);
 
-            historiqueFondsRepository.save(historiqueFonds);
+            historiqueFondsRepository.save(operation);
         }
     }
 }

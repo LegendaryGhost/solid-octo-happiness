@@ -11,18 +11,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.Nullable;
 
-public interface HistoriqueFondsRepository extends JpaRepository<HistoriqueFonds, Integer> {
+public interface HistoriqueFondsRepository extends JpaRepository<Operation, Integer> {
 
-    @Query("select hf from HistoriqueFonds hf where hf.utilisateur.id = :idProfil")
-    List<HistoriqueFonds> findTransactionsProfil(@Param("idProfil") Long idProfil);
+    @Query("select hf from Operation hf where hf.utilisateur.id = :idProfil")
+    List<Operation> findTransactionsProfil(@Param("idProfil") Long idProfil);
 
-    List<HistoriqueFonds> findAllByDateHeureEquals(@Nullable LocalDateTime dateHeure);
+    List<Operation> findAllByDateHeureEquals(@Nullable LocalDateTime dateHeure);
 
     @Query("""
-        SELECT shf.historiqueFonds
+        SELECT shf.operation
         FROM StatutHistoriqueFonds shf
-        WHERE shf.historiqueFonds.id = :id
+        WHERE shf.operation.id = :id
         ORDER BY shf.dateHeure DESC
     """)
-    Optional<HistoriqueFonds> findByIdAndLatestStatut(Integer id);
+    Optional<Operation> findByIdAndLatestStatut(Integer id);
 }
