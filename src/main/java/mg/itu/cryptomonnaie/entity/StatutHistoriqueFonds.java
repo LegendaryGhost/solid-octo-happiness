@@ -21,12 +21,13 @@ public class StatutHistoriqueFonds {
 
     @Setter
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private StatutOperation statut;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime dateHeure;
 
+    @Setter
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_historique_fonds")
     private HistoriqueFonds historiqueFonds;
