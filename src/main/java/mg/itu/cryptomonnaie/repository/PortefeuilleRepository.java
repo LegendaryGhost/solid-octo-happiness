@@ -12,12 +12,12 @@ public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Inte
     Portefeuille findByUtilisateurIdAndCryptomonnaieId(Integer idUtilisateur, Integer idCryptomonnaie);
 
     @Query("""
-        SELECT u.id,
-               c.id,
-               c.designation,
+        SELECT u.id AS idUtilisateur,
+               c.id AS idCryptomonnaie,
+               c.designation AS designationCryptomonnaie,
                p.quantite,
-               cc.cours,
-               cc.dateHeure
+               cc.cours AS coursActuel,
+               cc.dateHeure AS dateHeureCours
         FROM Portefeuille p
             JOIN p.cryptomonnaie c
             JOIN CoursCrypto cc ON cc.cryptomonnaie.id = c.id

@@ -16,11 +16,11 @@ public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Intege
     List<CoursCrypto> findByCryptomonnaieId(Integer idCryptomonnaie);
 
     @Query("""
-        SELECT cc.coursActuel
+        SELECT cc.cours
         FROM CoursCrypto cc
         WHERE cc.cryptomonnaie.id IN :idsCryptomonnaie
-        AND (:dateHeureMin IS NULL OR cc.dateHeure >= :dateHeureMin)
-        AND (:dateHeureMax IS NULL OR cc.dateHeure <= :dateHeureMax)
+            AND (:dateHeureMin IS NULL OR cc.dateHeure >= :dateHeureMin)
+            AND (:dateHeureMax IS NULL OR cc.dateHeure <= :dateHeureMax)
         ORDER BY cc.dateHeure DESC
     """)
     List<Double> findAllCoursActuelInIdsCryptomonnaieForPeriode(

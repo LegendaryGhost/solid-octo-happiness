@@ -5,10 +5,10 @@ import java.util.List;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
-import mg.itu.cryptomonnaie.dto.ResultatAnalyseCommissionDTO;
-import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
 import mg.itu.cryptomonnaie.entity.*;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
+import mg.itu.cryptomonnaie.projections.ResultatAnalyseCommission;
+import mg.itu.cryptomonnaie.projections.ResumeHistoriqueTransactionUtilisateur;
 import mg.itu.cryptomonnaie.request.AnalyseCommissionRequest;
 import mg.itu.cryptomonnaie.request.TransactionRequest;
 import org.springframework.stereotype.Service;
@@ -23,10 +23,6 @@ public class TransactionService {
     private final CoursCryptoService   coursCryptoService;
     private final PortefeuilleService  portefeuilleService;
     private final UtilisateurService   utilisateurService;
-
-    public List<ResumeHistoriqueTransactionUtilisateurDTO> getResumesHistoriquesTransactionGroupByUtilisateur() {
-        return transactionRepository.findResumesHistoriquesTransactionGroupByUtilisateur();
-    }
 
     public List<HistoriqueTransactionDTO> getHistoriqueGlobale() {
         return transactionRepository.findHistoriqueGlobale();
@@ -70,8 +66,12 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public ResultatAnalyseCommissionDTO analyserCommission(final AnalyseCommissionRequest request) {
+    public ResultatAnalyseCommission analyserCommission(final AnalyseCommissionRequest request) {
         return transactionRepository.analyserCommission(
             request.getTypeAnalyse(), request.getIdCryptomonnaie(), request.getDateHeureMin(), request.getDateHeureMax());
+    }
+
+    public List<ResumeHistoriqueTransactionUtilisateur> getResumesHistoriquesTransactionGroupByUtilisateur() {
+        return transactionRepository.findResumesHistoriquesTransactionGroupByUtilisateur();
     }
 }
