@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.Nullable;
 
-public interface HistoriqueFondsRepository extends JpaRepository<Operation, Integer> {
+public interface OperationRepository extends JpaRepository<Operation, Integer> {
 
     @Query("select hf from Operation hf where hf.utilisateur.id = :idProfil")
     List<Operation> findTransactionsProfil(@Param("idProfil") Long idProfil);

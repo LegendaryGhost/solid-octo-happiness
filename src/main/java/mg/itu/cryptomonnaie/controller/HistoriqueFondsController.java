@@ -3,9 +3,9 @@ package mg.itu.cryptomonnaie.controller;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.enums.TypeOperation;
-import mg.itu.cryptomonnaie.request.HistoriqueFondsRequest;
+import mg.itu.cryptomonnaie.request.OperationRequest;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
-import mg.itu.cryptomonnaie.service.HistoriqueFondsService;
+import mg.itu.cryptomonnaie.service.OperationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/historique-fonds")
 public class HistoriqueFondsController {
-    private final HistoriqueFondsService historiqueFondsService;
+    private final OperationService operationService;
     private final AuthenticationManager authenticationManager;
 
     @GetMapping("/creation")
     public String form(Model model) {
-        model.addAttribute("hf", new HistoriqueFondsRequest())
+        model.addAttribute("hf", new OperationRequest())
             .addAttribute("typesOperation", TypeOperation.values());
 
         return "pages/transaction/formulaire_depot_retrait";
@@ -27,9 +27,9 @@ public class HistoriqueFondsController {
 
     @PostMapping("/creation")
     public String ajouter(
-        @ModelAttribute("hf") HistoriqueFondsRequest historiqueFondsRequest
+        @ModelAttribute("hf") OperationRequest operationRequest
     ) throws MessagingException {
-        historiqueFondsService.creerHistoriqueFondsTemporaire(historiqueFondsRequest, authenticationManager.safelyGetCurrentUser());
+        operationService.creerHistoriqueFondsTemporaire(operationRequest, authenticationManager.safelyGetCurrentUser());
 
         return "redirect:/historique-fond/form";
     }
@@ -38,14 +38,14 @@ public class HistoriqueFondsController {
     public String validerTransaction(
         @RequestParam("token") String token
     ) {
-        historiqueFondsService.confirmerOperation(authenticationManager.safelyGetCurrentUser(), token);
+        operationService.confirmerOperation(authenticationManager.safelyGetCurrentUser(), token);
 
         return "redirect:/historique-fond/form";
     }
 
     @GetMapping("/utilisateur")
     public String transactionsUtilisateurCourant(Model model) {
-        model.addAttribute("transactions", historiqueFondsService.transactionProfil(authenticationManager.safelyGetCurrentUser()));
+        model.addAttribute("transactions", operationService.transactionProfil(authenticationManager.safelyGetCurrentUser()));
 
         return "pages/historique/historique_fond";
     }

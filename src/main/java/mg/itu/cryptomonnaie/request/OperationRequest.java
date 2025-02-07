@@ -7,7 +7,7 @@ import lombok.Data;
 import mg.itu.cryptomonnaie.enums.TypeOperation;
 
 @Data
-public class HistoriqueFondsRequest {
+public class OperationRequest {
     @NotNull
     @NotBlank
     private String numCarteBancaire;
@@ -17,5 +17,5 @@ public class HistoriqueFondsRequest {
     private Double montant;
 
     @NotNull
-    private TypeOperation typeOperation;
+    private TypeOperation type;
 }
