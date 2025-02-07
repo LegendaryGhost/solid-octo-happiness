@@ -4,6 +4,7 @@ CREATE TABLE profil
     email       VARCHAR(250),
     fond_actuel NUMERIC(15, 2),
     photo VARCHAR(255),
+    token VARCHAR(255),
     PRIMARY KEY (id)
 );
 
