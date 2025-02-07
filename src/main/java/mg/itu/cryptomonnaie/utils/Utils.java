@@ -2,20 +2,15 @@ package mg.itu.cryptomonnaie.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.security.SecureRandom;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 public final class Utils {
     public static final String BINDING_RESULT_KEY_PREFIX = "org.springframework.validation.BindingResult.";
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    private Utils() { }
 
     public static HttpHeaders createJsonHttpHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -45,23 +40,5 @@ public final class Utils {
         }
 
         return stringBuilder.toString();
-    }
-
-    public static String generateToken(final int length) {
-        SecureRandom secureRandom = new SecureRandom();
-
-        return IntStream.range(0, length)
-            .mapToObj(i ->
-                String.valueOf(
-                    CHARACTERS.charAt(secureRandom.nextInt(CHARACTERS.length()))
-                ))
-            .collect(Collectors.joining());
-    }
-
-    public static Cache safelyGetCache(final String name) {
-        Cache cache = SpringContextUtil.cacheManager().getCache(name);
-        if (cache == null) throw new RuntimeException("Aucune cache trouvée avec le nom : " + name);
-
-        return cache;
     }
 }

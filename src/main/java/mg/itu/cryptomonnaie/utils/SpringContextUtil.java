@@ -2,7 +2,6 @@ package mg.itu.cryptomonnaie.utils;
 
 import lombok.Getter;
 import org.springframework.beans.BeansException;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
