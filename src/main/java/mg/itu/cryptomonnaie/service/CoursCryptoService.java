@@ -1,8 +1,8 @@
 package mg.itu.cryptomonnaie.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
-import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.repository.CryptomonnaieRepository;
 import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
@@ -13,42 +13,36 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CoursCryptoService {
-    private final CoursCryptoRepository coursCryptoRepository;
+    private final CoursCryptoRepository   coursCryptoRepository;
     private final CryptomonnaieRepository cryptomonnaieRepository;
     private Random random;
+
+    public List<CoursCrypto> getByCryptomonnaie(final Integer idCryptomonnaie) {
+        return coursCryptoRepository.findByCryptomonnaieId(idCryptomonnaie);
+    }
 
     @Transactional
     public CoursCrypto getCoursCryptoActuelByCryptomonnaie(final Integer idCryptomonnaie) {
         return coursCryptoRepository.findFirstByCryptomonnaieIdOrderByDateHeureDesc(idCryptomonnaie);
     }
 
-    public List<CoursCrypto> getByCryptomonnaie(final Cryptomonnaie cryptomonnaie) {
-        return coursCryptoRepository.findByCryptomonnaieId(cryptomonnaie.getId());
-    }
-
     // @Scheduled(fixedRate = 10000)
+    @Transactional
     public void generateRandomCours() {
-        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieRepository.findAll();
-
-        for (Cryptomonnaie crypto : cryptomonnaies) {
-            CoursCrypto coursActuel = coursCryptoRepository
-                .findFirstByCryptomonnaieIdOrderByDateHeureDesc(crypto.getId());
-            Double dernierCours = coursActuel.getCours();
+        cryptomonnaieRepository.findAll().forEach(cryptomonnaie -> {
             CoursCrypto coursCrypto = new CoursCrypto();
-            coursCrypto.setCryptomonnaie(crypto);
-            coursCrypto.setCours(generateRandomCoursValue(dernierCours));
-
+            coursCrypto.setCours(generateRandomCoursValue(
+                getCoursCryptoActuelByCryptomonnaie(cryptomonnaie.getId()).getCours()
+            ));
+            coursCrypto.setCryptomonnaie(cryptomonnaie);
             coursCryptoRepository.save(coursCrypto);
-            System.out.println("Cours généré pour " + crypto.getDesignation() + ": " + coursCrypto.getCours());
-        }
-    }
 
-    private Double generateRandomCoursValue(Double dernierCours) {
-        Double facteur = (random.nextDouble() * 0.2) - 0.1;
-        return dernierCours + (dernierCours * facteur);
+            log.debug("Cours généré pour la cryptomonnaie \"{}\" : {}", cryptomonnaie.getDesignation(), coursCrypto.getCours());
+        });
     }
 
     @Nullable
@@ -64,6 +58,11 @@ public class CoursCryptoService {
             case MOYENNE    -> moyenne(coursCrypto);
             case ECART_TYPE -> ecartType(coursCrypto);
         };
+    }
+
+    private Double generateRandomCoursValue(Double dernierCours) {
+        Double facteur = (random.nextDouble() * 0.2) - 0.1;
+        return dernierCours + (dernierCours * facteur);
     }
 
     private static Double premierQuartile(List<Double> coursCrypto) {
