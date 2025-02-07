@@ -1,7 +1,7 @@
 package mg.itu.cryptomonnaie.repository;
 
-import mg.itu.cryptomonnaie.dto.ResultatAnalyseCommissionDTO;
-import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
+import mg.itu.cryptomonnaie.projections.ResultatAnalyseCommission;
+import mg.itu.cryptomonnaie.projections.ResumeHistoriqueTransactionUtilisateur;
 import mg.itu.cryptomonnaie.entity.*;
 
 import java.time.LocalDateTime;
@@ -23,17 +23,15 @@ public interface HistoriqueCryptoRepository
     List<HistoriqueCrypto> findAllByOrderByDateActionDesc();
 
     @Query("""
-        SELECT NEW mg.itu.cryptomonnaie.dto.ResultatAnalyseCommissionDTO(
-            c.designation,
-            CASE WHEN :typeAnalyse = mg.itu.cryptomonnaie.enums.TypeAnalyseCommission.SOMME 
-                 THEN CAST(SUM(CASE WHEN hc.typeAction.id = 1 THEN hc.montantCommission ELSE 0 END) AS Double)
-                 ELSE CAST(AVG(CASE WHEN hc.typeAction.id = 1 THEN hc.montantCommission ELSE 0 END) AS Double)
-            END,
-            CASE WHEN :typeAnalyse = mg.itu.cryptomonnaie.enums.TypeAnalyseCommission.SOMME 
-                 THEN CAST(SUM(CASE WHEN hc.typeAction.id = 2 THEN hc.montantCommission ELSE 0 END) AS Double)
-                 ELSE CAST(AVG(CASE WHEN hc.typeAction.id = 2 THEN hc.montantCommission ELSE 0 END) AS Double)
-            END
-        )
+        SELECT c.designation,
+               CASE WHEN :typeAnalyse = mg.itu.cryptomonnaie.enums.TypeAnalyseCommission.SOMME 
+                   THEN CAST(SUM(CASE WHEN hc.typeAction.id = 1 THEN hc.montantCommission ELSE 0 END) AS Double)
+                   ELSE CAST(AVG(CASE WHEN hc.typeAction.id = 1 THEN hc.montantCommission ELSE 0 END) AS Double)
+               END,
+               CASE WHEN :typeAnalyse = mg.itu.cryptomonnaie.enums.TypeAnalyseCommission.SOMME 
+                   THEN CAST(SUM(CASE WHEN hc.typeAction.id = 2 THEN hc.montantCommission ELSE 0 END) AS Double)
+                   ELSE CAST(AVG(CASE WHEN hc.typeAction.id = 2 THEN hc.montantCommission ELSE 0 END) AS Double)
+               END
         FROM HistoriqueCrypto hc
             JOIN hc.cryptomonnaie c
         WHERE (:idCryptomonnaie IS NULL OR c.id = :idCryptomonnaie)
@@ -41,23 +39,21 @@ public interface HistoriqueCryptoRepository
             AND (:dateHeureMax  IS NULL OR hc.dateAction <= :dateHeureMax)
         GROUP BY c.id
     """)
-    ResultatAnalyseCommissionDTO analyserCommission(
+    ResultatAnalyseCommission analyserCommission(
         TypeAnalyseCommission typeAnalyse,
         @Nullable Integer idCryptomonnaie,
         @Nullable LocalDateTime dateHeureMin,
         @Nullable LocalDateTime dateHeureMax);
 
     @Query("""
-        SELECT NEW mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO(
-            p.id,
-            p.email,
-            CAST(SUM(CASE WHEN hc.typeAction.id = 1 THEN hc.quantite * hc.cours ELSE 0 END) AS Double),
-            CAST(SUM(CASE WHEN hc.typeAction.id = 2 THEN hc.quantite * hc.cours ELSE 0 END) AS Double),
-            p.fondActuel
-        )
+        SELECT p.id,
+               p.email,
+               CAST(SUM(CASE WHEN hc.typeAction.id = 1 THEN hc.quantite * hc.cours ELSE 0 END) AS Double),
+               CAST(SUM(CASE WHEN hc.typeAction.id = 2 THEN hc.quantite * hc.cours ELSE 0 END) AS Double),
+               p.fondActuel
         FROM HistoriqueCrypto hc
             JOIN hc.profil p
         GROUP BY p.id
     """)
-    List<ResumeHistoriqueTransactionUtilisateurDTO> findResumesHistoriquesTransactionGroupByUtilisateur();
+    List<ResumeHistoriqueTransactionUtilisateur> findResumesHistoriquesTransactionGroupByUtilisateur();
 }
