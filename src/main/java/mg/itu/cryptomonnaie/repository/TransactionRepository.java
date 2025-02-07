@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
-public interface HistoriqueTransactionRepository extends JpaRepository<Transaction, Integer> {
+public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
     List<Transaction> findAllByUtilisateurIdOrderByDateHeureDesc(Integer idUtilisateur);
 

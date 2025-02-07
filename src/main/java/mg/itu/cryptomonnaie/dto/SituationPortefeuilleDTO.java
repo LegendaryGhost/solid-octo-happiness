@@ -1,10 +1,12 @@
 package mg.itu.cryptomonnaie.dto;
 
+import mg.itu.cryptomonnaie.projections.PortefeuilleAvecCours;
+
 import java.util.List;
 
 public record SituationPortefeuilleDTO(
     Integer idUtilisateur,
     Double  fondsActuel,
-    List<PortefeuilleAvecCoursDTO> portefeuilleAvecCoursList,
+    List<PortefeuilleAvecCours>    portefeuilleAvecCoursList,
     List<HistoriqueTransactionDTO> historiquesTransaction
 ) { }

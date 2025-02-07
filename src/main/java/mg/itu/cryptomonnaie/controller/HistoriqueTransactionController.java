@@ -2,7 +2,7 @@ package mg.itu.cryptomonnaie.controller;
 
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
-import mg.itu.cryptomonnaie.service.HistoriqueTransactionService;
+import mg.itu.cryptomonnaie.service.TransactionService;
 import mg.itu.cryptomonnaie.service.PortefeuilleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/portefeuille")
 public class HistoriqueTransactionController {
-    private final HistoriqueTransactionService historiqueTransactionService;
+    private final TransactionService transactionService;
     private final PortefeuilleService portefeuilleService;
     private final AuthenticationManager authenticationManager;
     private final CryptomonnaieService cryptomonnaieService;

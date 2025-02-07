@@ -13,28 +13,28 @@ import mg.itu.cryptomonnaie.request.AnalyseCommissionRequest;
 import mg.itu.cryptomonnaie.request.HistoriqueTransactionRequest;
 import org.springframework.stereotype.Service;
 
-import mg.itu.cryptomonnaie.repository.HistoriqueTransactionRepository;
+import mg.itu.cryptomonnaie.repository.TransactionRepository;
 
 @RequiredArgsConstructor
 @Service
-public class HistoriqueTransactionService {
-    private final HistoriqueTransactionRepository historiqueTransactionRepository;
+public class TransactionService {
+    private final TransactionRepository transactionRepository;
     private final CryptomonnaieService cryptomonnaieService;
     private final CoursCryptoService   coursCryptoService;
     private final PortefeuilleService  portefeuilleService;
     private final UtilisateurService   utilisateurService;
 
     public List<HistoriqueTransactionDTO> getHistoriqueGlobale() {
-        return historiqueTransactionRepository.findHistoriqueGlobale();
+        return transactionRepository.findHistoriqueGlobale();
     }
 
     public List<ResumeHistoriqueTransactionUtilisateurDTO> getResumesHistoriquesTransactionGroupByUtilisateur() {
-        return historiqueTransactionRepository.findResumesHistoriquesTransactionGroupByUtilisateur();
+        return transactionRepository.findResumesHistoriquesTransactionGroupByUtilisateur();
     }
 
     @Transactional
     public List<Transaction> getAllByUtilisateurIdOrderByDateHeureDesc(final Integer idUtilisateur) {
-        return historiqueTransactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur);
+        return transactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur);
     }
 
     public void save(final HistoriqueTransactionRequest request, final Utilisateur utilisateur) {
@@ -67,11 +67,11 @@ public class HistoriqueTransactionService {
         }
 
         portefeuilleService.save(portefeuille);
-        historiqueTransactionRepository.save(transaction);
+        transactionRepository.save(transaction);
     }
 
     public ResultatAnalyseCommissionDTO analyserCommission(final AnalyseCommissionRequest request) {
-        return historiqueTransactionRepository.analyserCommission(
+        return transactionRepository.analyserCommission(
             request.getTypeAnalyse(), request.getIdCryptomonnaie(), request.getDateHeureMin(), request.getDateHeureMax());
     }
 }

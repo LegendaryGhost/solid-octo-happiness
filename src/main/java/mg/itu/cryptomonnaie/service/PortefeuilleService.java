@@ -2,11 +2,11 @@ package mg.itu.cryptomonnaie.service;
 
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
-import mg.itu.cryptomonnaie.dto.PortefeuilleAvecCoursDTO;
 import mg.itu.cryptomonnaie.dto.SituationPortefeuilleDTO;
 import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
 import mg.itu.cryptomonnaie.entity.Portefeuille;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
+import mg.itu.cryptomonnaie.projections.PortefeuilleAvecCours;
 import mg.itu.cryptomonnaie.repository.PortefeuilleRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class PortefeuilleService {
     private final PortefeuilleRepository portefeuilleRepository;
-    private final HistoriqueTransactionService historiqueTransactionService;
+    private final TransactionService transactionService;
 
     @Transactional
     public Portefeuille getByUtilisateurAndCryptomonnaieOrCreate(
@@ -46,17 +46,17 @@ public class PortefeuilleService {
         final Integer idUtilisateur = utilisateur.getId();
 
         // Récupération de la liste des cryptos dans le portefeuille avec leur cours actuel
-        List<PortefeuilleAvecCoursDTO> portefeuilleAvecCoursDTOList = portefeuilleRepository.findAvecCoursActuelByUtilisateur(idUtilisateur);
+        List<PortefeuilleAvecCours> portefeuilleAvecCoursDTOList = portefeuilleRepository.findAvecCoursActuelByUtilisateur(idUtilisateur);
         Map<Integer, Double> coursCryptoActuelMap = portefeuilleAvecCoursDTOList.stream()
             .collect(Collectors.toMap(
-                PortefeuilleAvecCoursDTO::idCryptomonnaie,
-                PortefeuilleAvecCoursDTO::coursActuel,
+                PortefeuilleAvecCours::getIdCryptomonnaie,
+                PortefeuilleAvecCours::getCoursActuel,
                 (existing, replacement) -> existing
             ));
 
         // Récupération de l'historique des transactions
         List<HistoriqueTransactionDTO> historiquesTransactionDTO = new ArrayList<>();
-        historiqueTransactionService.getAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur)
+        transactionService.getAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur)
             .forEach(historiqueTransaction -> {
                 Cryptomonnaie cryptomonnaie = historiqueTransaction.getCryptomonnaie();
                 Integer idCryptomonnaie = cryptomonnaie.getId();

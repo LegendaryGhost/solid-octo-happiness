@@ -1,7 +1,7 @@
 package mg.itu.cryptomonnaie.repository;
 
-import mg.itu.cryptomonnaie.dto.PortefeuilleAvecCoursDTO;
 import mg.itu.cryptomonnaie.entity.Portefeuille;
+import mg.itu.cryptomonnaie.projections.PortefeuilleAvecCours;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,14 +12,12 @@ public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Inte
     Portefeuille findByUtilisateurIdAndCryptomonnaieId(Integer idUtilisateur, Integer idCryptomonnaie);
 
     @Query("""
-        SELECT NEW mg.itu.cryptomonnaie.dto.PortefeuilleAvecCoursDTO(
-            u.id,
-            c.id,
-            c.designation,
-            p.quantite,
-            cc.coursActuel,
-            cc.dateHeure
-        )
+        SELECT u.id,
+               c.id,
+               c.designation,
+               p.quantite,
+               cc.cours,
+               cc.dateHeure
         FROM Portefeuille p
             JOIN p.cryptomonnaie c
             JOIN CoursCrypto cc ON cc.cryptomonnaie.id = c.id
@@ -31,5 +29,5 @@ public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Inte
         )
         AND u.id = :idUtilisateur
     """)
-    List<PortefeuilleAvecCoursDTO> findAvecCoursActuelByUtilisateur(Integer idUtilisateur);
+    List<PortefeuilleAvecCours> findAvecCoursActuelByUtilisateur(Integer idUtilisateur);
 }
