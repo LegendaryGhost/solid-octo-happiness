@@ -78,7 +78,7 @@
 
         // Transformation des données en format lisible par ApexCharts
         const coursData = coursCryptoos.map(cours => ({
-            x: new Date(cours.dateCours).getTime(),
+            x: new Date(cours.dateCours).getTime(),  // Convertit la date en timestamp
             y: cours.coursActuel
         }));
 
@@ -87,7 +87,14 @@
                 type: 'line',
                 height: 350,
                 background: 'transparent',
-                toolbar: { show: true }
+                toolbar: { show: true },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800,
+                    animateGradually: { enabled: true, delay: 150 },
+                    dynamicAnimation: { enabled: true, speed: 350 }
+                }
             },
             series: [{
                 name: 'Prix en EUR',
@@ -96,15 +103,52 @@
             xaxis: {
                 type: 'datetime',
                 labels: {
-                    format: 'dd/MM/yyyy' // format de date à afficher sur l'axe X
+                    format: 'HH:mm:ss',  // Affichage de l'heure et des minutes
+                    rotate: -45           // Angle des labels pour mieux les espacer
+                },
+                title: {
+                    text: 'Temps'
+                },
+                min: new Date().getTime() - 60 * 1000 * 60,  // Afficher les dernières 60 minutes seulement
+                max: new Date().getTime(),                    // Limiter au temps actuel
+                tickAmount: 10,                               // Limite le nombre de ticks sur l'axe X
+                axisBorder: {
+                    show: true
+                },
+                axisTicks: {
+                    show: true
                 }
             },
-            stroke: { curve: 'smooth' }
+            stroke: { curve: 'smooth' },
+            tooltip: {
+                x: {
+                    format: 'dd/MM/yyyy HH:mm:ss'  // Format du tooltip pour afficher l'heure complète
+                }
+            }
         };
 
         try {
             const chart = new ApexCharts(chartElement, options);
             chart.render();
+
+            // Rafraîchissement du graphique toutes les 10 secondes
+            setInterval(function() {
+                // Récupérer de nouvelles données depuis le backend et les ajouter au graphique
+                // Cela dépend de la manière dont tu récupères tes données dynamiquement via Ajax ou un autre mécanisme
+
+                // Exemple d'ajout de nouvelles données
+                const newCoursCryptoos = /*[[${coursCryptoos}]]*/ [];  // Récupère les nouvelles données mises à jour
+                const newCoursData = newCoursCryptoos.map(cours => ({
+                    x: new Date(cours.dateCours).getTime(),
+                    y: cours.coursActuel
+                }));
+
+                // Mise à jour des séries dans le graphique
+                chart.updateSeries([{
+                    name: 'Prix en EUR',
+                    data: newCoursData
+                }]);
+            }, 10000);  // Met à jour toutes les 10 secondes
         } catch (error) {
             console.error("Error rendering chart:", error);
         }
