@@ -35,3 +35,6 @@ build/
 ### Projet ###
 application.properties
 .env
+
+
+src/main/resources/firebase/phoenixcoin-19b13-firebase-adminsdk-fbsvc-7f4db86915.json
