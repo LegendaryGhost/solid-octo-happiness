@@ -6,8 +6,10 @@ import mg.itu.cryptomonnaie.entity.HistoriqueFonds;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.repository.HistoriqueFondsRepository;
 import mg.itu.cryptomonnaie.request.HistoriqueFondsRequest;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static mg.itu.cryptomonnaie.utils.Utils.*;
@@ -23,6 +25,10 @@ public class HistoriqueFondsService {
 
     public List<HistoriqueFonds> transactionProfil(final Utilisateur utilisateur) {
         return historiqueFondsRepository.findTransactionsProfil(Long.valueOf(utilisateur.getId()));
+    }
+
+    public List<HistoriqueFonds> getHistoriqueGlobale(final @Nullable LocalDateTime dateHeure) {
+        return historiqueFondsRepository.findAllByDateHeureEquals(dateHeure);
     }
 
     public void creerHistoriqueFondsTemporaire(
