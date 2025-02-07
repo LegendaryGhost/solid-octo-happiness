@@ -21,10 +21,6 @@ public class OperationService {
     private final SuiviOperationService suiviOperationService;
     private final UtilisateurService utilisateurService;
 
-    public List<Operation> transactionProfil(final Utilisateur utilisateur) {
-        return operationRepository.findTransactionsProfil(Long.valueOf(utilisateur.getId()));
-    }
-
     public List<Operation> getHistoriqueGlobale(final @Nullable LocalDateTime dateHeure) {
         return operationRepository.findAllByDateHeureEquals(dateHeure);
     }
@@ -36,7 +32,7 @@ public class OperationService {
         Operation operation = new Operation();
         operation.setNumCarteBancaire(request.getNumCarteBancaire());
         operation.setMontant(request.getMontant());
-        operation.setTypeOperation(request.getType());
+        operation.setTypeOperation(request.getTypeOperation());
         operation.setUtilisateur(utilisateur);
 
         SuiviOperation suiviOperation = new SuiviOperation();
@@ -59,8 +55,6 @@ public class OperationService {
         s.setDateHeure(LocalDateTime.now());
         s.setOperation(operation);
 
-        suiviOperationService.save(s);
-
         // Mise à jour du fonds
         Utilisateur utilisateur = operation.getUtilisateur();
         Double fondsActuel = utilisateur.getFondsActuel();
@@ -71,6 +65,7 @@ public class OperationService {
         });
 
         utilisateurService.save(utilisateur);
+        suiviOperationService.save(s);
     }
 
     public void refuser(final Integer idOperation) {

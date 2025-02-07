@@ -17,5 +17,5 @@ public class OperationRequest {
     private Double montant;
 
     @NotNull
-    private TypeOperation type;
+    private TypeOperation typeOperation;
 }

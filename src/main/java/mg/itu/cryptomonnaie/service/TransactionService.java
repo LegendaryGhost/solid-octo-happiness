@@ -10,7 +10,7 @@ import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
 import mg.itu.cryptomonnaie.entity.*;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
 import mg.itu.cryptomonnaie.request.AnalyseCommissionRequest;
-import mg.itu.cryptomonnaie.request.HistoriqueTransactionRequest;
+import mg.itu.cryptomonnaie.request.TransactionRequest;
 import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.repository.TransactionRepository;
@@ -24,12 +24,12 @@ public class TransactionService {
     private final PortefeuilleService  portefeuilleService;
     private final UtilisateurService   utilisateurService;
 
-    public List<HistoriqueTransactionDTO> getHistoriqueGlobale() {
-        return transactionRepository.findHistoriqueGlobale();
-    }
-
     public List<ResumeHistoriqueTransactionUtilisateurDTO> getResumesHistoriquesTransactionGroupByUtilisateur() {
         return transactionRepository.findResumesHistoriquesTransactionGroupByUtilisateur();
+    }
+
+    public List<HistoriqueTransactionDTO> getHistoriqueGlobale() {
+        return transactionRepository.findHistoriqueGlobale();
     }
 
     @Transactional
@@ -37,7 +37,7 @@ public class TransactionService {
         return transactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur);
     }
 
-    public void save(final HistoriqueTransactionRequest request, final Utilisateur utilisateur) {
+    public void save(final TransactionRequest request, final Utilisateur utilisateur) {
         final Integer idCryptomonnaie = request.getIdCryptomonnaie();
         Cryptomonnaie cryptomonnaie = cryptomonnaieService.getById(idCryptomonnaie);
 

@@ -19,24 +19,24 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     @Query("""
         SELECT NEW mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO(
-            ht.utilisateur.id,
-            ht.utilisateur.email,
-            ht.cryptomonnaie.id,
-            ht.cryptomonnaie.designation,
-            ht.typeTransaction,
-            ht.quantite,
-            ht.dateHeure,
-            ht.cours,
-            cc.coursActuel
+            t.utilisateur.id,
+            t.utilisateur.email,
+            t.cryptomonnaie.id,
+            t.cryptomonnaie.designation,
+            t.typeTransaction,
+            t.quantite,
+            t.dateHeure,
+            t.cours,
+            cc.cours
         )
-        FROM Transaction ht
-        LEFT JOIN CoursCrypto cc ON cc.cryptomonnaie.id = ht.cryptomonnaie.id
+        FROM Transaction t
+        LEFT JOIN CoursCrypto cc ON cc.cryptomonnaie.id = t.cryptomonnaie.id
         AND cc.dateHeure = (
             SELECT MAX(cc2.dateHeure)
             FROM CoursCrypto cc2
-            WHERE cc2.cryptomonnaie.id = ht.cryptomonnaie.id
+            WHERE cc2.cryptomonnaie.id = t.cryptomonnaie.id
         ) 
-        ORDER BY ht.dateHeure DESC
+        ORDER BY t.dateHeure DESC
     """)
     List<HistoriqueTransactionDTO> findHistoriqueGlobale();
 

@@ -38,7 +38,7 @@ public class PortefeuilleService {
     }
 
     @Transactional
-    public Portefeuille save(Portefeuille portefeuille) {
+    public Portefeuille save(final Portefeuille portefeuille) {
         return portefeuilleRepository.save(portefeuille);
     }
 

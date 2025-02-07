@@ -6,7 +6,7 @@ import lombok.Data;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
 
 @Data
-public class HistoriqueTransactionRequest {
+public class TransactionRequest {
     @NotNull
     @Positive
     private Float quantite;
