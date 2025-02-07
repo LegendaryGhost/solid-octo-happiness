@@ -25,6 +25,10 @@ public class OperationService {
         return operationRepository.findAllByDateHeureEquals(dateHeure);
     }
 
+    public List<Operation> findAllByUtilisateur(final Integer idUtilisateur) {
+        return operationRepository.findAllByUtilisateurId(idUtilisateur);
+    }
+
     @Transactional
     public void creerOperationEnAttente(
         final OperationRequest request, final Utilisateur utilisateur

@@ -24,8 +24,10 @@ public class TransactionService {
     private final PortefeuilleService  portefeuilleService;
     private final UtilisateurService   utilisateurService;
 
-    public List<HistoriqueTransactionDTO> getHistoriqueGlobale() {
-        return transactionRepository.findHistoriqueGlobale();
+    public List<HistoriqueTransactionDTO> getHistoriqueGlobale(
+        final Integer idCryptomonnaie, final Integer idUtilisateur
+    ) {
+        return transactionRepository.findHistoriqueGlobale(idCryptomonnaie, idUtilisateur);
     }
 
     @Transactional

@@ -8,15 +8,13 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.lang.Nullable;
 
 public interface OperationRepository extends JpaRepository<Operation, Integer> {
 
-    @Query("select hf from Operation hf where hf.utilisateur.id = :idProfil")
-    List<Operation> findTransactionsProfil(@Param("idProfil") Long idProfil);
-
     List<Operation> findAllByDateHeureEquals(@Nullable LocalDateTime dateHeure);
+
+    List<Operation> findAllByUtilisateurId(Integer idUtilisateur);
 
     @Query("""
         SELECT shf.operation

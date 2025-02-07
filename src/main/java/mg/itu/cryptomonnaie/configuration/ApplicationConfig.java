@@ -1,6 +1,5 @@
 package mg.itu.cryptomonnaie.configuration;
 
-import mg.itu.cryptomonnaie.service.OperationService;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
@@ -23,7 +22,7 @@ public class ApplicationConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager(OperationService.HISTORIQUES_FONDS_TEMPORAIRES_CACHE_KEY);
+        return new ConcurrentMapCacheManager();
     }
 
     @Bean

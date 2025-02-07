@@ -30,15 +30,20 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
             cc.cours
         )
         FROM Transaction t
-        LEFT JOIN CoursCrypto cc ON cc.cryptomonnaie.id = t.cryptomonnaie.id
-        AND cc.dateHeure = (
-            SELECT MAX(cc2.dateHeure)
-            FROM CoursCrypto cc2
-            WHERE cc2.cryptomonnaie.id = t.cryptomonnaie.id
-        ) 
+                LEFT JOIN 
+            CoursCrypto cc ON cc.cryptomonnaie.id = t.cryptomonnaie.id AND 
+            cc.dateHeure = (
+                SELECT MAX(cc2.dateHeure)
+                FROM CoursCrypto cc2
+                WHERE cc2.cryptomonnaie.id = t.cryptomonnaie.id
+            )
+        WHERE (:idCryptomonnaie IS NULL OR t.cryptomonnaie.id = :idCryptomonnaie) AND 
+              (:idUtilisateur   IS NULL OR t.utilisateur.id = :idUtilisateur)
         ORDER BY t.dateHeure DESC
     """)
-    List<HistoriqueTransactionDTO> findHistoriqueGlobale();
+    List<HistoriqueTransactionDTO> findHistoriqueGlobale(
+        @Nullable Integer idCryptomonnaie,
+        @Nullable Integer idUtilisateur);
 
     @Query("""
         SELECT
