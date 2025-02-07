@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.request.EmailAndPasswordRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
-import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.service.UtilisateurService;
 import mg.itu.cryptomonnaie.utils.Facade;
 import org.springframework.beans.factory.annotation.Value;

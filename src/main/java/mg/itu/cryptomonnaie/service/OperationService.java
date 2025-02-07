@@ -25,7 +25,7 @@ public class OperationService {
         return operationRepository.findAllByDateHeureEquals(dateHeure);
     }
 
-    public List<Operation> findAllByUtilisateur(final Integer idUtilisateur) {
+    public List<Operation> getAllByUtilisateur(final Integer idUtilisateur) {
         return operationRepository.findAllByUtilisateurId(idUtilisateur);
     }
 
