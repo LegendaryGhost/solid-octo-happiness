@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import mg.itu.cryptomonnaie.enums.StatutOperation;
 
 import java.time.LocalDateTime;
 
@@ -12,20 +13,22 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
-public class CoursCrypto {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id_historique_fonds", "statut"}))
+public class StatutHistoriqueFonds {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Setter
-    @Column(nullable = false)
-    private Double coursActuel;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, updatable = false)
+    private StatutOperation statut;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime dateHeure;
 
     @Setter
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_cryptomonnaie")
-    private Cryptomonnaie cryptomonnaie;
+    @JoinColumn(name = "id_historique_fonds")
+    private HistoriqueFonds historiqueFonds;
 }

@@ -7,6 +7,6 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(CryptoMonnaieApplication.class);
+		return application.sources(CryptomonnaieApplication.class);
 	}
 }

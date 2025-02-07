@@ -7,7 +7,7 @@ import mg.itu.cryptomonnaie.request.EmailAndPasswordRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
-import mg.itu.cryptomonnaie.service.ProfilService;
+import mg.itu.cryptomonnaie.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -38,6 +38,7 @@ public class AuthenticationController {
     private static final String PENDING_VERIFICATION_EMAIL_KEY = "_pending_verification_email";
 
     private final AuthenticationManager authenticationManager;
+    private final UtilisateurService utilisateurService;
     private final RestTemplate restTemplate;
     private final ParameterizedTypeReference<Map<String, Object>> mapTypeReference;
     private final ProfilService profilService;
@@ -45,7 +46,7 @@ public class AuthenticationController {
     @Value("${identity-flow.api.url}")
     private String identityFlowApiUrl;
 
-    @GetMapping("/")
+    @GetMapping
     public String index() {
         return "redirect:/connexion";
     }
@@ -148,10 +149,7 @@ public class AuthenticationController {
         try {
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                 identityFlowApiUrl + "/auth/verification-pin", HttpMethod.POST,
-                new HttpEntity<>(VerificationCodePinRequest.builder()
-                    .email(pendingVerificationEmail)
-                    .codePin(codePin)
-                    .build(), createJsonHttpHeaders()),
+                new HttpEntity<>(new VerificationCodePinRequest(pendingVerificationEmail, codePin), createJsonHttpHeaders()),
                 mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
@@ -159,7 +157,7 @@ public class AuthenticationController {
 
                 @SuppressWarnings("unchecked")
                 Map<String, String> data = (Map<String, String>) Objects.requireNonNull(responseEntity.getBody()).get("data");
-                authenticationManager.authenticate(profilService.updateOrCreate(pendingVerificationEmail, data.get("token")));
+                authenticationManager.authenticate(utilisateurService.updateOrCreate(pendingVerificationEmail, data.get("token")));
 
                 return "redirect:/portefeuille/etat";
             }
