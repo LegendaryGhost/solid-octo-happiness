@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr" th:fragment="base(title, body, scripts, styles)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="${title}">Phoenix Coin</title>
+    <link href="/assets/compiled/svg/favicon.svg" rel="shortcut icon" type="image/x-icon">
+
+    <link th:href="@{/css/app.css}" rel="stylesheet">
+    <link th:href="@{/css/app-dark.css}" rel="stylesheet">
+    <th:block th:insert="${styles}"/>
+
+    <script th:src="@{/js/initTheme.js}"></script>
+</head>
+<body>
+<th:block th:insert="${body}"/>
+<th:block th:insert="${scripts}"/>
+</body>
+</html>

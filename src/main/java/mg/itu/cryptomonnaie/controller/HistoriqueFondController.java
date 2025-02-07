@@ -2,6 +2,7 @@ package mg.itu.cryptomonnaie.controller;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import mg.itu.cryptomonnaie.dto.HistoriqueFondDTO;
 import mg.itu.cryptomonnaie.entity.HistoriqueFond;
 import mg.itu.cryptomonnaie.entity.Profil;
 import mg.itu.cryptomonnaie.request.HistoriqueFondRequest;
