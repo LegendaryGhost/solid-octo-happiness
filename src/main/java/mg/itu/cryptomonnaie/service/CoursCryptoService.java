@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
+import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -55,62 +57,36 @@ public class CoursCryptoService {
         return coursCryptos;
     }
 
-    public Double analyse(
-            String typeAnalyse,
-            List<Long> idCryptos,
-            LocalDateTime dateHeureMin,
-            LocalDateTime dateHeureMax) {
-        List<CoursCrypto> coursCryptos = coursCryptoRepository.findParCryptomonnaieEtDate(idCryptos, dateHeureMin,
-                dateHeureMax);
-        if (coursCryptos.isEmpty())
-            return null;
+    @Nullable
+    public Double analyser(final AnalyseCoursCryptoRequest request) {
+        List<Double> coursCrypto = coursCryptoRepository.findAllCoursActuelInIdsCryptomonnaieForPeriode(
+            request.getIdsCryptomonnaie(), request.getDateHeureMin(), request.getDateHeureMax());
+        if (coursCrypto.isEmpty()) return null;
 
-        return switch (typeAnalyse.toLowerCase()) {
-            case "1er-quartile" -> calculerPremierQuartile(coursCryptos);
-            case "max" -> calculerMax(coursCryptos);
-            case "min" -> calculerMin(coursCryptos);
-            case "moyenne" -> calculerMoyenne(coursCryptos);
-            case "ecart-type" -> calculerEcartType(coursCryptos);
-            default -> throw new IllegalArgumentException("Type d'analyse inconnu: " + typeAnalyse);
+        return switch (request.getTypeAnalyse()) {
+            case PREMIER_QUARTILE -> premierQuartile(coursCrypto);
+            case MAX -> coursCrypto.stream().max(Double::compare).orElse(0.0);
+            case MIN -> coursCrypto.stream().min(Double::compare).orElse(0.0);
+            case MOYENNE    -> moyenne(coursCrypto);
+            case ECART_TYPE -> ecartType(coursCrypto);
         };
     }
 
-    private Double calculerPremierQuartile(List<CoursCrypto> coursCryptos) {
-        List<Double> coursValues = coursCryptos.stream()
-                .map(CoursCrypto::getCoursActuel)
-                .sorted()
-                .toList();
-
-        return coursValues.get(
-                (int) (Math.floor(0.25 * (coursValues.size() + 1)) - 1));
+    private static Double premierQuartile(List<Double> coursCrypto) {
+        coursCrypto.sort(null);
+        return coursCrypto.get((int) Math.ceil(0.25 * coursCrypto.size()) - 1);
     }
 
-    private Double calculerMax(List<CoursCrypto> coursCryptos) {
-        return coursCryptos.stream()
-                .map(CoursCrypto::getCoursActuel)
-                .max(Double::compare)
-                .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
+    private static Double moyenne(List<Double> coursCrypto) {
+        return coursCrypto.stream()
+            .mapToDouble(aDouble -> aDouble)
+            .average().orElse(0.0);
     }
 
-    private Double calculerMin(List<CoursCrypto> coursCryptos) {
-        return coursCryptos.stream()
-                .map(CoursCrypto::getCoursActuel)
-                .min(Double::compare)
-                .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
-    }
-
-    private Double calculerMoyenne(List<CoursCrypto> coursCryptos) {
-        return coursCryptos.stream()
-                .mapToDouble(CoursCrypto::getCoursActuel)
-                .average()
-                .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé"));
-    }
-
-    private Double calculerEcartType(List<CoursCrypto> coursCryptos) {
-        return Math.sqrt(
-                coursCryptos.stream()
-                        .mapToDouble(c -> Math.pow(c.getCoursActuel() - calculerMoyenne(coursCryptos), 2))
-                        .average()
-                        .orElseThrow(() -> new IllegalArgumentException("Aucun cours trouvé")));
+    private static Double ecartType(List<Double> coursCrypto) {
+        Double moyenne = moyenne(coursCrypto);
+        return Math.sqrt(coursCrypto.stream()
+            .mapToDouble(val -> Math.pow(val - moyenne, 2))
+            .average().orElse(0.0));
     }
 }

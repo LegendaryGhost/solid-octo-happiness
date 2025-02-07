@@ -2,7 +2,7 @@ package mg.itu.cryptomonnaie.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,6 +22,12 @@ public class HistoriqueCrypto {
 
     @Column(nullable = false)
     private Double quantite;
+
+    @Column(nullable = false)
+    private Double tauxCommission;
+
+    @Column(nullable = false)
+    private Double montantCommission;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_profil")
