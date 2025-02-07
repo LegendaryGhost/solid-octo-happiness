@@ -14,7 +14,7 @@
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
-                <div class="col-12 col-md-6 order-md-1 order-last">
+                <div class="col-12 col-md-6">
                     <h1>Courbe de fluctuation du crypto</h1>
                     <p class="text-subtitle text-muted">Visualisez les fluctuations des crypto-monnaies.</p>
                 </div>
@@ -28,11 +28,16 @@
                     <h4 class="card-title">Sélectionnez une crypto-monnaie</h4>
                 </div>
                 <div class="card-body">
-                    <form method="get" th:action="@{/cours/chart/traitement/}">
+                    <form method="get" th:action="@{/cours/chart/traitement}">
                         <div class="form-group">
                             <label for="crypto">Crypto-monnaie</label>
                             <select id="crypto" name="crypto" class="form-select">
-                                <option th:each="c : ${cryptomonnaies}" th:value="${c.id}" th:text="${c.designation}"></option>
+                                <option value="#">Choisir</option>
+                                <option th:each="c : ${cryptomonnaies}" 
+                                        th:value="${c.id}" 
+                                        th:text="${c.designation}"
+                                        th:selected="${cryptoActuelle == c.id}">
+                                </option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3">
@@ -47,7 +52,7 @@
         <section class="section">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Graphique des fluctuations</h4>
+                    <h4 class="card-title" th:text="'Graphique des fluctuations ' + ${cryptoActuelle}"></h4>
                 </div>
                 <div class="card-body">
                     <div id="cryptoChart"></div>
@@ -57,52 +62,54 @@
     </div>
 </div>
 
-    <script src="/assets/extensions/jquery/jquery.min.js"></script>
-    <!-- ApexCharts -->
-    <script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>
+<script src="/assets/extensions/jquery/jquery.min.js"></script>
+<script src="/assets/extensions/apexcharts/apexcharts.min.js"></script>
 
-    <script src="/assets/static/js/pages/dashboard.js"></script>
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const chartElement = document.querySelector("#cryptoChart");
+        if (!chartElement) {
+            console.error("Element #cryptoChart not found");
+            return;
+        }
 
-    <!-- Script personnalisé -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Vérification de l'élément avant création du graphique
-            const chartElement = document.querySelector("#cryptoChart");
-            if (!chartElement) {
-                console.error("Element #cryptoChart not found");
-                return;
-            }else {
-                console.error("found");
-            }
+        // Injection des données de coursCryptoos depuis le backend Thymeleaf
+        const coursCryptoos = /*[[${coursCryptoos}]]*/ [];
 
-            const options = {
-                chart: {
-                    type: 'line',
-                    height: 350,
-                    background: 'transparent',
-                    toolbar: {
-                        show: true
-                    }
-                },
-                series: [{
-                    name: 'Prix en EUR',
-                    data: [30000, 31000, 32000, 33000, 34000]
-                }],
-                xaxis: {
-                    categories: ['2025-01-01', '2025-01-02', '2025-01-03', '2025-01-04', '2025-01-05']
-                },
-                stroke: {
-                    curve: 'smooth'
+        // Transformation des données en format lisible par ApexCharts
+        const coursData = coursCryptoos.map(cours => ({
+            x: new Date(cours.dateCours).getTime(),
+            y: cours.coursActuel
+        }));
+
+        const options = {
+            chart: {
+                type: 'line',
+                height: 350,
+                background: 'transparent',
+                toolbar: { show: true }
+            },
+            series: [{
+                name: 'Prix en EUR',
+                data: coursData
+            }],
+            xaxis: {
+                type: 'datetime',
+                labels: {
+                    format: 'dd/MM/yyyy' // format de date à afficher sur l'axe X
                 }
-            };
+            },
+            stroke: { curve: 'smooth' }
+        };
 
-            try {
-                const chart = new ApexCharts(chartElement, options);
-                chart.render();
-            } catch (error) {
-                console.error("Error rendering chart:", error);
-            }
-        });
-    </script>
+        try {
+            const chart = new ApexCharts(chartElement, options);
+            chart.render();
+        } catch (error) {
+            console.error("Error rendering chart:", error);
+        }
+    });
+</script>
+
 </body>
 </html>
