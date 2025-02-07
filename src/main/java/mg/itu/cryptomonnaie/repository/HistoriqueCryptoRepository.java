@@ -1,6 +1,7 @@
 package mg.itu.cryptomonnaie.repository;
 
 import mg.itu.cryptomonnaie.dto.ResultatAnalyseCommissionDTO;
+import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
 import mg.itu.cryptomonnaie.entity.*;
 
 import java.time.LocalDateTime;
@@ -45,4 +46,18 @@ public interface HistoriqueCryptoRepository
         @Nullable Integer idCryptomonnaie,
         @Nullable LocalDateTime dateHeureMin,
         @Nullable LocalDateTime dateHeureMax);
+
+    @Query("""
+        SELECT NEW mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO(
+            p.id,
+            p.email,
+            CAST(SUM(CASE WHEN hc.typeAction.id = 1 THEN hc.quantite * hc.cours ELSE 0 END) AS Double),
+            CAST(SUM(CASE WHEN hc.typeAction.id = 2 THEN hc.quantite * hc.cours ELSE 0 END) AS Double),
+            p.fondActuel
+        )
+        FROM HistoriqueCrypto hc
+            JOIN hc.profil p
+        GROUP BY p.id
+    """)
+    List<ResumeHistoriqueTransactionUtilisateurDTO> findResumesHistoriquesTransactionGroupByUtilisateur();
 }

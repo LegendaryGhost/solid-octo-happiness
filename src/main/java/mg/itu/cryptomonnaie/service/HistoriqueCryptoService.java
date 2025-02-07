@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 import mg.itu.cryptomonnaie.dto.ResultatAnalyseCommissionDTO;
+import mg.itu.cryptomonnaie.dto.ResumeHistoriqueTransactionUtilisateurDTO;
 import mg.itu.cryptomonnaie.request.AnalyseCommissionRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -83,5 +84,9 @@ public class HistoriqueCryptoService {
     public ResultatAnalyseCommissionDTO analyserCommission(final AnalyseCommissionRequest request) {
         return historiqueCryptoRepository.analyserCommission(
             request.getTypeAnalyse(), request.getIdCryptomonnaie(), request.getDateHeureMin(), request.getDateHeureMax());
+    }
+
+    public List<ResumeHistoriqueTransactionUtilisateurDTO> getResumesHistoriquesTransactionGroupByUtilisateur() {
+        return historiqueCryptoRepository.findResumesHistoriquesTransactionGroupByUtilisateur();
     }
 }
