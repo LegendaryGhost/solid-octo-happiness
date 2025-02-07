@@ -2,6 +2,7 @@ CREATE TABLE utilisateur
 (
     id                  SERIAL,
     email               VARCHAR(75)    NOT NULL,
+    pdp                 VARCHAR(255),
     fonds_actuel        NUMERIC(15, 2) NOT NULL DEFAULT 0,
     token               VARCHAR(255),
     date_heure_maj      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -21,14 +22,14 @@ CREATE TABLE cryptomonnaie
 CREATE TABLE cours_crypto
 (
     id               SERIAL,
-    cours_actuel     NUMERIC(15, 2) NOT NULL,
+    cours            NUMERIC(15, 2) NOT NULL,
     date_heure       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     id_cryptomonnaie INTEGER        NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id)
 );
 
-CREATE TABLE historique_transaction
+CREATE TABLE _transaction
 (
     id                 SERIAL,
     quantite           REAL           NOT NULL,
@@ -44,7 +45,7 @@ CREATE TABLE historique_transaction
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id)
 );
 
-CREATE TABLE historique_fonds
+CREATE TABLE operation
 (
     id                 SERIAL,
     num_carte_bancaire VARCHAR(50)    NOT NULL,
@@ -76,15 +77,15 @@ CREATE TABLE taux_commission
     PRIMARY KEY (id)
 );
 
-CREATE TABLE statut_historique_fonds
+CREATE TABLE statut_operation
 (
-    id                  SERIAL,
-    statut              VARCHAR(10) NOT NULL,
-    date_heure          TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id_historique_fonds INTEGER     NOT NULL,
-    UNIQUE (id_historique_fonds, statut),
+    id           SERIAL,
+    statut       VARCHAR(10) NOT NULL,
+    date_heure   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_operation INTEGER     NOT NULL,
+    UNIQUE (id_operation, statut),
     PRIMARY KEY (id),
-    FOREIGN KEY (id_historique_fonds) REFERENCES historique_fonds (id)
+    FOREIGN KEY (id_operation) REFERENCES operation (id)
 );
 
 CREATE TABLE crypto_favoris
