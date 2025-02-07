@@ -82,15 +82,15 @@
                             <tbody>
                             <tr th:each="historique : ${historiques}">
                                 <td >
-                                    <img 
-                                        th:src="@{'/assets/compiled/profil/' + ${historique.profil.photo}}" 
-                                        alt="photo" 
-                                        width="50" 
-                                        style="width: 50px;
-                                            height: 50px;
-                                            border-radius: 50%;
-                                            object-fit: cover;
-                                            border: 2px solid #ddd;">
+                                    <a th:href="@{/portefeuille/historique/profil/{id}(id=${historique.profil.id})}">
+                                        <img th:src="@{'/assets/compiled/profil/' + ${historique.profil.photo}}" 
+                                             alt="photo" 
+                                             width="50" 
+                                             style="width: 50px;
+                                                    height: 50px;
+                                                    border-radius: 50%;
+                                                    object-fit: cover;">
+                                    </a>
                                 </td>
                                 <td th:text="${historique.profil.email}">Email</td>
                                 <td th:text="${historique.cryptomonnaie.designation}">Bitcoin</td>

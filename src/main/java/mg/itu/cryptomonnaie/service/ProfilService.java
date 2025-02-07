@@ -20,4 +20,8 @@ public class ProfilService {
     public List<Profil> listeProfils() {
         return profilRepository.findAll();
     }
+
+    public Profil getById(Long id) {
+        return profilRepository.findById(id).orElse(null);
+    }
 }
