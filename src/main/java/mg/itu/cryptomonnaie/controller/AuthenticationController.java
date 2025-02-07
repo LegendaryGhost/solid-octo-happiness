@@ -7,6 +7,7 @@ import mg.itu.cryptomonnaie.request.EmailAndPasswordRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
+import mg.itu.cryptomonnaie.service.ProfilService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -39,6 +40,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final RestTemplate restTemplate;
     private final ParameterizedTypeReference<Map<String, Object>> mapTypeReference;
+    private final ProfilService profilService;
 
     @Value("${identity-flow.api.url}")
     private String identityFlowApiUrl;
@@ -149,7 +151,10 @@ public class AuthenticationController {
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 httpSession.removeAttribute(PENDING_VERIFICATION_EMAIL_KEY);
-                authenticationManager.authenticate(pendingVerificationEmail);
+
+                @SuppressWarnings("unchecked")
+                Map<String, String> data = (Map<String, String>) Objects.requireNonNull(responseEntity.getBody()).get("data");
+                authenticationManager.authenticate(profilService.updateOrCreate(pendingVerificationEmail, data.get("token")));
 
                 return "redirect:/portefeuille/etat";
             }
