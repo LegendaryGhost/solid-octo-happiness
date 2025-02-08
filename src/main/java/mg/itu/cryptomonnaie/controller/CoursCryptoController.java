@@ -25,9 +25,9 @@ public class CoursCryptoController {
         @RequestParam(required = false) Integer idCryptomonnaie
     ) {
         Cryptomonnaie cryptomonnaie = cryptomonnaieService.getByIdOrGetFirst(idCryptomonnaie);
-        model.addAttribute("coursCryptos", coursCryptoService.getByCryptomonnaie(cryptomonnaie))
+        model.addAttribute("coursCryptos", coursCryptoService.getByCryptomonnaie(cryptomonnaie.getId()))
             .addAttribute("cryptomonnaies", cryptomonnaieService.getAll())
-            .addAttribute("cryptoActuelle", cryptomonnaie);
+            .addAttribute("cryptoActuelle", cryptomonnaie.getDesignation());
 
         return "cours";
     }
