@@ -41,11 +41,10 @@ public class OperationController {
     @GetMapping("/historique-globale")
     public String historiqueGlobale(
         Model model,
-        @RequestParam(required = false)LocalDateTime dateHeure
+        @RequestParam(required = false) LocalDateTime dateHeure
     ) {
         model.addAttribute("operations", operationService.getHistoriqueGlobale(dateHeure));
-
-        return null;
+        return "operation/historique_globale";
     }
 
     @GetMapping("/utilisateur/{idUtilisateur}")
