@@ -65,14 +65,36 @@
                     <li class="sidebar-item has-sub">
                         <a class="sidebar-link" href="#">
                             <i class="bi bi-cash-stack"></i>
-                            <span>Gestion de fonds</span>
+                            <span>Opération</span>
                         </a>
                         <ul class="submenu">
                             <li class="submenu-item">
-                                <a class="submenu-link" th:href="@{/historique-fond/form}">Dépôt / Retrait</a>
+                                <a class="submenu-link" th:href="@{/operation/demande-depot-retrait}">
+                                    Faire un dépôt ou retrait
+                                </a>
                             </li>
                             <li class="submenu-item">
-                                <a class="submenu-link" th:href="@{/historique-fond/utilisateur}">Historique</a>
+                                <a class="submenu-link" th:href="@{/operation/historique-globale}">
+                                    Historique globale
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-item has-sub">
+                        <a class="sidebar-link" href="#">
+                            <i class="bi bi-clock-history"></i>
+                            <span>Transaction</span>
+                        </a>
+                        <ul class="submenu">
+                            <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/transaction/creation}">
+                                    Nouvelle
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/transaction/historique-globale}">
+                                    Historique globale
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -80,12 +102,6 @@
                         <a class="sidebar-link" th:href="@{/cours/chart}">
                             <i class="bi bi-graph-up"></i>
                             <span>Cours</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" th:href="@{/portefeuille/historique-global}">
-                            <i class="bi bi-clock-history"></i>
-                            <span>Historique globale</span>
                         </a>
                     </li>
                 </ul>

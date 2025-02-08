@@ -24,7 +24,7 @@ public class OperationController {
         model.addAttribute("o", new OperationRequest())
             .addAttribute("typesOperation", TypeOperation.values());
 
-        return "formulaire_depot_retrait";
+        return "operation/formulaire_depot_retrait";
     }
 
     @PostMapping("/ajouter-en-attente")
