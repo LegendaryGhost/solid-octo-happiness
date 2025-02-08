@@ -33,7 +33,7 @@ public class OperationController {
         RedirectAttributes redirectAttributes
     ) {
         operationService.creerOperationEnAttente(request, Facade.authenticationManager().safelyGetCurrentUser());
-        redirectAttributes.addFlashAttribute("message", "Votre demande a été enregistrée");
+        redirectAttributes.addFlashAttribute("success", "Votre demande a été enregistrée");
 
         return "redirect:/operation/demande-depot-retrait";
     }
