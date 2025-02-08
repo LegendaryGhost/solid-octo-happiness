@@ -15,34 +15,32 @@
                     <div class="card-header">
                         <h4 class="card-title">Filtre</h4>
                     </div>
-                    <div class="card-content">
-                        <div class="card-body">
-                            <form class="form">
-                                <div class="row">
-                                    <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="cryptomonnaie">Cryptomonnaie</label>
-                                            <select class="form-select"
-                                                    id="cryptomonnaie"
-                                                    name="idCryptomonnaie"
-                                            >
-                                                <option value="">Sélectionnez une cryptomonnaie</option>
-                                                <option th:each="cryptomonnaie : ${cryptomonnaies}"
-                                                        th:value="${cryptomonnaie.id}"
-                                                        th:text="${cryptomonnaie.designation}"
-                                                        th:selected="${param.idCryptomonnaie != null && cryptomonnaie.id.toString() == param.idCryptomonnaie[0]}">
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary mt-2">
-                                            Appliquer
-                                        </button>
+                    <div class="card-body">
+                        <form class="form">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="cryptomonnaie">Cryptomonnaie</label>
+                                        <select class="form-select"
+                                                id="cryptomonnaie"
+                                                name="idCryptomonnaie"
+                                        >
+                                            <option value="">Sélectionnez une cryptomonnaie</option>
+                                            <option th:each="cryptomonnaie : ${cryptomonnaies}"
+                                                    th:value="${cryptomonnaie.id}"
+                                                    th:text="${cryptomonnaie.designation}"
+                                                    th:selected="${param.idCryptomonnaie != null && cryptomonnaie.id.toString() == param.idCryptomonnaie[0]}">
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary mt-2">
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
