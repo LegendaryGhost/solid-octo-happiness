@@ -5,12 +5,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
 
 @Getter
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id_utilisateur", "id_cryptomonnaie"}))
+@DynamicInsert
 public class Portefeuille {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

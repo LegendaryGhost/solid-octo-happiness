@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @ToString(doNotUseGetters = true)
 @Entity
 @Table(name = "_transaction")
+@DynamicInsert
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +41,6 @@ public class Transaction {
     @Column(nullable = false)
     private Double tauxCommission;
 
-    @Setter
     @Column(nullable = false)
     private Double montantCommission;
 
@@ -52,4 +53,9 @@ public class Transaction {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_utilisateur")
     private Utilisateur utilisateur;
+
+    public void calculerMontantCommission() {
+        montantCommission = quantite != null && cours != null && tauxCommission != null ?
+            quantite * cours * (tauxCommission / 100) : 0;
+    }
 }

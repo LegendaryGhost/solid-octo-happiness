@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, ~{::scripts}, ~{::styles})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transaction</title>
+    <th:block th:fragment="styles">
+        <link rel="stylesheet" th:href="@{/extensions/toastify-js/src/toastify.css}">
+    </th:block>
+</head>
+
+<th:block th:fragment="content">
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Transaction de cryptomonnaie</h3>
+                    <p class="text-subtitle text-muted">Effectuez vos achats et ventes de cryptomonnaie</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Transaction</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Achat ou Vente</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <section class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Formulaire</h4>
+                    </div>
+                    <div class="card-body">
+                        <form class="form form-horizontal"
+                              method="post"
+                              th:object="${t}"
+                        >
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="crypto">Cryptomonnaie</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select class="form-select"
+                                                id="crypto"
+                                                th:field="*{idCryptomonnaie}"
+                                        >
+                                            <option th:each="cryptomonnaie :${cryptomonnaies}"
+                                                    th:value="${cryptomonnaie.id}"
+                                                    th:text="${cryptomonnaie.designation}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="quantite">Quantite</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <input type="number"
+                                               id="quantite"
+                                               class="form-control"
+                                               placeholder="Quantité voulue"
+                                               min="0"
+                                               th:field="*{quantite}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="type-transaction">Type de transaction</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select class="form-select"
+                                                id="type-transaction"
+                                                th:field="*{typeTransaction}"
+                                        >
+                                            <option th:each="type :${typesTransaction}"
+                                                    th:value="${type}"
+                                                    th:text="${type.value}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary me-1 mb-1">
+                                        Soumettre
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</th:block>
+<th:block th:fragment="scripts">
+    <script th:src="@{/extensions/toastify-js/src/toastify.js}"></script>
+    <th:block th:insert="~{partials/_success}"/>
+</th:block>
+</html>
