@@ -15,7 +15,7 @@ public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Inte
         SELECT u.id AS idUtilisateur,
                c.id AS idCryptomonnaie,
                c.designation AS designationCryptomonnaie,
-               p.quantite,
+               p.quantite AS quantite,
                cc.cours AS coursActuel,
                cc.dateHeure AS dateHeureCours
         FROM Portefeuille p

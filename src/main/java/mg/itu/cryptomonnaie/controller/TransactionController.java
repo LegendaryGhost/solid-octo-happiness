@@ -46,7 +46,7 @@ public class TransactionController {
         @RequestParam(required = false) Integer idUtilisateur
     ) {
         model.addAttribute("historiques", transactionService.getHistoriqueGlobale(idCryptomonnaie, idUtilisateur));
-        return null;
+        return "transaction/historique_globale";
     }
 
     @GetMapping("/resumes-historiques-transaction")
