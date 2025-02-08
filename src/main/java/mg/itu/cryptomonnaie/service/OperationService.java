@@ -22,7 +22,11 @@ public class OperationService {
     private final UtilisateurService utilisateurService;
 
     public List<Operation> getHistoriqueGlobale(final @Nullable LocalDateTime dateHeure) {
-        return operationRepository.findAllBySuiviOperationRecentAndStatutValidee(dateHeure);
+        return operationRepository.findAllBySuiviOperationRecentAndStatut(dateHeure, StatutOperation.VALIDEE);
+    }
+
+    public List<Operation> getAllEnAttente() {
+        return operationRepository.findAllBySuiviOperationRecentAndStatut(null, StatutOperation.EN_ATTENTE);
     }
 
     public List<Operation> getAllByUtilisateur(final Integer idUtilisateur) {
