@@ -88,4 +88,29 @@ VALUES
     -- Retrait de Edward après ses gains ADA
     ('5398228707871529', 70.00, '2025-01-02 10:07:00', 'Retrait', 5);
 
+INSERT INTO taux_commission (valeur_achat, valeur_vente)
+VALUES (0.5, 0.5);
 
+-- Ajout des cryptomonnaies favorites pour chaque utilisateur
+INSERT INTO crypto_favoris (id_utilisateur, id_cryptomonnaie)
+VALUES
+    -- Favoris d'Alice (id=1)
+    (1, 1),  -- Bitcoin
+    (1, 2),  -- Ethereum
+    (1, 5),  -- Solana
+    -- Favoris de Bob (id=2)
+    (2, 1),  -- Bitcoin
+    (2, 3),  -- Binance Coin
+    (2, 10), -- Litecoin
+    -- Favoris de Charlie (id=3)
+    (3, 4),  -- Cardano
+    (3, 5),  -- Solana
+    (3, 7),  -- Polkadot
+    -- Favoris de Diana (id=4)
+    (4, 8),  -- Dogecoin
+    (4, 9),  -- Shiba Inu
+    (4, 6),  -- Ripple
+    -- Favoris d'Edward (id=5)
+    (5, 2),  -- Ethereum
+    (5, 4),  -- Cardano
+    (5, 10); -- Litecoin
