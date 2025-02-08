@@ -15,7 +15,15 @@
 <body>
 <div id="app">
     <th:block th:insert="~{partials/_sidebar}"/>
-    <div id="main" th:replace="${content}"></div>
+    <div id="main">
+        <header class="mb-3">
+            <a href="#" class="burger-btn d-block d-xl-none">
+                <i class="bi bi-justify fs-3"></i>
+            </a>
+        </header>
+
+        <th:block th:replace="${content}"/>
+    </div>
 </div>
 
 <script th:src="@{js/components/dark.js}"></script>

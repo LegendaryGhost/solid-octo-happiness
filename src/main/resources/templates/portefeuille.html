@@ -1,9 +1,110 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, _, _)}" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, _, ~{::styles})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Situation du portefeuille</title>
 </head>
+
 <th:block th:fragment="content">
-    Hello World
+    <div class="page-heading">
+        <h3>Situation du portefeuille</h3>
+    </div>
+    <div class="page-content">
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Fonds actuel</h4>
+                        </div>
+                        <div class="card-body">
+                            <span class="font-extrabold fs-4 mb-0"
+                                  th:text="${situationPortefeuille.fondsActuel()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Vos cryptomonnaies</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <table class="table mb-0 table-lg">
+                                    <thead>
+                                    <tr>
+                                        <th>ID. cryptomonnaie</th>
+                                        <th>Désignation Cryptomonnaie</th>
+                                        <th>Quantité</th>
+                                        <th>Cours actuel</th>
+                                        <th>Date et heure du cours</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="portefeuille : ${situationPortefeuille.portefeuilleAvecCoursList()}">
+                                        <td th:text="${portefeuille.idCryptomonnaie}"></td>
+                                        <td th:text="${portefeuille.designationCryptomonnaie}"></td>
+                                        <td th:text="${portefeuille.quantite}"></td>
+                                        <td th:text="${portefeuille.coursActuel}"></td>
+                                        <td th:text="${portefeuille.dateHeureCours}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Historique de vos transactions</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="table-responsive">
+                                <table class="table mb-0 table-lg">
+                                    <thead>
+                                    <tr>
+                                        <th>Cryptomonnaie</th>
+                                        <th>Type de transaction</th>
+                                        <th>Quantité</th>
+                                        <th>Date et heure</th>
+                                        <th>Cours</th>
+                                        <th>Cours actuel</th>
+                                        <th>Valeur actuelle</th>
+                                        <th>Variation</th>
+                                        <th>Profit ou perte</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="transaction : ${situationPortefeuille.historiquesTransaction()}">
+                                        <td th:text="${transaction.designationCryptomonnaie}"></td>
+                                        <td th:text="${transaction.typeTransaction.value}"></td>
+                                        <td th:text="${transaction.quantite}"></td>
+                                        <td th:text="${transaction.dateHeure}"></td>
+                                        <td th:text="${transaction.cours}"></td>
+                                        <td th:text="${transaction.coursActuel}"></td>
+                                        <td th:text="${transaction.valeurActuelle}"></td>
+                                        <td th:text="${transaction.variation}"></td>
+                                        <td th:text="${transaction.profitOuPerte}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 </th:block>
 </html>
