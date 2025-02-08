@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+    <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+    <th:block th:if="${message}">
+        <script th:inline="javascript">
+            Toastify({
+                text: /*[[${message}]]*/,
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#4fbe87",
+            }).showToast();
+        </script>
+    </th:block>
+</html>

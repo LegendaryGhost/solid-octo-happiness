@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, _, _)}" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, ~{::scripts}, ~{::styles})}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Faire un dépôt ou retrait</title>
+    <th:block th:fragment="styles">
+        <link rel="stylesheet" th:href="@{/extensions/toastify-js/src/toastify.css}">
+    </th:block>
 </head>
+
 <th:block th:fragment="content">
     <div class="page-heading">
         <div class="page-title">
@@ -88,5 +92,9 @@
             </div>
         </section>
     </div>
+</th:block>
+<th:block th:fragment="scripts">
+    <script th:src="@{/extensions/toastify-js/src/toastify.js}"></script>
+    <th:block th:insert="~{partials/_message}"/>
 </th:block>
 </html>
