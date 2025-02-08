@@ -64,24 +64,28 @@ VALUES
     -- Edward investit dans le Cardano
     (100.0, 1.40, '2025-01-02 10:05:00', 'Achat', 0.5, 70.00, 4, 5);
 
-INSERT INTO type_transaction (designation)
-VALUES ('Dépôt'),
-       ('Retrait');
+-- Opérations du premier jour (2025-01-01)
+INSERT INTO operation (num_carte_bancaire, montant, date_heure, type_operation, id_utilisateur)
+VALUES
+    -- Dépôt de Alice pour acheter des cryptos
+    ('4532015112830366', 1500.00, '2025-01-01 09:03:00', 'Dépôt', 1),
+    -- Retrait de Bob après ses ventes
+    ('5398228707871528', 750.00, '2025-01-01 09:20:00', 'Retrait', 2),
+    -- Dépôt de Charlie pour ses investissements
+    ('6771549495586802', 1000.00, '2025-01-01 09:28:00', 'Dépôt', 3),
+    -- Retrait de Diana après ses gains
+    ('4532015112830367', 35.00, '2025-01-01 09:48:00', 'Retrait', 4),
+    -- Dépôt initial d'Edward
+    ('5398228707871529', 500.00, '2025-01-01 10:02:00', 'Dépôt', 5),
+    -- Retrait de Alice après ses ventes BTC
+    ('4532015112830366', 115.00, '2025-01-02 09:12:00', 'Retrait', 1),
+    -- Dépôt de Bob pour nouveaux achats
+    ('5398228707871528', 255.00, '2025-01-02 09:22:00', 'Dépôt', 2),
+    -- Retrait de Charlie après ses ventes SOL
+    ('6771549495586802', 52.50, '2025-01-02 09:37:00', 'Retrait', 3),
+    -- Dépôt de Diana pour investir plus
+    ('4532015112830367', 20.00, '2025-01-02 09:52:00', 'Dépôt', 4),
+    -- Retrait de Edward après ses gains ADA
+    ('5398228707871529', 70.00, '2025-01-02 10:07:00', 'Retrait', 5);
 
-INSERT INTO etat_fond (designation)
-VALUES ('Validée'),
-       ('Refusée'),
-       ('En attente');
-
-INSERT INTO historique_fond (date_transaction, montant, id_profil, id_type_transaction, num_carte_bancaire, id_etat)
-VALUES ('2025-01-01 10:00:00', 1000.00, 1, 1, 'CRT1', 3),
-       ('2025-01-01 11:00:00', 500.00, 2, 2, 'CRT2', 3),
-       ('2025-01-01 12:00:00', 2000.00, 3, 1, 'CRT3', 3),
-       ('2025-01-01 13:00:00', 700.00, 4, 2, 'CRT4', 3),
-       ('2025-01-01 14:00:00', 300.00, 5, 1, 'CRT5', 3),
-       ('2025-01-02 10:00:00', 1500.00, 1, 1, 'CRT1', 3),
-       ('2025-01-02 11:00:00', 800.00, 2, 2, 'CRT2', 3),
-       ('2025-01-02 12:00:00', 2500.00, 3, 1, 'CRT3', 3),
-       ('2025-01-02 13:00:00', 900.00, 4, 2, 'CRT4', 3),
-       ('2025-01-02 14:00:00', 400.00, 5, 1, 'CRT5', 3);
 
