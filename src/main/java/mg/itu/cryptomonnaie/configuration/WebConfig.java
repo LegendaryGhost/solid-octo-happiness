@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // Maybe should we list the paths one by one ?
         registry.addInterceptor(authenticationInterceptor)
-            .addPathPatterns("/portefeuille/etat", "/portefeuille/historique",
+            .addPathPatterns("/portefeuille", "/portefeuille/historique",
                 "/historique-fond/**", "/cours/**");
     }
 }

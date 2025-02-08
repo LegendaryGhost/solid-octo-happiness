@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="~{layout :: layout(~{::title}, ~{::content}, ~{::scripts}, ~{::styles})}" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, _, _)}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Situation du portefeuille</title>
 </head>
-<th:block th:replace="content">
-
+<th:block th:fragment="content">
+    Hello World
 </th:block>
 </html>
