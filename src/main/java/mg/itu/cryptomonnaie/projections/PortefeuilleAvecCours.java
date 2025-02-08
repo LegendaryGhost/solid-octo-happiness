@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public interface PortefeuilleAvecCours {
     Integer getIdUtilisateur();
     Integer getIdCryptomonnaie();
-    Integer getDesignationCryptomonnaie();
+    String  getDesignationCryptomonnaie();
     Float   getQuantite();
     Double  getCoursActuel();
     LocalDateTime getDateHeureCours();

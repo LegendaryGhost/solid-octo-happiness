@@ -22,7 +22,7 @@ public class OperationService {
     private final UtilisateurService utilisateurService;
 
     public List<Operation> getHistoriqueGlobale(final @Nullable LocalDateTime dateHeure) {
-        return operationRepository.findAllByDateHeureEquals(dateHeure);
+        return operationRepository.findAllBySuiviOperationRecentAndStatutValidee(dateHeure);
     }
 
     public List<Operation> getAllByUtilisateur(final Integer idUtilisateur) {

@@ -132,7 +132,7 @@ public class AuthenticationController {
     public String pageVerificationCodePin(
         @Nullable @SessionAttribute(name = PENDING_VERIFICATION_EMAIL_KEY, required = false) String pendingVerificationEmail
     ) {
-        return pendingVerificationEmail == null ? "redirect:/connexion" : "auth/confirmation/pin_confirmation";
+        return pendingVerificationEmail == null ? "redirect:/connexion" : "auth/code_pin_confirmation";
     }
 
     @PostMapping("/verification-code-pin")

@@ -24,6 +24,7 @@ public class TransactionService {
     private final PortefeuilleService  portefeuilleService;
     private final UtilisateurService   utilisateurService;
 
+    @Transactional
     public List<HistoriqueTransactionDTO> getHistoriqueGlobale(
         final Integer idCryptomonnaie, final Integer idUtilisateur
     ) {
@@ -35,6 +36,7 @@ public class TransactionService {
         return transactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur);
     }
 
+    @Transactional
     public void save(final TransactionRequest request, final Utilisateur utilisateur) {
         final Integer idCryptomonnaie = request.getIdCryptomonnaie();
         Cryptomonnaie cryptomonnaie = cryptomonnaieService.getById(idCryptomonnaie);
@@ -47,6 +49,7 @@ public class TransactionService {
         transaction.setCours(coursCryptoService
             .getCoursCryptoActuelByCryptomonnaie(idCryptomonnaie).getCours());
         transaction.setTypeTransaction(typeTransaction);
+        transaction.calculerMontantCommission();
         transaction.setCryptomonnaie(cryptomonnaie);
         transaction.setUtilisateur(utilisateur);
 
@@ -55,16 +58,24 @@ public class TransactionService {
         // Mise à jour du portefeuille
         Portefeuille portefeuille  = portefeuilleService.getByUtilisateurAndCryptomonnaieOrCreate(utilisateur, cryptomonnaie);
         Float portefeuilleQuantite = portefeuille.getQuantite();
+
+        // Pour la création du portefeuille la première fois, ceci sera null
+        portefeuilleQuantite = portefeuilleQuantite == null ? 0 : portefeuilleQuantite;
+
+        // Mise à jour du fonds de l'utilisateur
+        Double fondsActuel = utilisateur.getFondsActuel();
+        Double montant     = requestQuantite * transaction.getCours();
         switch (typeTransaction) {
-            case ACHAT -> portefeuille.setQuantite(portefeuilleQuantite + requestQuantite);
+            case ACHAT -> {
+                portefeuille.setQuantite(portefeuilleQuantite + requestQuantite);
+                utilisateur.setFondsActuel(fondsActuel - montant);
+            }
             case VENTE -> {
                 portefeuille.setQuantite(portefeuilleQuantite - requestQuantite);
-
-                // La Vente se transforme en fonds
-                utilisateur.setFondsActuel(utilisateur.getFondsActuel() + requestQuantite * transaction.getCours());
-                utilisateurService.save(utilisateur);
+                utilisateur.setFondsActuel(fondsActuel + montant);
             }
         }
+        utilisateurService.save(utilisateur);
 
         portefeuilleService.save(portefeuille);
     }

@@ -1,16 +1,23 @@
 package mg.itu.cryptomonnaie.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.repository.UtilisateurRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
+
+    @Transactional
+    public List<Utilisateur> getAll() {
+        return utilisateurRepository.findAll();
+    }
 
     @Nullable
     @Transactional

@@ -3,6 +3,7 @@ package mg.itu.cryptomonnaie.service;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CryptomonnaieService {
     private final CryptomonnaieRepository cryptomonnaieRepository;
 
+    @Transactional
     public List<Cryptomonnaie> getAll() {
         return cryptomonnaieRepository.findAll();
     }
@@ -22,5 +24,11 @@ public class CryptomonnaieService {
     public Cryptomonnaie getById(final Integer id) {
         return cryptomonnaieRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Aucune cryptomonnaie trouvée avec l'identifiant : " + id));
+    }
+
+    @Transactional
+    public Cryptomonnaie getByIdOrGetFirst(@Nullable final Integer id) {
+        return cryptomonnaieRepository.findByIdOrFindFirst(id)
+            .orElseThrow(() -> new RuntimeException("Aucune cryptomonnaie dans la base de données"));
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, _, ~{::styles})}"
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, _, _)}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Situation du portefeuille</title>
@@ -33,9 +33,9 @@
                         <div class="card-header">
                             <h4 class="card-title">Vos cryptomonnaies</h4>
                         </div>
-                        <div class="card-content">
+                        <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table mb-0 table-lg">
+                                <table class="table mb-0 table-md">
                                     <thead>
                                     <tr>
                                         <th>ID. cryptomonnaie</th>
@@ -69,9 +69,9 @@
                         <div class="card-header">
                             <h4 class="card-title">Historique de vos transactions</h4>
                         </div>
-                        <div class="card-content">
+                        <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table mb-0 table-lg">
+                                <table class="table mb-0 table-md">
                                     <thead>
                                     <tr>
                                         <th>Cryptomonnaie</th>

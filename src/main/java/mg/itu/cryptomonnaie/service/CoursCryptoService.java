@@ -7,20 +7,23 @@ import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.repository.CryptomonnaieRepository;
 import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
 import org.springframework.lang.Nullable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class CoursCryptoService {
+    private static final double POURCENTAGE_MAX_VARIATION = 5.0;
+
     private final CoursCryptoRepository   coursCryptoRepository;
     private final CryptomonnaieRepository cryptomonnaieRepository;
-    private Random random;
 
+    @Transactional
     public List<CoursCrypto> getByCryptomonnaie(final Integer idCryptomonnaie) {
         return coursCryptoRepository.findByCryptomonnaieId(idCryptomonnaie);
     }
@@ -30,19 +33,24 @@ public class CoursCryptoService {
         return coursCryptoRepository.findFirstByCryptomonnaieIdOrderByDateHeureDesc(idCryptomonnaie);
     }
 
-    // @Scheduled(fixedRate = 10000)
+    // @Scheduled(fixedRateString = "${courscrypto.fixed-rate}")
     @Transactional
-    public void generateRandomCours() {
+    public void genererCoursCryptosAleatoirement() {
+        List<CoursCrypto> coursCryptosAleatoires = new ArrayList<>();
         cryptomonnaieRepository.findAll().forEach(cryptomonnaie -> {
+            CoursCrypto dernierCours = getCoursCryptoActuelByCryptomonnaie(cryptomonnaie.getId());
+
             CoursCrypto coursCrypto = new CoursCrypto();
             coursCrypto.setCours(generateRandomCoursValue(
-                getCoursCryptoActuelByCryptomonnaie(cryptomonnaie.getId()).getCours()
+                dernierCours == null ? 1000.0 : dernierCours.getCours()
             ));
             coursCrypto.setCryptomonnaie(cryptomonnaie);
-            coursCryptoRepository.save(coursCrypto);
+            coursCryptosAleatoires.add(coursCrypto);
 
-            log.debug("Cours généré pour la cryptomonnaie \"{}\" : {}", cryptomonnaie.getDesignation(), coursCrypto.getCours());
+            log.trace("Cours généré pour la cryptomonnaie \"{}\" : {}", cryptomonnaie.getDesignation(), coursCrypto.getCours());
         });
+
+        coursCryptoRepository.saveAll(coursCryptosAleatoires);
     }
 
     @Nullable
@@ -61,8 +69,10 @@ public class CoursCryptoService {
     }
 
     private Double generateRandomCoursValue(Double dernierCours) {
-        Double facteur = (random.nextDouble() * 0.2) - 0.1;
-        return dernierCours + (dernierCours * facteur);
+        double pourcentageVariationAleatoire = -POURCENTAGE_MAX_VARIATION + (Math.random() * (POURCENTAGE_MAX_VARIATION * 2));
+
+        // S'assure que la valeur ne dépasse pas les limites de la base de données (10^13)
+        return Math.min(dernierCours * (1 + (pourcentageVariationAleatoire / 100.0)), 9.99999999999999E12);
     }
 
     private static Double premierQuartile(List<Double> coursCrypto) {
