@@ -66,8 +66,8 @@
                             <table class="table mb-0 table-md">
                                 <thead>
                                 <tr>
-                                    <th>ID. Utilisateur</th>
-                                    <th>Email</th>
+                                    <th>#</th>
+                                    <th>Email utilisateur</th>
                                     <th>Montant</th>
                                     <th>Date et heure</th>
                                     <th>Type d'opération</th>
@@ -75,7 +75,11 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="operation : ${operations}">
-                                    <td th:text="${operation.utilisateur.id}"></td>
+                                    <td>
+                                        <div class="avatar avatar-lg me-3">
+                                            <img th:src="${operation.utilisateur.pdp}" alt="Photo de profil"/>
+                                        </div>
+                                    </td>
                                     <td th:text="${operation.utilisateur.email}"></td>
                                     <td th:text="${operation.montant}"></td>
                                     <td th:text="${operation.dateHeure}"></td>
