@@ -50,6 +50,8 @@ public class TransactionService {
         transaction.setCryptomonnaie(cryptomonnaie);
         transaction.setUtilisateur(utilisateur);
 
+        transactionRepository.save(transaction);
+
         // Mise à jour du portefeuille
         Portefeuille portefeuille  = portefeuilleService.getByUtilisateurAndCryptomonnaieOrCreate(utilisateur, cryptomonnaie);
         Float portefeuilleQuantite = portefeuille.getQuantite();
@@ -65,7 +67,6 @@ public class TransactionService {
         }
 
         portefeuilleService.save(portefeuille);
-        transactionRepository.save(transaction);
     }
 
     public ResultatAnalyseCommission analyserCommission(final AnalyseCommissionRequest request) {

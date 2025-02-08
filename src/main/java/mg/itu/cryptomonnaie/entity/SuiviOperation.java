@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id_historique_fonds", "statut"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id_operation", "statut"}))
 public class SuiviOperation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,6 @@ public class SuiviOperation {
 
     @Setter
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_historique_fonds")
+    @JoinColumn(name = "id_operation")
     private Operation operation;
 }

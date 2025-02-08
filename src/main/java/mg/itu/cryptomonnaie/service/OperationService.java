@@ -39,13 +39,14 @@ public class OperationService {
         operation.setTypeOperation(request.getTypeOperation());
         operation.setUtilisateur(utilisateur);
 
+        operationRepository.save(operation);
+
         SuiviOperation suiviOperation = new SuiviOperation();
         suiviOperation.setStatut(StatutOperation.defaultValue());
         suiviOperation.setDateHeure(operation.getDateHeure());
         suiviOperation.setOperation(operation);
 
         suiviOperationService.save(suiviOperation);
-        operationRepository.save(operation);
     }
 
     @Transactional
@@ -59,6 +60,8 @@ public class OperationService {
         s.setDateHeure(LocalDateTime.now());
         s.setOperation(operation);
 
+        suiviOperationService.save(s);
+
         // Mise à jour du fonds
         Utilisateur utilisateur = operation.getUtilisateur();
         Double fondsActuel = utilisateur.getFondsActuel();
@@ -69,7 +72,6 @@ public class OperationService {
         });
 
         utilisateurService.save(utilisateur);
-        suiviOperationService.save(s);
     }
 
     public void refuser(final Integer idOperation) {
