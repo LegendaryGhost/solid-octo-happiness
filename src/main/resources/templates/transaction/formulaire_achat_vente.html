@@ -50,7 +50,7 @@
                                                 id="crypto"
                                                 th:field="*{idCryptomonnaie}"
                                         >
-                                            <option th:each="cryptomonnaie :${cryptomonnaies}"
+                                            <option th:each="cryptomonnaie : ${cryptomonnaies}"
                                                     th:value="${cryptomonnaie.id}"
                                                     th:text="${cryptomonnaie.designation}">
                                             </option>
@@ -82,11 +82,9 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-12 d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary me-1 mb-1">
-                                        Soumettre
-                                    </button>
-                                </div>
+                                <button type="submit" class="btn btn-primary mt-1">
+                                    Soumettre
+                                </button>
                             </div>
                         </form>
                     </div>

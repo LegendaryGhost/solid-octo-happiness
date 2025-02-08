@@ -24,6 +24,7 @@ public class TransactionService {
     private final PortefeuilleService  portefeuilleService;
     private final UtilisateurService   utilisateurService;
 
+    @Transactional
     public List<HistoriqueTransactionDTO> getHistoriqueGlobale(
         final Integer idCryptomonnaie, final Integer idUtilisateur
     ) {

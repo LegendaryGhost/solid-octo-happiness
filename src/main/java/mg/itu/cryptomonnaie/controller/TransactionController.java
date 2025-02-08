@@ -6,6 +6,7 @@ import mg.itu.cryptomonnaie.enums.TypeTransaction;
 import mg.itu.cryptomonnaie.request.TransactionRequest;
 import mg.itu.cryptomonnaie.service.CryptomonnaieService;
 import mg.itu.cryptomonnaie.service.TransactionService;
+import mg.itu.cryptomonnaie.service.UtilisateurService;
 import mg.itu.cryptomonnaie.utils.Facade;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TransactionController {
     private final TransactionService   transactionService;
     private final CryptomonnaieService cryptomonnaieService;
+    private final UtilisateurService   utilisateurService;
 
     @GetMapping("/creation")
     public String formulaireCreation(Model model) {
@@ -45,7 +47,9 @@ public class TransactionController {
         @RequestParam(required = false) Integer idCryptomonnaie,
         @RequestParam(required = false) Integer idUtilisateur
     ) {
-        model.addAttribute("historiques", transactionService.getHistoriqueGlobale(idCryptomonnaie, idUtilisateur));
+        model.addAttribute("transactions", transactionService.getHistoriqueGlobale(idCryptomonnaie, idUtilisateur))
+            .addAttribute("cryptomonnaies", cryptomonnaieService.getAll())
+            .addAttribute("utilisateurs", utilisateurService.getAll());
         return "transaction/historique_globale";
     }
 

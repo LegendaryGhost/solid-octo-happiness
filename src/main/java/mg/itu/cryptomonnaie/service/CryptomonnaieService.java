@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CryptomonnaieService {
     private final CryptomonnaieRepository cryptomonnaieRepository;
 
+    @Transactional
     public List<Cryptomonnaie> getAll() {
         return cryptomonnaieRepository.findAll();
     }
