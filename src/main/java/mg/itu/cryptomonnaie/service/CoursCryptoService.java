@@ -33,7 +33,7 @@ public class CoursCryptoService {
         return coursCryptoRepository.findFirstByCryptomonnaieIdOrderByDateHeureDesc(idCryptomonnaie);
     }
 
-    // @Scheduled(fixedRateString = "${courscrypto.fixed-rate}")
+    // @Scheduled(fixedRateString = "${courscrypto.fixedrate}")
     @Transactional
     public void genererCoursCryptosAleatoirement() {
         List<CoursCrypto> coursCryptosAleatoires = new ArrayList<>();

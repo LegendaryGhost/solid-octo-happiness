@@ -41,7 +41,7 @@ public class AuthenticationController {
     private final RestTemplate restTemplate;
     private final ParameterizedTypeReference<Map<String, Object>> mapTypeReference;
 
-    @Value("${identity-flow.api.url}")
+    @Value("${identity-flow.apiurl}")
     private String identityFlowApiUrl;
 
     @GetMapping
