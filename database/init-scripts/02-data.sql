@@ -1,24 +1,23 @@
-INSERT INTO profil (email, fond_actuel,photo)
+INSERT INTO utilisateur (email, fonds_actuel, pdp,  date_heure_maj, date_heure_creation)
 VALUES
-  ('alice@example.com', 1500.00, 'alice.jpg'),
-  ('bob@example.com', 2500.00, 'bob.jpg'),
-  ('charlie@example.com', 1000.00, 'charlie.jpg'),
-  ('diana@example.com', 1800.00, 'diana.jpg'),
-  ('edward@example.com', 500.00, 'edward.jpg');
+  ('alice@example.com', 1500.00, 'alice.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('bob@example.com', 2500.00, 'bob.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('charlie@example.com', 1000.00, 'charlie.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('diana@example.com', 1800.00, 'diana.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  ('edward@example.com', 500.00, 'edward.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO cryptomonnaie (designation)
+INSERT INTO cryptomonnaie (designation, symbole)
 VALUES
-  ('Bitcoin'),
-  ('Ethereum'),
-  ('Binance Coin'),
-  ('Cardano'),
-  ('Solana'),
-  ('Ripple'),
-  ('Polkadot'),
-  ('Dogecoin'),
-  ('Shiba Inu'),
-  ('Litecoin');
-
+    ('Bitcoin', 'BTC'),
+    ('Ethereum', 'ETH'),
+    ('Binance Coin', 'BNB'),
+    ('Cardano', 'ADA'),
+    ('Solana', 'SOL'),
+    ('Ripple', 'XRP'),
+    ('Polkadot', 'DOT'),
+    ('Dogecoin', 'DOGE'),
+    ('Shiba Inu', 'SHIB'),
+    ('Litecoin', 'LTC');
 
 INSERT INTO type_action (designation)
 VALUES

@@ -16,4 +16,7 @@ public class Cryptomonnaie {
 
     @Column(length = 150, nullable = false, unique = true)
     private String designation;
+
+    @Column(length = 10, nullable = false, unique = true)
+    private String symbole;
 }
