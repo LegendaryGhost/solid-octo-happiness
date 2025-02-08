@@ -3,6 +3,7 @@ package mg.itu.cryptomonnaie.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
+import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.repository.CryptomonnaieRepository;
 import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
@@ -21,8 +22,9 @@ public class CoursCryptoService {
     private final CryptomonnaieRepository cryptomonnaieRepository;
     private Random random;
 
-    public List<CoursCrypto> getByCryptomonnaie(final Integer idCryptomonnaie) {
-        return coursCryptoRepository.findByCryptomonnaieId(idCryptomonnaie);
+    @Transactional
+    public List<CoursCrypto> getByCryptomonnaie(final Cryptomonnaie cryptomonnaie) {
+        return coursCryptoRepository.findByCryptomonnaieId(cryptomonnaie.getId());
     }
 
     @Transactional
