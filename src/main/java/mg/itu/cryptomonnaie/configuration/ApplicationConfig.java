@@ -22,7 +22,7 @@ public class ApplicationConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("historiqueFondCache");
+        return new ConcurrentMapCacheManager();
     }
 
     @Bean

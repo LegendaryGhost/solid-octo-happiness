@@ -34,7 +34,7 @@ build/
 
 ### Projet ###
 application.properties
+*.lo1
+LoopingImage.jpg
 .env
-
-
 src/main/resources/firebase/*

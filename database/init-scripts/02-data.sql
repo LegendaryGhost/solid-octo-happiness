@@ -1,10 +1,10 @@
-INSERT INTO profil (email, fond_actuel)
+INSERT INTO profil (email, fond_actuel,photo)
 VALUES
-  ('alice@example.com', 1500.00),
-  ('bob@example.com', 2500.00),
-  ('charlie@example.com', 1000.00),
-  ('diana@example.com', 1800.00),
-  ('edward@example.com', 500.00);
+  ('alice@example.com', 1500.00, 'alice.jpg'),
+  ('bob@example.com', 2500.00, 'bob.jpg'),
+  ('charlie@example.com', 1000.00, 'charlie.jpg'),
+  ('diana@example.com', 1800.00, 'diana.jpg'),
+  ('edward@example.com', 500.00, 'edward.jpg');
 
 INSERT INTO cryptomonnaie (designation)
 VALUES

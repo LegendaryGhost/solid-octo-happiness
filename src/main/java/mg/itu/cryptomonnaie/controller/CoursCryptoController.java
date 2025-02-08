@@ -1,16 +1,10 @@
 package mg.itu.cryptomonnaie.controller;
 
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import mg.itu.cryptomonnaie.entity.CoursCrypto;
-import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import mg.itu.cryptomonnaie.service.CoursCryptoService;
 import mg.itu.cryptomonnaie.service.CryptomonnaieService;
 
@@ -18,23 +12,31 @@ import mg.itu.cryptomonnaie.service.CryptomonnaieService;
 @Controller
 @RequestMapping("/cours")
 public class CoursCryptoController {
-    private final CoursCryptoService coursCryptosService;
+    private final CoursCryptoService   coursCryptoService;
     private final CryptomonnaieService cryptomonnaieService;
 
-    @GetMapping("/chart")
+    /*@GetMapping("/chart")
     public String afficherEtatPortefeuille(Model model) {
-        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.listeCryptomonnaie();
-        model.addAttribute("cryptomonnaies", cryptomonnaies);
+        Cryptomonnaie crypto = cryptomonnaieService.getById(1); // Bitcoin par défaut
+        List<CoursCrypto> coursCryptos = coursCryptoService.listeCoursParCryptomonnaie(crypto);
+        System.out.println("Cours envoyés : " + coursCryptos.size());
+
+        model.addAttribute("coursCryptoos", coursCryptos);
+        model.addAttribute("cryptomonnaies", cryptomonnaieService.listeCryptomonnaie());
+        model.addAttribute("cryptoActuelle", crypto.getDesignation());
+
         return "pages/crypto_detail/cours";
     }
 
-    @GetMapping("/chart/traitement/")
+    @GetMapping("/chart/traitement")
     public String traitementChart(Model model, @RequestParam("crypto") Long idCryptomonnaie) {
         Cryptomonnaie crypto = cryptomonnaieService.getById(idCryptomonnaie);
-        List<CoursCrypto> coursCryptos = coursCryptosService.listeCoursParCryptomonnaie(crypto);
+        List<CoursCrypto> coursCryptos = coursCryptoService.listeCoursParCryptomonnaie(crypto);
+
         model.addAttribute("coursCryptoos", coursCryptos);
-        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.listeCryptomonnaie();
-        model.addAttribute("cryptomonnaies", cryptomonnaies);
+        model.addAttribute("cryptomonnaies", cryptomonnaieService.listeCryptomonnaie());
+        model.addAttribute("cryptoActuelle", crypto.getDesignation());
+
         return "pages/crypto_detail/cours";
-    }
+    } */
 }

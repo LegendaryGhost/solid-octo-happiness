@@ -5,77 +5,81 @@
     <title>Transaction de cryptomonnaies</title>
 </head>
 <body>
+    <th:block th:replace="~{fragment/sidebar}"/>
 
-    <div class="page-heading">
-        <div class="page-title">
-            <div class="row">
-                <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Transaction de cryptomonnaies</h3>
-                    <p class="text-subtitle text-muted">Effectuez vos achats et ventes de cryptomonnaies</p>
+    <div id="main"> 
+        <div class="page-heading">
+            <div class="page-title">
+                <div class="row">
+                    <div class="col-12 col-md-6 order-md-1 order-last">
+                        <h3>Transaction de cryptomonnaies</h3>
+                        <p class="text-subtitle text-muted">Effectuez vos achats et ventes de cryptomonnaies</p>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <section class="section">
-            <div class="col-md-6 col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Formulaire de transaction</h4>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-body">
-                            <form class="form form-vertical" action="#" method="post">
-                                <div class="form-body">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label for="crypto">Crypto-monnaie</label>
-                                                <select class="form-select" id="crypto" name="crypto">
-                                                    <option th:each="c : ${crypto}"
-                                                            th:value="${c.id}"
-                                                            th:text="${c.nom}">
-                                                    </option>
-                                                </select>
+    
+            <section class="section">
+                <div class="col-md-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Formulaire de transaction</h4>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-body">
+                                <form class="form form-vertical" action="#" method="post">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="crypto">Crypto-monnaie</label>
+                                                    <select class="form-select" id="crypto" name="crypto">
+                                                        <option th:each="c : ${crypto}"
+                                                                th:value="${c.id}"
+                                                                th:text="${c.nom}">
+                                                        </option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label for="type_transaction">Type de transaction</label>
-                                                <select class="form-select" id="type_transaction"
-                                                        name="type_transaction">
-                                                    <option value="achat">Achat</option>
-                                                    <option value="vente">Vente</option>
-                                                </select>
+    
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="type_transaction">Type de transaction</label>
+                                                    <select class="form-select" id="type_transaction"
+                                                            name="type_transaction">
+                                                        <option value="achat">Achat</option>
+                                                        <option value="vente">Vente</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label for="quantite">Quantité</label>
-                                                <input type="number"
-                                                       class="form-control"
-                                                       name="quantite"
-                                                       id="quantite"
-                                                       placeholder="0.00"
-                                                       step="0.01"
-                                                       min="0">
+    
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="quantite">Quantité</label>
+                                                    <input type="number"
+                                                           class="form-control"
+                                                           name="quantite"
+                                                           id="quantite"
+                                                           placeholder="0.00"
+                                                           step="0.01"
+                                                           min="0">
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <div class="col-12 d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary me-1 mb-1">
-                                                Valider la transaction
-                                            </button>
+    
+                                            <div class="col-12 d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary me-1 mb-1">
+                                                    Valider la transaction
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
+    
 </body>
 </html>
