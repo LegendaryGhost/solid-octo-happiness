@@ -15,7 +15,9 @@ CREATE TABLE cryptomonnaie
 (
     id          SERIAL,
     designation VARCHAR(150) NOT NULL,
+    symbole VARCHAR(10) NOT NULL,
     UNIQUE (designation),
+    UNIQUE (symbole),
     PRIMARY KEY (id)
 );
 
