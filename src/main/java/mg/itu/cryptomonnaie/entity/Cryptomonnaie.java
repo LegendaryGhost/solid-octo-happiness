@@ -4,12 +4,18 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import mg.itu.cryptomonnaie.utils.Collection;
+import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
-public class Cryptomonnaie {
+@Collection
+public class Cryptomonnaie implements FirestoreSynchronisableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -17,6 +23,21 @@ public class Cryptomonnaie {
     @Column(length = 150, nullable = false, unique = true)
     private String designation;
 
-    @Column(length = 10, nullable = false, unique = true)
-    private String symbole;
+    //@Column(length = 10, nullable = false, unique = true)
+    //private String symbole;
+
+    @Override
+    public String getDocumentId() {
+        return String.valueOf(id);
+    }
+
+    @Override
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("designation", designation);
+       // map.put("symbole", symbole);
+
+        return map;
+    }
 }

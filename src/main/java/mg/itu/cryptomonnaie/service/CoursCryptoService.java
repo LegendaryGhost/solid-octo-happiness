@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
-import mg.itu.cryptomonnaie.repository.CryptomonnaieRepository;
 import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
 import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,9 +18,11 @@ import java.util.List;
 @Service
 public class CoursCryptoService {
     private static final double POURCENTAGE_MAX_VARIATION = 5.0;
+    private static final double VALEUR_COURS_MAX = 9.99999999999999E12;
 
-    private final CoursCryptoRepository   coursCryptoRepository;
-    private final CryptomonnaieRepository cryptomonnaieRepository;
+    private final CoursCryptoRepository coursCryptoRepository;
+    private final CryptomonnaieService  cryptomonnaieService;
+    private final FirestoreService firestoreService;
 
     @Transactional
     public List<CoursCrypto> getByCryptomonnaie(final Integer idCryptomonnaie) {
@@ -33,11 +34,11 @@ public class CoursCryptoService {
         return coursCryptoRepository.findFirstByCryptomonnaieIdOrderByDateHeureDesc(idCryptomonnaie);
     }
 
-    // @Scheduled(fixedRateString = "${courscrypto.fixed-rate}")
+    // @Scheduled(fixedRateString = "${courscrypto.fixedrate}")
     @Transactional
     public void genererCoursCryptosAleatoirement() {
         List<CoursCrypto> coursCryptosAleatoires = new ArrayList<>();
-        cryptomonnaieRepository.findAll().forEach(cryptomonnaie -> {
+        cryptomonnaieService.getAll().forEach(cryptomonnaie -> {
             CoursCrypto dernierCours = getCoursCryptoActuelByCryptomonnaie(cryptomonnaie.getId());
 
             CoursCrypto coursCrypto = new CoursCrypto();
@@ -51,6 +52,7 @@ public class CoursCryptoService {
         });
 
         coursCryptoRepository.saveAll(coursCryptosAleatoires);
+        firestoreService.synchronizeLocalDbToFirestore(coursCryptosAleatoires);
     }
 
     @Nullable
@@ -72,7 +74,7 @@ public class CoursCryptoService {
         double pourcentageVariationAleatoire = -POURCENTAGE_MAX_VARIATION + (Math.random() * (POURCENTAGE_MAX_VARIATION * 2));
 
         // S'assure que la valeur ne dépasse pas les limites de la base de données (10^13)
-        return Math.min(dernierCours * (1 + (pourcentageVariationAleatoire / 100.0)), 9.99999999999999E12);
+        return Math.min(dernierCours * (1 + (pourcentageVariationAleatoire / 100.0)), VALEUR_COURS_MAX);
     }
 
     private static Double premierQuartile(List<Double> coursCrypto) {
