@@ -21,7 +21,7 @@ public final class FirestoreUtils {
         return Timestamp.ofTimeSecondsAndNanos(localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond(), localDateTime.getNano());
     }
 
-    public static String getCollectionName(final DocumentSnapshot documentSnapshot) {
+    public static String documentSnapshotCollectionName(final DocumentSnapshot documentSnapshot) {
         return documentSnapshot.getReference().getParent().getId();
     }
 

@@ -6,9 +6,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
+import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
+import mg.itu.cryptomonnaie.utils.FirestoreUtils;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @EqualsAndHashCode
@@ -16,7 +20,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "_transaction")
 @DynamicInsert
-public class Transaction {
+public class Transaction implements FirestoreSynchronisableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -57,5 +61,31 @@ public class Transaction {
     public void calculerMontantCommission() {
         montantCommission = quantite != null && cours != null && tauxCommission != null ?
             quantite * cours * (tauxCommission / 100) : 0;
+    }
+
+    @Override
+    public String getCollectionName() {
+        return "transaction";
+    }
+
+    @Override
+    public String getDocumentId() {
+        return String.valueOf(id);
+    }
+
+    @Override
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("quantite", quantite);
+        map.put("cours", cours);
+        map.put("dateHeure", FirestoreUtils.convertLocalDateTimeToGoogleCloudTimestamp(dateHeure));
+        map.put("typeTransaction", typeTransaction);
+        map.put("tauxCommission", tauxCommission);
+        map.put("montantCommission", montantCommission);
+        map.put("idCryptomonnaie", cryptomonnaie != null ? cryptomonnaie.getId() : null);
+        map.put("idUtilisateur", utilisateur != null ? utilisateur.getId() : null);
+
+        return map;
     }
 }

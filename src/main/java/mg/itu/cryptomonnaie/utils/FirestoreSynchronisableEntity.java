@@ -14,7 +14,7 @@ import static mg.itu.cryptomonnaie.utils.FirestoreUtils.*;
 public interface FirestoreSynchronisableEntity {
     String getCollectionName();
 
-    String getId();
+    String getDocumentId();
 
     Map<String, Object> toMap();
 
@@ -26,7 +26,7 @@ public interface FirestoreSynchronisableEntity {
     ) {
         final Map<String, Object> data = documentSnapshot.getData();
 
-        final String collectionName = FirestoreUtils.getCollectionName(documentSnapshot);
+        final String collectionName = documentSnapshotCollectionName(documentSnapshot);
         final String id = documentSnapshot.getId();
         if (data == null) throw new RuntimeException(String.format(
             "Les données du document avec l'identifiant \"%s\" dans la collection \"%s\" sont \"null\"", id, collectionName));
