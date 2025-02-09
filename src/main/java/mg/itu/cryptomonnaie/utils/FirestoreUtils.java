@@ -22,7 +22,6 @@ public final class FirestoreUtils {
         .addCollection(CoursCrypto.class)
         .addCollection(Cryptomonnaie.class)
         .addCollection(Operation.class)
-        .addCollection(Portefeuille.class)
         .addCollection(Transaction.class);
 
     public static LocalDateTime convertGoogleCloudTimestampToLocalDateTime(final Timestamp timestamp) {
@@ -56,12 +55,15 @@ public final class FirestoreUtils {
         private void setCollectionName() {
             final String lowerCasedClassName = clazz.getSimpleName().toLowerCase();
 
-            if (!clazz.isAnnotationPresent(Collection.class)) collectionName = lowerCasedClassName;
+            if (!clazz.isAnnotationPresent(Collection.class))
+                throw new IllegalStateException(String.format(
+                    "La classe \"%s\" n'a pas l'annotation @Collection", lowerCasedClassName
+                ));
+
             Collection collection = clazz.getAnnotation(Collection.class);
 
             final String collectionValue = collection.value();
-            if (!StringUtils.hasText(collectionValue)) collectionName = lowerCasedClassName;
-            else collectionName = collectionValue;
+            collectionName = !StringUtils.hasText(collectionValue) ? lowerCasedClassName : collectionValue;
         }
     }
 

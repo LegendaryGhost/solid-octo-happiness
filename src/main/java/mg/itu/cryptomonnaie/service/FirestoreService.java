@@ -81,6 +81,8 @@ public class FirestoreService {
 
         final DocumentReference documentReference = firestore.collection(collectionName).document(entity.getDocumentId());
         try {
+            // Vérifier si le document existe, si oui alors on ne l'envoie pas, sinon on le crée
+
             if (delete) documentReference.delete().get();
             else documentReference.set(entity.toMap()).get();
 

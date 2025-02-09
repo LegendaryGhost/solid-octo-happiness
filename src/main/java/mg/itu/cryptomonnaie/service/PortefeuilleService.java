@@ -35,15 +35,12 @@ public class PortefeuilleService {
         portefeuille.setUtilisateur(utilisateur);
         portefeuille.setCryptomonnaie(cryptomonnaie);
 
-        save(portefeuille);
-        firestoreService.synchronizeLocalDbToFirestore(portefeuille);
-
-        return portefeuille;
+        return save(portefeuille);
     }
 
     @Transactional
-    public void save(final Portefeuille portefeuille) {
-        portefeuilleRepository.save(portefeuille);
+    public Portefeuille save(final Portefeuille portefeuille) {
+        return portefeuilleRepository.save(portefeuille);
     }
 
     public SituationPortefeuilleDTO getSituationPortefeuilleActuelle(final Utilisateur utilisateur) {

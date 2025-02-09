@@ -80,7 +80,6 @@ public class TransactionService {
         utilisateurService.save(utilisateur);
 
         portefeuilleService.save(portefeuille);
-        firestoreService.synchronizeLocalDbToFirestore(portefeuille);
     }
 
     public ResultatAnalyseCommission analyserCommission(final AnalyseCommissionRequest request) {

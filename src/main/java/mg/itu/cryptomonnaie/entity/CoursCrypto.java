@@ -17,7 +17,7 @@ import java.util.Map;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
-@Collection("cours_crypto")
+@Collection("coursCrypto")
 public class CoursCrypto implements FirestoreSynchronisableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

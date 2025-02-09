@@ -6,6 +6,7 @@ import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
 import org.springframework.lang.Nullable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
