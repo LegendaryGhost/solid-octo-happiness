@@ -1,8 +1,12 @@
 package mg.itu.cryptomonnaie.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
+import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
+import mg.itu.cryptomonnaie.enums.TypeAnalyseCoursCrypto;
+import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -61,5 +65,4 @@ public class CoursCryptoController {
 
         return "redirect:/cours/analyse";
     }
-
 }

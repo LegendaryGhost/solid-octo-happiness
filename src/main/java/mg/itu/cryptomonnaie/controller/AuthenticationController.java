@@ -8,7 +8,6 @@ import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
 import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.service.UtilisateurService;
-import mg.itu.cryptomonnaie.utils.Facade;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -68,7 +67,7 @@ public class AuthenticationController {
         try {
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                 identityFlowApiUrl + "/auth/inscription", HttpMethod.POST,
-                new HttpEntity<>(inscriptionRequest, createJsonHttpHeaders()),
+                new HttpEntity<>(inscriptionRequest, createJsonContentTypeHttpHeaders()),
                 mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful())
@@ -107,7 +106,7 @@ public class AuthenticationController {
         try {
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                 identityFlowApiUrl + "/auth/connexion", HttpMethod.POST,
-                new HttpEntity<>(connexionRequest, createJsonHttpHeaders()),
+                new HttpEntity<>(connexionRequest, createJsonContentTypeHttpHeaders()),
                 mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
@@ -149,7 +148,7 @@ public class AuthenticationController {
         try {
             ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                 identityFlowApiUrl + "/auth/verification-pin", HttpMethod.POST,
-                new HttpEntity<>(new VerificationCodePinRequest(pendingVerificationEmail, codePin), createJsonHttpHeaders()),
+                new HttpEntity<>(new VerificationCodePinRequest(pendingVerificationEmail, codePin), createJsonContentTypeHttpHeaders()),
                 mapTypeReference);
 
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
@@ -157,7 +156,7 @@ public class AuthenticationController {
 
                 @SuppressWarnings("unchecked")
                 Map<String, String> data = (Map<String, String>) Objects.requireNonNull(responseEntity.getBody()).get("data");
-                Facade.authenticationManager().authenticate(utilisateurService.updateOrCreate(pendingVerificationEmail, data.get("token")));
+                authenticationManager.authenticate(utilisateurService.updateOrCreate(pendingVerificationEmail, data.get("token")));
 
                 return "redirect:/portefeuille";
             }
@@ -169,6 +168,12 @@ public class AuthenticationController {
         }
 
         return "redirect:/verification-code-pin";
+    }
+
+    @GetMapping("/deconnexion")
+    public String deconnexion() {
+        authenticationManager.logout();
+        return "redirect:/connexion";
     }
 
     private void handleHttpStatusCodeException(HttpStatusCodeException e, BindingResult bindingResult) {
@@ -186,11 +191,5 @@ public class AuthenticationController {
 
         } else bindingResult.reject("error",
             (String) Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
-    }
-
-    @GetMapping("/deconnexion")
-    public String deconnexion() {
-        authenticationManager.logout();
-        return "redirect:/connexion";
     }
 }

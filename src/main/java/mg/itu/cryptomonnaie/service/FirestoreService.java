@@ -41,7 +41,8 @@ public class FirestoreService {
         log.info("Initialisation des listeners Firestore");
 
         listenerRegistrations = new ArrayList<>();
-        this.addRegistrationListener(Operation.class);
+        this.addRegistrationListener(Operation.class)
+            .addRegistrationListener(CryptoFavoris.class);
 
         log.info("Listeners Firestore initialisés avec succès");
     }
@@ -57,24 +58,22 @@ public class FirestoreService {
     }
 
     public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(final List<T> entities) {
-        synchronizeLocalDbToFirestore(entities, null);
+        synchronizeLocalDbToFirestore(entities, false);
     }
 
     public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(
-        final List<T> entities, @Nullable Boolean delete
+        final List<T> entities, final boolean delete
     ) {
         entities.forEach(entity -> synchronizeLocalDbToFirestore(entity, delete));
     }
 
     public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(final T entity) {
-        synchronizeLocalDbToFirestore(entity, null);
+        synchronizeLocalDbToFirestore(entity, false);
     }
 
     public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(
-        final T entity, @Nullable Boolean delete
+        final T entity, final boolean delete
     ) {
-        delete = delete != null && delete;
-
         final Class<? extends FirestoreSynchronisableEntity> entityClass = entity.getClass();
         final String collectionName  = getCollectionName(entityClass);
         final String entityClassName = entityClass.getName();
@@ -134,6 +133,10 @@ public class FirestoreService {
         return this;
     }
 
+    /*
+        On assume que le format des documents ressemblent au format de l'entité.
+        C'est la condition sine qua non pour faire fonctionner la méthode
+     */
     @Nullable
     private static <T> T createEntityFromDocumentSnapshot(
         final DocumentSnapshot documentSnapshot,

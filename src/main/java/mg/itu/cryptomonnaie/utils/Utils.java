@@ -12,7 +12,7 @@ public final class Utils {
 
     private Utils() { }
 
-    public static HttpHeaders createJsonHttpHeaders() {
+    public static HttpHeaders createJsonContentTypeHttpHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 

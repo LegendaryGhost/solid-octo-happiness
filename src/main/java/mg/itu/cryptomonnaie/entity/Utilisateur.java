@@ -1,5 +1,6 @@
 package mg.itu.cryptomonnaie.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,12 +35,15 @@ public class Utilisateur {
     @Column(nullable = false)
     private Double fondsActuel;
 
+    @JsonIgnore
     @Setter
     private String token;
 
+    @JsonIgnore
     @Column(nullable = false)
     private LocalDateTime dateHeureMaj;
 
+    @JsonIgnore
     @Column(nullable = false, updatable = false)
     private LocalDateTime dateHeureCreation;
 }
