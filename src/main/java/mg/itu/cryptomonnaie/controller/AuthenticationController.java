@@ -43,7 +43,7 @@ public class AuthenticationController {
     private final ParameterizedTypeReference<Map<String, Object>> mapTypeReference;
     private final AuthenticationManager authenticationManager;
 
-    @Value("${identity-flow.api.url}")
+    @Value("${identity-flow.apiurl}")
     private String identityFlowApiUrl;
 
     @GetMapping

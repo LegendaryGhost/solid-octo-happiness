@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class PortefeuilleService {
     private final PortefeuilleRepository portefeuilleRepository;
     private final TransactionService transactionService;
+    private final FirestoreService firestoreService;
     private final UtilisateurRepository utilisateurRepository;
 
     @Transactional

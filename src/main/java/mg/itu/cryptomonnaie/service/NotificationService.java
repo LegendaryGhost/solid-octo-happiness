@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 
 @Service
-public class PushNotificationService {
+public class NotificationService {
     private static final String EXPO_PUSH_URL = "https://exp.host/--/api/v2/push/send";
 
     public void sendPushNotification(String expoPushToken, String title, String body) {

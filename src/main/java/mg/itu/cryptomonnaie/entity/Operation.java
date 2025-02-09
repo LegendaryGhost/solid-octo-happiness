@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import mg.itu.cryptomonnaie.enums.TypeOperation;
+import mg.itu.cryptomonnaie.utils.Collection;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
+@Collection
 public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
