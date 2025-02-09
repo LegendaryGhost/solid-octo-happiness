@@ -64,7 +64,7 @@ public class TransactionController {
     }
 
     @GetMapping("/filtre")
-    public String filtreGlobal(@RequestParam(name = "dateMax",required = false)LocalDateTime localDateTime , Model model)
+    public String filtreGlobal(@RequestParam(name = "dateMax",required = false) LocalDateTime localDateTime , Model model)
     {
         List<ResumeHistoriqueTransactionUtilisateur>  resumesHistoriquesTransactionGroupByUtilisateur = transactionService.getResumesHistoriquesTransactionGroupByUtilisateur();
         model.addAttribute("historiqueTransaction",resumesHistoriquesTransactionGroupByUtilisateur);

@@ -1,19 +1,21 @@
 package mg.itu.cryptomonnaie.service;
 
-import java.util.List;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO;
-import mg.itu.cryptomonnaie.entity.*;
+import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
+import mg.itu.cryptomonnaie.entity.Portefeuille;
+import mg.itu.cryptomonnaie.entity.Transaction;
+import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
 import mg.itu.cryptomonnaie.projections.ResultatAnalyseCommission;
 import mg.itu.cryptomonnaie.projections.ResumeHistoriqueTransactionUtilisateur;
+import mg.itu.cryptomonnaie.repository.TransactionRepository;
 import mg.itu.cryptomonnaie.request.AnalyseCommissionRequest;
 import mg.itu.cryptomonnaie.request.TransactionRequest;
 import org.springframework.stereotype.Service;
 
-import mg.itu.cryptomonnaie.repository.TransactionRepository;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -24,6 +26,8 @@ public class TransactionService {
     private final PortefeuilleService  portefeuilleService;
     private final UtilisateurService   utilisateurService;
     private final FirestoreService     firestoreService;
+    private final CryptoFavorisService cryptoFavorisService;
+    private final NotificationService  notificationService;
 
     @Transactional
     public List<HistoriqueTransactionDTO> getHistoriqueGlobale(
@@ -57,6 +61,17 @@ public class TransactionService {
         transactionRepository.save(transaction);
         firestoreService.synchronizeLocalDbToFirestore(transaction);
 
+        final Double cours = transaction.getCours();
+
+        // Envoi de notification si la crypto fait partie des favoris de l'utilisateur
+        if (cryptoFavorisService.isCryptomonnaieInFavoris(utilisateur.getId(), idCryptomonnaie))
+            notificationService.envoyerNotificationPush(utilisateur.getToken(),
+                "Transaction effectuée",
+                String.format("Vous avez %s %s %s au cours de %s",
+                    typeTransaction == TypeTransaction.ACHAT ? "acheté" : "vendu",
+                    requestQuantite, cryptomonnaie.getDesignation(), cours
+                ));
+
         // Mise à jour du portefeuille
         Portefeuille portefeuille  = portefeuilleService.getByUtilisateurAndCryptomonnaieOrCreate(utilisateur, cryptomonnaie);
         Float portefeuilleQuantite = portefeuille.getQuantite();
@@ -65,8 +80,8 @@ public class TransactionService {
         portefeuilleQuantite = portefeuilleQuantite == null ? 0 : portefeuilleQuantite;
 
         // Mise à jour du fonds de l'utilisateur
-        Double fondsActuel = utilisateur.getFondsActuel();
-        Double montant     = requestQuantite * transaction.getCours();
+        final Double fondsActuel = utilisateur.getFondsActuel();
+        final Double montant     = requestQuantite * cours;
         switch (typeTransaction) {
             case ACHAT -> {
                 portefeuille.setQuantite(portefeuilleQuantite + requestQuantite);

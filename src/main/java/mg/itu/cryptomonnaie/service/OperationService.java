@@ -5,6 +5,7 @@ import mg.itu.cryptomonnaie.entity.Operation;
 import mg.itu.cryptomonnaie.entity.SuiviOperation;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.enums.StatutOperation;
+import mg.itu.cryptomonnaie.enums.TypeOperation;
 import mg.itu.cryptomonnaie.repository.OperationRepository;
 import mg.itu.cryptomonnaie.request.OperationRequest;
 import org.springframework.lang.Nullable;
@@ -19,7 +20,8 @@ import java.util.List;
 public class OperationService {
     private final OperationRepository operationRepository;
     private final SuiviOperationService suiviOperationService;
-    private final UtilisateurService utilisateurService;
+    private final UtilisateurService  utilisateurService;
+    private final NotificationService notificationService;
 
     public List<Operation> getHistoriqueGlobale(final @Nullable LocalDateTime dateHeure) {
         return operationRepository.findAllBySuiviOperationRecentAndStatut(dateHeure, StatutOperation.VALIDEE);
@@ -67,15 +69,23 @@ public class OperationService {
         suiviOperationService.save(s);
 
         // Mise à jour du fonds
-        Utilisateur utilisateur = operation.getUtilisateur();
-        Double fondsActuel = utilisateur.getFondsActuel();
-        Double montant     = operation.getMontant();
-        utilisateur.setFondsActuel(switch (operation.getTypeOperation()) {
+        Utilisateur utilisateur  = operation.getUtilisateur();
+        final Double fondsActuel = utilisateur.getFondsActuel();
+        final Double montant     = operation.getMontant();
+        final TypeOperation typeOperation = operation.getTypeOperation();
+        utilisateur.setFondsActuel(switch (typeOperation) {
             case DEPOT   -> fondsActuel + montant;
             case RETRAIT -> fondsActuel - montant;
         });
 
         utilisateurService.save(utilisateur);
+
+        // Envoi de notification
+        notificationService.envoyerNotificationPush(utilisateur.getToken(),
+            "Opération validée ✅", String.format(
+                "Votre opération de %s de %s a été validée. Votre nouveau solde est de %s",
+                typeOperation.getValue(), operation.getMontant(), utilisateur.getFondsActuel()
+            ));
     }
 
     public void refuser(final Integer idOperation) {
@@ -88,6 +98,15 @@ public class OperationService {
         s.setOperation(suiviOperation.getOperation());
 
         suiviOperationService.save(s);
+
+        // Envoi de notification
+        Operation operation = suiviOperation.getOperation();
+        notificationService.envoyerNotificationPush(operation.getUtilisateur().getToken(),
+            "Opération rejetée ❌", String.format(
+                "Votre opération de %s de %s a été rejetée",
+                operation.getTypeOperation().getValue(),
+                operation.getMontant()
+            ));
     }
 
     private static void ensureOperationIsPending(final SuiviOperation suiviOperation) {
