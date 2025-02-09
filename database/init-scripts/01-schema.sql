@@ -11,6 +11,15 @@ CREATE TABLE utilisateur
     PRIMARY KEY (id)
 );
 
+CREATE TABLE admin
+(
+    id SERIAL,
+    email VARCHAR(75) NOT NULL,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    UNIQUE (email),
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE cryptomonnaie
 (
     id          SERIAL,

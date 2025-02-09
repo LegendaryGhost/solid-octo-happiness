@@ -2,21 +2,21 @@
 <html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, _, _)}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Historique globale des opérations</title>
+    <title>Opérations en attente</title>
 </head>
 <th:block th:fragment="content">
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Historique globale</h3>
-                    <p class="text-subtitle text-muted">Liste complète de toutes les opérations des utilisateurs</p>
+                    <h3>Opérations en attente</h3>
+                    <p class="text-subtitle text-muted">Liste des opérations en attente des utilisateurs</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Opération</a></li>
-                            <li aria-current="page" class="breadcrumb-item active">Historique globale</li>
+                            <li aria-current="page" class="breadcrumb-item active">Opérations en attente</li>
                         </ol>
                     </nav>
                 </div>

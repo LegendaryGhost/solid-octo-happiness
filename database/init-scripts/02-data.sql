@@ -5,6 +5,9 @@ VALUES ('alice@example.com', 1500.00, 'alice.jpg', CURRENT_TIMESTAMP, CURRENT_TI
        ('diana@example.com', 1800.00, 'diana.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('edward@example.com', 500.00, 'edward.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+INSERT INTO admin(email, mot_de_passe)
+VALUES ('phoenix-coin.admin@gmail.com', 'admin1234');
+
 INSERT INTO cryptomonnaie (designation, symbole)
 VALUES ('Bitcoin', 'BTC'),
        ('Ethereum', 'ETH'),
