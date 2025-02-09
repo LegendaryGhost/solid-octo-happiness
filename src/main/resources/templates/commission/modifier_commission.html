@@ -37,10 +37,13 @@
                     </div>
                     <div class="card-body">
                         <form class="form form-horizontal"
+                              th:action="@{/commission/modifier}"
                               method="post"
+                              th:object="${tauxCommissionRequest}"
                         >
                             <div class="form-body">
                                 <div class="row">
+                                    <!-- Commission d'achat -->
                                     <div class="col-md-4">
                                         <label for="achat">Commission d'achat (%)</label>
                                     </div>
@@ -48,8 +51,15 @@
                                         <input type="number"
                                                id="achat"
                                                class="form-control"
-                                               step="0.01">
+                                               step="0.01"
+                                               th:field="*{valeurAchat}"
+                                        >
+                                        <!-- Affichage de l'erreur -->
+                                        <small class="text-danger" th:if="${#fields.hasErrors('valeurAchat')}"
+                                               th:text="${#fields.errors('valeurAchat')[0]}"></small>
                                     </div>
+
+                                    <!-- Commission de vente -->
                                     <div class="col-md-4">
                                         <label for="vente">Commission de vente (%)</label>
                                     </div>
@@ -57,9 +67,16 @@
                                         <input type="number"
                                                id="vente"
                                                class="form-control"
-                                               step="0.01">
+                                               step="0.01"
+                                               th:field="*{valeurVente}"
+                                        >
+                                        <!-- Affichage de l'erreur -->
+                                        <small class="text-danger" th:if="${#fields.hasErrors('valeurVente')}"
+                                               th:text="${#fields.errors('valeurVente')[0]}"></small>
                                     </div>
                                 </div>
+
+                                <!-- Bouton de soumission -->
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-primary mt-2">
                                         Enregistrer
@@ -67,6 +84,7 @@
                                 </div>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
