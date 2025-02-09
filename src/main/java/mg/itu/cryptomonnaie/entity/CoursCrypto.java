@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import mg.itu.cryptomonnaie.utils.Collection;
 import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
 import mg.itu.cryptomonnaie.utils.FirestoreUtils;
 import org.hibernate.annotations.DynamicInsert;
@@ -18,6 +19,7 @@ import java.util.Map;
 @ToString(doNotUseGetters = true)
 @Entity
 @DynamicInsert
+@Collection("cours_crypto")
 public class CoursCrypto implements FirestoreSynchronisableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +36,6 @@ public class CoursCrypto implements FirestoreSynchronisableEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cryptomonnaie")
     private Cryptomonnaie cryptomonnaie;
-
-    @Override
-    public String getCollectionName() {
-        return "cours_crypto";
-    }
 
     @Override
     public String getDocumentId() {

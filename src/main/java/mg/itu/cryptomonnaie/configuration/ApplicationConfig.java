@@ -27,6 +27,7 @@ public class ApplicationConfig {
         return new ConcurrentMapCacheManager();
     }
 
+    @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper()
             .registerModule(new JavaTimeModule());

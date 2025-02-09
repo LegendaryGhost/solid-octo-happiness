@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import mg.itu.cryptomonnaie.enums.TypeOperation;
+import mg.itu.cryptomonnaie.utils.Collection;
 import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.util.Map;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
+@Collection
 public class Operation implements FirestoreSynchronisableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +43,6 @@ public class Operation implements FirestoreSynchronisableEntity {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_utilisateur")
     private Utilisateur utilisateur;
-
-    @Override
-    public String getCollectionName() {
-        return "operation";
-    }
 
     @Override
     public String getDocumentId() {

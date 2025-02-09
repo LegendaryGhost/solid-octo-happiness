@@ -1,21 +1,30 @@
 package mg.itu.cryptomonnaie.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
+import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.entity.*;
-import mg.itu.cryptomonnaie.repository.*;
+import mg.itu.cryptomonnaie.utils.Facade;
 import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
-import mg.itu.cryptomonnaie.utils.FirestoreUtils;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import static mg.itu.cryptomonnaie.utils.FirestoreUtils.*;
+import static mg.itu.cryptomonnaie.utils.FirestoreUtils.convertGoogleCloudTimestampToLocalDateTime;
+import static mg.itu.cryptomonnaie.utils.FirestoreUtils.documentSnapshotCollectionName;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,58 +35,129 @@ public class FirestoreService {
     private final EntityManager entityManager;
     private final ObjectMapper objectMapper;
 
-    private final CoursCryptoRepository coursCryptoRepository;
-    private final CryptomonnaieRepository cryptomonnaieRepository;
-    private final OperationRepository operationRepository;
-    private final PortefeuilleRepository portefeuilleRepository;
-    private final TransactionRepository transactionRepository;
+    private List<ListenerRegistration> listenerRegistrations = new ArrayList<>();
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void initListenerRegistrations() {
+        log.info("Initialisation des listeners Firestore");
+
+        listenerRegistrations = new ArrayList<>();
+        this.addRegistrationListener(Operation.class);
+
+        log.info("Listeners Firestore initialisés avec succès");
+    }
+
+    @EventListener(ContextClosedEvent.class)
+    public void destroyListenerRegistrations() {
+        log.info("Destruction des listeners Firestore");
+
+        listenerRegistrations.forEach(ListenerRegistration::remove);
+        listenerRegistrations.clear();
+
+        log.info("Listeners Firestore correctement détruits");
+    }
 
     public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(
         final T entity, final boolean delete
     ) {
-        final String collectionName = entity.getCollectionName();
+        final Class<? extends FirestoreSynchronisableEntity> entityClass = entity.getClass();
+        final String collectionName  = getCollectionName(entityClass);
+        final String entityClassName = entityClass.getName();
+
         final DocumentReference documentReference = firestore.collection(collectionName).document(entity.getDocumentId());
         try {
             if (delete) documentReference.delete().get();
             else documentReference.set(entity.toMap()).get();
 
-            log.debug("Synchronisation de la base de données locale vers Firestore pour l'entité : \"{}\"", entity.getClass().getName());
+            log.debug("Synchronisation de la base de données locale vers Firestore pour l'entité : \"{}\"", entityClassName);
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(String.format("Erreur lors de la %s vers Firestore pour l'entité : %s",
-                delete ? "suppression" : "synchronisation", entity.getClass().getName()
-            ), e);
+                delete ? "suppression" : "synchronisation", entityClassName), e);
         }
     }
 
-    public void synchronizeFirestoreToLocalDb() {
-        synchronizeFirestoreToLocalDb("cours_crypto", CoursCrypto.class, coursCryptoRepository);
-        synchronizeFirestoreToLocalDb("cryptomonnaie", Cryptomonnaie.class, cryptomonnaieRepository);
-        synchronizeFirestoreToLocalDb("operation", Operation.class, operationRepository);
-        synchronizeFirestoreToLocalDb("portefeuille", Portefeuille.class, portefeuilleRepository);
-        synchronizeFirestoreToLocalDb("transaction", Transaction.class, transactionRepository);
-    }
-
-    private <T extends FirestoreSynchronisableEntity, ID> void synchronizeFirestoreToLocalDb(
-        final String collectionName,
-        final Class<T> entityClass,
-        final JpaRepository<T, ID> repository
-    ) {
-        firestore.collection(collectionName).addSnapshotListener((snapshots, e) -> {
+    @SuppressWarnings("unchecked")
+    private <T extends FirestoreSynchronisableEntity, ID> FirestoreService addRegistrationListener(final Class<T> entityClass) {
+        final String collectionName = getCollectionName(entityClass);
+        listenerRegistrations.add(firestore.collection(collectionName).addSnapshotListener((snapshots, e) -> {
+            final String entityClassName = entityClass.getName();
             if (e != null) {
-                log.error("Erreur lors de l'écoute des changements pour l'entité : \"{}\"", entityClass.getName(), e);
+                log.error("Erreur lors de l'écoute des changements pour l'entité : \"{}\"", entityClassName, e);
                 return;
             }
             if (snapshots == null) return;
 
+            final JpaRepository<T, Object> repository = Facade.getRepositoryFor(entityClass);
             snapshots.getDocumentChanges().forEach(documentChange -> {
                 DocumentSnapshot documentSnapshot = documentChange.getDocument();
                 switch (documentChange.getType()) {
-                    case ADDED, MODIFIED ->
-                        repository.save(FirestoreSynchronisableEntity.createFromDocumentSnapshot(documentSnapshot, entityClass, objectMapper, entityManager));
-                    case REMOVED -> repository.deleteById(FirestoreSynchronisableEntity.convertId(
-                        documentSnapshot.getId(), FirestoreUtils.documentSnapshotCollectionName(documentSnapshot), entityClass, entityManager));
+                    case ADDED, MODIFIED -> {
+                        T t = createFromDocumentSnapshot(documentSnapshot, entityClass, objectMapper, entityManager);
+                        if (t != null) repository.save(t);
+                    }
+                    case REMOVED -> {
+                        ID id = (ID) convertId(
+                            documentSnapshot.getId(), collectionName, entityClass, entityManager);
+                        if (id != null) repository.deleteById(id);
+                    }
                 }
             });
+        }));
+
+        return this;
+    }
+
+    @Nullable
+    private static <T extends FirestoreSynchronisableEntity> T createFromDocumentSnapshot(
+        final DocumentSnapshot documentSnapshot,
+        final Class<T> entityClass,
+        final ObjectMapper objectMapper,
+        final EntityManager entityManager
+    ) {
+        final Map<String, Object> data = documentSnapshot.getData();
+
+        final String collectionName = documentSnapshotCollectionName(documentSnapshot);
+        final String id = documentSnapshot.getId();
+        if (data == null) {
+            log.error("Les données du document avec l'identifiant \"{}\" dans la collection \"{}\" sont \"null\"", id, collectionName);
+            return null;
+        }
+
+        // Nettoyage des données
+        data.put("id", convertId(id, collectionName, entityClass, entityManager));
+        data.forEach((k, v) -> {
+            if (k.equalsIgnoreCase("id") || !(v instanceof Timestamp timestamp)) return;
+            data.put(k, convertGoogleCloudTimestampToLocalDateTime(timestamp));
         });
+
+        return objectMapper.convertValue(data, entityClass);
+    }
+
+    @Nullable
+    private static Object convertId(
+        final String id,
+        final String collectionName,
+        final Class<?> entityClass,
+        final EntityManager entityManager
+    ) {
+        final Class<?> idType = entityManager.getMetamodel()
+            .entity(entityClass)
+            .getIdType()
+            .getJavaType();
+        String idTypeSimpleName = idType.getSimpleName();
+        try {
+            if (idType == String.class) return id;
+            if (idType == Long.class    || idType == long.class)   return Long.parseLong(id);
+            if (idType == Integer.class || idType == int.class)    return Integer.parseInt(id);
+            if (idType == Double.class  || idType == double.class) return Double.parseDouble(id);
+            if (idType == Float.class   || idType == float.class)  return Float.parseFloat(id);
+
+            log.error("Type d'identifiant non supporté pour la conversion : {}", idTypeSimpleName);
+            return null;
+        } catch (NumberFormatException e) {
+            log.error("Impossible de convertir l'identifiant \"{}\" de la collection \"{}\" en type \"{}\"",
+                id, collectionName, idTypeSimpleName);
+            return null;
+        }
     }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
+import mg.itu.cryptomonnaie.utils.Collection;
 import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
 import mg.itu.cryptomonnaie.utils.FirestoreUtils;
 import org.hibernate.annotations.DynamicInsert;
@@ -20,6 +21,7 @@ import java.util.Map;
 @Entity
 @Table(name = "_transaction")
 @DynamicInsert
+@Collection
 public class Transaction implements FirestoreSynchronisableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,11 +63,6 @@ public class Transaction implements FirestoreSynchronisableEntity {
     public void calculerMontantCommission() {
         montantCommission = quantite != null && cours != null && tauxCommission != null ?
             quantite * cours * (tauxCommission / 100) : 0;
-    }
-
-    @Override
-    public String getCollectionName() {
-        return "transaction";
     }
 
     @Override
