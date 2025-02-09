@@ -38,7 +38,6 @@
                     <div class="card-body">
                         <form class="form form-horizontal"
                               method="get"
-                              th:object="${filtreTransaction}"
                         >
                             <div class="form-body">
                                 <div class="row">
@@ -48,8 +47,7 @@
                                     <div class="col-md-8 form-group">
                                         <input type="datetime-local"
                                                id="date-max"
-                                               class="form-control"
-                                               th:field="*{dateMax}">
+                                               class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -76,15 +74,20 @@
                                     <th>Valeur Portefeuille</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <!-- <tbody>
                                 <tr th:each="transaction : ${transactions}">
                                     <td th:text="${transaction.utilisateur}"></td>
                                     <td th:text="${transaction.totalAchat} + ' €'"></td>
                                     <td th:text="${transaction.totalVente} + ' €'"></td>
                                     <td th:text="${transaction.valeurPortefeuille} + ' €'"></td>
                                 </tr>
-                                <tr th:if="${#lists.isEmpty(transactions)}">
-                                    <td colspan="4" class="text-center">Aucune transaction trouvée</td>
+                            </tbody> -->
+                            <tbody>
+                                <tr>
+                                    <td>User1</td>
+                                    <td>0000</td>
+                                    <td>000</td>
+                                    <td>0000</td>
                                 </tr>
                             </tbody>
                         </table>
