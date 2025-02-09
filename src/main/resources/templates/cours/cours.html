@@ -51,7 +51,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title" th:text="'Graphique des fluctuations pour : ' + ${cryptoActuelle}"></h4>
+                            <h4 class="card-title"
+                                th:text="'Graphique des fluctuations pour : ' + ${cryptoActuelle}"></h4>
                         </div>
                         <div class="card-body">
                             <div id="crypto-chart" th:data-cours-cryptos="${coursCryptos}"></div>
@@ -84,13 +85,13 @@
                     type: "line",
                     height: 350,
                     background: "transparent",
-                    toolbar: { show: true },
+                    toolbar: {show: true},
                     animations: {
                         enabled: true,
                         easing: "easeinout",
                         speed: 800,
-                        animateGradually: { enabled: true, delay: 150 },
-                        dynamicAnimation: { enabled: true, speed: 350 }
+                        animateGradually: {enabled: true, delay: 150},
+                        dynamicAnimation: {enabled: true, speed: 350}
                     }
                 },
                 series: [{
@@ -116,7 +117,7 @@
                         show: true
                     }
                 },
-                stroke: { curve: "smooth" },
+                stroke: {curve: "smooth"},
                 tooltip: {
                     x: {
                         format: "dd/MM/yyyy HH:mm:ss"  // Format du tooltip pour afficher l'heure complète

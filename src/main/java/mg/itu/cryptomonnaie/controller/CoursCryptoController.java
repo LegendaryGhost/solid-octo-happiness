@@ -38,7 +38,7 @@ public class CoursCryptoController {
             )).addAttribute("cryptomonnaies", cryptomonnaieService.getAll())
             .addAttribute("cryptoActuelle", cryptomonnaie.getDesignation());
 
-        return "cours";
+        return "cours/cours";
     }
 
     @GetMapping(path = "/data", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,7 +55,7 @@ public class CoursCryptoController {
         model.addAttribute("cryptomonnaies", cryptomonnaies);
         model.addAttribute("typesAnalyse", TypeAnalyseCoursCrypto.values());
         model.addAttribute("resultat",0);
-        return "AnalyseCours";
+        return "cours/AnalyseCours";
     }
 
     @PostMapping("/analyse")
