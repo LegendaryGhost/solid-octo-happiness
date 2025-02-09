@@ -38,29 +38,26 @@
                     <div class="card-body">
                         <form class="form form-horizontal"
                               method="post"
-                              th:object="${commission}"
                         >
                             <div class="form-body">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <label for="commission-achat">Commission d'achat (%)</label>
+                                        <label for="achat">Commission d'achat (%)</label>
                                     </div>
                                     <div class="col-md-8 form-group">
                                         <input type="number"
-                                               id="commission-achat"
+                                               id="achat"
                                                class="form-control"
-                                               step="0.01"
-                                               th:field="*{commissionAchat}">
+                                               step="0.01">
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="commission-vente">Commission de vente (%)</label>
+                                        <label for="vente">Commission de vente (%)</label>
                                     </div>
                                     <div class="col-md-8 form-group">
                                         <input type="number"
-                                               id="commission-vente"
+                                               id="vente"
                                                class="form-control"
-                                               step="0.01"
-                                               th:field="*{commissionVente}">
+                                               step="0.01">
                                     </div>
                                 </div>
                                 <div class="col-12">

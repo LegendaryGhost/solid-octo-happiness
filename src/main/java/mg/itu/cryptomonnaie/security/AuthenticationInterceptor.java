@@ -32,7 +32,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         // Warning !! : This code is for testing purposes only
         if (!authenticationManager.isUserConnected())
             authenticationManager.authenticate(
-                    utilisateurService.updateOrCreate("example@domain.com", "unsecure_token_for_testing_purposes"));
+                    utilisateurService.updateOrCreate("alice@gmail.com", "unsecure_token_for_testing_purposes"));
         return true;
     }
 }

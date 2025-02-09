@@ -38,7 +38,6 @@
                     <div class="card-body">
                         <form class="form form-horizontal"
                               method="post"
-                              th:object="${analyseCommission}"
                         >
                             <div class="form-body">
                                 <div class="row">
@@ -47,8 +46,7 @@
                                     </div>
                                     <div class="col-md-8 form-group">
                                         <select class="form-select"
-                                                id="type-analyse"
-                                                th:field="*{typeAnalyse}">
+                                                id="type-analyse">
                                             <option value="">Choisir</option>
                                             <option value="somme">Somme</option>
                                             <option value="moyenne">Moyenne</option>
@@ -60,8 +58,7 @@
                                     </div>
                                     <div class="col-md-8 form-group">
                                         <select class="form-select"
-                                                id="crypto"
-                                                th:field="*{crypto}">
+                                                id="crypto">
                                             <option value="">Choisir</option>
                                             <option value="crypto1">Crypto1</option>
                                             <option value="crypto2">Crypto2</option>
@@ -75,8 +72,7 @@
                                     <div class="col-md-8 form-group">
                                         <input type="datetime-local"
                                                id="date-min"
-                                               class="form-control"
-                                               th:field="*{dateMin}">
+                                               class="form-control">
                                     </div>
 
                                     <div class="col-md-4">
@@ -85,8 +81,7 @@
                                     <div class="col-md-8 form-group">
                                         <input type="datetime-local"
                                                id="date-max"
-                                               class="form-control"
-                                               th:field="*{dateMax}">
+                                               class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-12">
