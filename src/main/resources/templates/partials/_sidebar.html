@@ -87,6 +87,11 @@
                         </a>
                         <ul class="submenu">
                             <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/commission/modifier}">
+                                    Filtre Global
+                                </a>
+                            </li>
+                            <li class="submenu-item">
                                 <a class="submenu-link" th:href="@{/transaction/creation}">
                                     Nouvelle
                                 </a>
@@ -96,13 +101,35 @@
                                     Historique globale
                                 </a>
                             </li>
+                            <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/commission/analyse}">
+                                    Analyse Commission
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/commission/modifier}">
+                                    Modifier Commission
+                                </a>
+                            </li>
                         </ul>
                     </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" th:href="@{/cours}">
-                            <i class="bi bi-graph-up"></i>
+                    <li class="sidebar-item has-sub">
+                        <a class="sidebar-link" href="#">
+                            <i class="bi bi-clock-history"></i>
                             <span>Cours</span>
                         </a>
+                        <ul class="submenu">
+                            <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/cours}">
+                                    Chart
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/cours/analyse}">
+                                    Analyse
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" th:href="@{/deconnexion}">
