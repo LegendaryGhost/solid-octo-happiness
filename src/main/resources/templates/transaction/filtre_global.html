@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, ~{::scripts}, ~{::styles})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tableau des Transactions</title>
+    <th:block th:fragment="styles">
+        <link rel="stylesheet" th:href="@{/extensions/toastify-js/src/toastify.css}">
+    </th:block>
+</head>
+
+<th:block th:fragment="content">
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Transactions</h3>
+                    <p class="text-subtitle text-muted">Consultez les transactions et leurs détails</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Transactions</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tableau</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <section class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Filtrer les Transactions</h4>
+                    </div>
+                    <div class="card-body">
+                        <form class="form form-horizontal"
+                              method="get"
+                        >
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="date-max">Date et heure max</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <input type="datetime-local"
+                                               id="date-max"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary mt-2">
+                                        Filtrer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h4 class="card-title">Tableau des Transactions</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Utilisateur</th>
+                                    <th>Total Achat</th>
+                                    <th>Total Vente</th>
+                                    <th>Valeur Portefeuille</th>
+                                </tr>
+                            </thead>
+                            <!-- <tbody>
+                                <tr th:each="transaction : ${transactions}">
+                                    <td th:text="${transaction.utilisateur}"></td>
+                                    <td th:text="${transaction.totalAchat} + ' €'"></td>
+                                    <td th:text="${transaction.totalVente} + ' €'"></td>
+                                    <td th:text="${transaction.valeurPortefeuille} + ' €'"></td>
+                                </tr>
+                            </tbody> -->
+                            <tbody>
+                                <tr>
+                                    <td>User1</td>
+                                    <td>0000</td>
+                                    <td>000</td>
+                                    <td>0000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</th:block>
+
+<th:block th:fragment="scripts">
+    <script th:src="@{/extensions/toastify-js/src/toastify.js}"></script>
+    <th:block th:insert="~{partials/_success}"/>
+</th:block>
+</html>
