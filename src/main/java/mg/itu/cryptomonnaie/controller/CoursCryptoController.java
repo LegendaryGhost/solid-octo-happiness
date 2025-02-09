@@ -2,20 +2,20 @@ package mg.itu.cryptomonnaie.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
+import mg.itu.cryptomonnaie.enums.TypeAnalyseCoursCrypto;
+import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import mg.itu.cryptomonnaie.service.CoursCryptoService;
 import mg.itu.cryptomonnaie.service.CryptomonnaieService;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -46,4 +46,29 @@ public class CoursCryptoController {
     public List<CoursCrypto> getCoursData(@RequestParam(required = false) Integer idCryptomonnaie) {
         return coursCryptoService.getByCryptomonnaie(cryptomonnaieService.getByIdOrGetFirst(idCryptomonnaie).getId());
     }
+
+    @GetMapping(path = "/analyse")
+    public String analyse(Model model) {
+        AnalyseCoursCryptoRequest request = new AnalyseCoursCryptoRequest();
+        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.getAll();
+        model.addAttribute("request", request);
+        model.addAttribute("cryptomonnaies", cryptomonnaies);
+        model.addAttribute("typesAnalyse", TypeAnalyseCoursCrypto.values());
+        return "AnalyseCours";
+    }
+
+    @PostMapping("/analyse")
+    public String traiterAnalyse(@Valid AnalyseCoursCryptoRequest request, Model model) {
+
+        System.out.println(request);
+
+        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.getAll();
+        model.addAttribute("request", request);
+        model.addAttribute("cryptomonnaies", cryptomonnaies);
+        model.addAttribute("typesAnalyse", TypeAnalyseCoursCrypto.values());
+        model.addAttribute("resultat", coursCryptoService.analyser(request));
+
+        return "redirect:/cours/analyse";
+    }
+
 }
