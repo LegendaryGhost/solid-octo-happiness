@@ -20,6 +20,10 @@ public class AuthenticationManager {
         getCurrentSession().setAttribute(AUTHENTICATED_USER_KEY, utilisateur);
     }
 
+    public void logout() {
+        getCurrentSession().removeAttribute(AUTHENTICATED_USER_KEY);
+    }
+
     @Nullable
     public Utilisateur getCurrentUser() {
         return (Utilisateur) getCurrentSession().getAttribute(AUTHENTICATED_USER_KEY);
