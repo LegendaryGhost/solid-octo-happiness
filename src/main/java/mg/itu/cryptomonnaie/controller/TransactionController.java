@@ -3,6 +3,7 @@ package mg.itu.cryptomonnaie.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mg.itu.cryptomonnaie.enums.TypeTransaction;
+import mg.itu.cryptomonnaie.projections.ResumeHistoriqueTransactionUtilisateur;
 import mg.itu.cryptomonnaie.request.TransactionRequest;
 import mg.itu.cryptomonnaie.service.CryptomonnaieService;
 import mg.itu.cryptomonnaie.service.TransactionService;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -60,7 +64,10 @@ public class TransactionController {
     }
 
     @GetMapping("/filtre")
-    public String filtreGlobal(Model model) {
+    public String filtreGlobal(@RequestParam(name = "dateMax",required = false)LocalDateTime localDateTime , Model model)
+    {
+        List<ResumeHistoriqueTransactionUtilisateur>  resumesHistoriquesTransactionGroupByUtilisateur = transactionService.getResumesHistoriquesTransactionGroupByUtilisateur();
+        model.addAttribute("historiqueTransaction",resumesHistoriquesTransactionGroupByUtilisateur);
         return "transaction/filtre_global";
     }
 }
