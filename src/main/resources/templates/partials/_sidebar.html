@@ -98,11 +98,23 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" th:href="@{/cours}">
-                            <i class="bi bi-graph-up"></i>
+                    <li class="sidebar-item has-sub">
+                        <a class="sidebar-link" href="#">
+                            <i class="bi bi-clock-history"></i>
                             <span>Cours</span>
                         </a>
+                        <ul class="submenu">
+                            <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/cours}">
+                                    Chart
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a class="submenu-link" th:href="@{/cours/analyse}">
+                                    Analyse
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" th:href="@{/deconnexion}">
