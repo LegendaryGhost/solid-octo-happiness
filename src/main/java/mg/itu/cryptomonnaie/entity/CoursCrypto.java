@@ -1,5 +1,7 @@
 package mg.itu.cryptomonnaie.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,6 +29,7 @@ public class CoursCrypto implements FirestoreSynchronisableEntity {
     @Column(nullable = false)
     private Double cours;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(nullable = false, updatable = false)
     private LocalDateTime dateHeure = LocalDateTime.now();
 
@@ -35,6 +38,7 @@ public class CoursCrypto implements FirestoreSynchronisableEntity {
     @JoinColumn(name = "id_cryptomonnaie")
     private Cryptomonnaie cryptomonnaie;
 
+    @JsonIgnore
     @Override
     public String getDocumentId() {
         return String.valueOf(id);
@@ -46,7 +50,8 @@ public class CoursCrypto implements FirestoreSynchronisableEntity {
         map.put("id", id);
         map.put("cours", cours);
         map.put("dateHeure", FirestoreUtils.convertLocalDateTimeToGoogleCloudTimestamp(dateHeure));
-        map.put("idCryptomonnaie", cryptomonnaie != null ? cryptomonnaie.getId() : null);
+        map.put("idCryptomonnaie", cryptomonnaie != null ?
+            String.valueOf(cryptomonnaie.getId()) : null);
 
         return map;
     }

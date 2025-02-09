@@ -13,14 +13,14 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String email;
 
     @Column
     private String motDePasse;
 
     public Admin(String email, String motDePasse) {
-	this.email = email;
-	this.motDePasse = motDePasse;
+        this.email = email;
+        this.motDePasse = motDePasse;
     }
 }

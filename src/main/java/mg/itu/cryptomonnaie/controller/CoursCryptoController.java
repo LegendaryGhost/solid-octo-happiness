@@ -1,11 +1,9 @@
 package mg.itu.cryptomonnaie.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
-import mg.itu.cryptomonnaie.entity.Cryptomonnaie;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,25 +23,20 @@ import java.util.List;
 public class CoursCryptoController {
     private final CoursCryptoService   coursCryptoService;
     private final CryptomonnaieService cryptomonnaieService;
-    private final ObjectMapper objectMapper;
+
+    @Value("${courscrypto.fixedrate}")
+    private long coursCryptoFixedRate;
 
     @GetMapping
-    public String index(
-        Model model,
-        @RequestParam(required = false) Integer idCryptomonnaie
-    ) throws JsonProcessingException {
-        Cryptomonnaie cryptomonnaie = cryptomonnaieService.getByIdOrGetFirst(idCryptomonnaie);
-        model.addAttribute("coursCryptos", objectMapper.writeValueAsString(
-            coursCryptoService.getByCryptomonnaie(cryptomonnaie.getId())
-            )).addAttribute("cryptomonnaies", cryptomonnaieService.getAll())
-            .addAttribute("cryptoActuelle", cryptomonnaie.getDesignation());
-
+    public String index(Model model) {
+        model.addAttribute("cryptomonnaies", cryptomonnaieService.getAll())
+            .addAttribute("timeout",coursCryptoFixedRate);
         return "cours";
     }
 
-    @GetMapping(path = "/data", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<CoursCrypto> getCoursData(@RequestParam(required = false) Integer idCryptomonnaie) {
-        return coursCryptoService.getByCryptomonnaie(cryptomonnaieService.getByIdOrGetFirst(idCryptomonnaie).getId());
+    @GetMapping(path = "/donnees", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<CoursCrypto> donneesCoursCrypto(@RequestParam(required = false) Integer idCryptomonnaie) {
+        return coursCryptoService.getByCryptomonnaie(cryptomonnaieService.getByIdOrGetTopest(idCryptomonnaie).getId());
     }
 }

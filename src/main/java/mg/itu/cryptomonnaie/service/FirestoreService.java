@@ -34,7 +34,7 @@ public class FirestoreService {
     private final EntityManager entityManager;
     private final ObjectMapper objectMapper;
 
-    private List<ListenerRegistration> listenerRegistrations = new ArrayList<>();
+    private List<ListenerRegistration> listenerRegistrations;
 
     @EventListener(ApplicationReadyEvent.class)
     public void initListenerRegistrations() {
@@ -81,7 +81,7 @@ public class FirestoreService {
 
         final DocumentReference documentReference = firestore.collection(collectionName).document(entity.getDocumentId());
         try {
-            // Vérifier si le document existe, si oui alors on ne l'envoie pas, sinon on le crée
+            // Vérifier si le document existe. Si oui alors, on ne l'envoie pas, sinon on le crée
 
             if (delete) documentReference.delete().get();
             else documentReference.set(entity.toMap()).get();
