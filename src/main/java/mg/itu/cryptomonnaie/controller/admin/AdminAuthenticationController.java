@@ -35,7 +35,7 @@ public class AdminAuthenticationController {
 	return "redirect:/admin/connexion";
     }
 
-    @GetMapping("/admin-logout")
+    @GetMapping("/admin-deconnexion")
     public String deconnexion(HttpSession session) {
 	session.removeAttribute("admin");
 	return "redirect:/admin-auth";

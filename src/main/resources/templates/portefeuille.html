@@ -19,7 +19,7 @@
                         </div>
                         <div class="card-body">
                             <span class="font-extrabold fs-4 mb-0"
-                                  th:text="${situationPortefeuille.fondsActuel()}"></span>
+                                  th:text="${#numbers.formatDecimal(situationPortefeuille.fondsActuel(), 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
                         </div>
                     </div>
                 </div>
