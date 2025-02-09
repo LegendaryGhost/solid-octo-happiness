@@ -17,7 +17,7 @@ public class PortefeuilleController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute("situationPortefeuille", portefeuilleService.getSituationPortefeuilleActuelle(
-            Facade.authenticationManager().safelyGetCurrentUser()
+            Facade.authenticationManager().safelyGetCurrentUser().getId()
         ));
 
         return "portefeuille";

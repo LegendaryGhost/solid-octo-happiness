@@ -8,6 +8,7 @@ import mg.itu.cryptomonnaie.entity.Portefeuille;
 import mg.itu.cryptomonnaie.entity.Utilisateur;
 import mg.itu.cryptomonnaie.projections.PortefeuilleAvecCours;
 import mg.itu.cryptomonnaie.repository.PortefeuilleRepository;
+import mg.itu.cryptomonnaie.repository.UtilisateurRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class PortefeuilleService {
     private final PortefeuilleRepository portefeuilleRepository;
     private final TransactionService transactionService;
+    private final UtilisateurRepository utilisateurRepository;
 
     @Transactional
     public Portefeuille getByUtilisateurAndCryptomonnaieOrCreate(
@@ -42,8 +44,9 @@ public class PortefeuilleService {
         return portefeuilleRepository.save(portefeuille);
     }
 
-    public SituationPortefeuilleDTO getSituationPortefeuilleActuelle(final Utilisateur utilisateur) {
-        final Integer idUtilisateur = utilisateur.getId();
+    public SituationPortefeuilleDTO getSituationPortefeuilleActuelle(final Integer idUtilisateur) {
+        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable, ID: " + idUtilisateur + "."));
 
         // Récupération de la liste des cryptos dans le portefeuille avec leur cours actuel
         List<PortefeuilleAvecCours> portefeuilleAvecCoursDTOList = portefeuilleRepository.findAvecCoursActuelByUtilisateur(idUtilisateur);
