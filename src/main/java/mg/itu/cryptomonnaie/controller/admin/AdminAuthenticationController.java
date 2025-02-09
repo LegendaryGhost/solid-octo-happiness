@@ -9,16 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @AllArgsConstructor
 @Controller
-@RequestMapping("/admin-auth")
 public class AdminAuthenticationController {
 
     private final AdminAuthenticationService adminAuthenticationService;
 
-    @GetMapping
+    @GetMapping("/admin-auth")
     public String formulaireAuthentification(Model model) {
 	Admin credentials = new Admin("phoenix-coin.admin@gmail.com", "admin1234");
 	model.addAttribute("credentials", credentials);
@@ -26,7 +24,7 @@ public class AdminAuthenticationController {
 	return "admin/connexion";
     }
 
-    @PostMapping
+    @PostMapping("/admin-auth")
     public String authentifier(@ModelAttribute Admin admin, HttpSession session) {
 	if (adminAuthenticationService.authentifier(admin)) {
 	    admin.setMotDePasse(null);
@@ -35,6 +33,12 @@ public class AdminAuthenticationController {
 	}
 
 	return "redirect:/admin/connexion";
+    }
+
+    @GetMapping("/admin-logout")
+    public String deconnexion(HttpSession session) {
+	session.removeAttribute("admin");
+	return "redirect:/admin-auth";
     }
 
 }

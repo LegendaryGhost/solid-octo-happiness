@@ -5,6 +5,7 @@ import mg.itu.cryptomonnaie.service.OperationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -19,6 +20,18 @@ public class AdminOperationController {
 	model.addAttribute("operations", operationService.getAllEnAttente());
 
 	return "admin/operations";
+    }
+
+    @GetMapping("/{id}/accepter")
+    public String accepter(@PathVariable Integer id) {
+	operationService.accepter(id);
+	return "redirect:/admin/operations";
+    }
+
+    @GetMapping("/{id}/refuser")
+    public String refuser(@PathVariable Integer id) {
+	operationService.refuser(id);
+	return "redirect:/admin/operations";
     }
 
 }
