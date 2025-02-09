@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.request.EmailAndPasswordRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
+import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.service.UtilisateurService;
 import mg.itu.cryptomonnaie.utils.Facade;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +41,7 @@ public class AuthenticationController {
     private final UtilisateurService utilisateurService;
     private final RestTemplate restTemplate;
     private final ParameterizedTypeReference<Map<String, Object>> mapTypeReference;
+    private final AuthenticationManager authenticationManager;
 
     @Value("${identity-flow.apiurl}")
     private String identityFlowApiUrl;
@@ -157,7 +159,7 @@ public class AuthenticationController {
                 Map<String, String> data = (Map<String, String>) Objects.requireNonNull(responseEntity.getBody()).get("data");
                 Facade.authenticationManager().authenticate(utilisateurService.updateOrCreate(pendingVerificationEmail, data.get("token")));
 
-                return "redirect:/portefeuille/etat";
+                return "redirect:/portefeuille";
             }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             log.error("Erreur lors d'une vérification d'un code pin", e);
@@ -184,5 +186,11 @@ public class AuthenticationController {
 
         } else bindingResult.reject("error",
             (String) Objects.requireNonNull(e.getResponseBodyAs(mapTypeReference)).get("error"));
+    }
+
+    @GetMapping("/deconnexion")
+    public String deconnexion() {
+        authenticationManager.logout();
+        return "redirect:/connexion";
     }
 }

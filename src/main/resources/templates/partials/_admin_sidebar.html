@@ -6,7 +6,7 @@
             <div class="sidebar-header position-relative">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="logo">
-                        <a th:href="@{/}">
+                        <a th:href="@{/admin/operations}">
                             <img alt="Logo" style="width: 50px; height: 50px; border-radius: 50px"
                                  th:src="@{/images/logo.png}">
                         </a>
@@ -51,61 +51,13 @@
                 <ul class="menu">
                     <li class="sidebar-title">Navigation</li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="#">
+                        <a class="sidebar-link" th:href="@{/admin/operations}">
                             <i class="bi bi-person-fill"></i>
-                            <span>Profil</span>
+                            <span>Opérations en attente</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" th:href="@{/portefeuille}">
-                            <i class="bi bi-wallet2"></i>
-                            <span>Portefeuille</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item has-sub">
-                        <a class="sidebar-link" href="#">
-                            <i class="bi bi-cash-stack"></i>
-                            <span>Opération</span>
-                        </a>
-                        <ul class="submenu">
-                            <li class="submenu-item">
-                                <a class="submenu-link" th:href="@{/operation/demande-depot-retrait}">
-                                    Faire un dépôt ou retrait
-                                </a>
-                            </li>
-                            <li class="submenu-item">
-                                <a class="submenu-link" th:href="@{/operation/historique-globale}">
-                                    Historique globale
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item has-sub">
-                        <a class="sidebar-link" href="#">
-                            <i class="bi bi-clock-history"></i>
-                            <span>Transaction</span>
-                        </a>
-                        <ul class="submenu">
-                            <li class="submenu-item">
-                                <a class="submenu-link" th:href="@{/transaction/creation}">
-                                    Nouvelle
-                                </a>
-                            </li>
-                            <li class="submenu-item">
-                                <a class="submenu-link" th:href="@{/transaction/historique-globale}">
-                                    Historique globale
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" th:href="@{/cours}">
-                            <i class="bi bi-graph-up"></i>
-                            <span>Cours</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" th:href="@{/deconnexion}">
+                        <a class="sidebar-link" th:href="@{/admin-deconnexion}">
                             <i class="bi bi-power"></i>
                             <span>Déconnexion</span>
                         </a>
