@@ -48,8 +48,8 @@ public class Portefeuille implements FirestoreSynchronisableEntity {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
         map.put("quantite", quantite);
-        map.put("utilisateur", utilisateur != null ? utilisateur.getId() : null);
-        map.put("cryptomonnaie", cryptomonnaie != null ? cryptomonnaie.getId() : null);
+        map.put("idUtilisateur", utilisateur != null ? utilisateur.getId() : null);
+        map.put("idCryptomonnaie", cryptomonnaie != null ? cryptomonnaie.getId() : null);
         
         return map;
     }

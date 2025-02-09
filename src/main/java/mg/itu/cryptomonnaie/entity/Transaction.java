@@ -36,7 +36,7 @@ public class Transaction implements FirestoreSynchronisableEntity {
     private Double cours;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime dateHeure;
+    private LocalDateTime dateHeure = LocalDateTime.now();
 
     @Setter
     @Enumerated(EnumType.STRING)
@@ -78,9 +78,7 @@ public class Transaction implements FirestoreSynchronisableEntity {
         map.put("cours", cours);
         map.put("dateHeure", FirestoreUtils.convertLocalDateTimeToGoogleCloudTimestamp(dateHeure));
         map.put("typeTransaction", typeTransaction);
-        map.put("tauxCommission", tauxCommission);
-        map.put("montantCommission", montantCommission);
-        map.put("idCryptomonnaie", cryptomonnaie != null ? cryptomonnaie.getId() : null);
+        map.put("cryptomonnaie", cryptomonnaie != null ? cryptomonnaie.getDesignation() : null);
         map.put("idUtilisateur", utilisateur != null ? utilisateur.getId() : null);
 
         return map;

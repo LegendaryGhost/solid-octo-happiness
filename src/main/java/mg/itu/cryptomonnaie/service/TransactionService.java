@@ -23,6 +23,7 @@ public class TransactionService {
     private final CoursCryptoService   coursCryptoService;
     private final PortefeuilleService  portefeuilleService;
     private final UtilisateurService   utilisateurService;
+    private final FirestoreService     firestoreService;
 
     @Transactional
     public List<HistoriqueTransactionDTO> getHistoriqueGlobale(
@@ -54,6 +55,7 @@ public class TransactionService {
         transaction.setUtilisateur(utilisateur);
 
         transactionRepository.save(transaction);
+        firestoreService.synchronizeLocalDbToFirestore(transaction);
 
         // Mise à jour du portefeuille
         Portefeuille portefeuille  = portefeuilleService.getByUtilisateurAndCryptomonnaieOrCreate(utilisateur, cryptomonnaie);
@@ -78,6 +80,7 @@ public class TransactionService {
         utilisateurService.save(utilisateur);
 
         portefeuilleService.save(portefeuille);
+        firestoreService.synchronizeLocalDbToFirestore(portefeuille);
     }
 
     public ResultatAnalyseCommission analyserCommission(final AnalyseCommissionRequest request) {

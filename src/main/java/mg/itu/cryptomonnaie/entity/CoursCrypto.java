@@ -8,7 +8,6 @@ import lombok.ToString;
 import mg.itu.cryptomonnaie.utils.Collection;
 import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
 import mg.itu.cryptomonnaie.utils.FirestoreUtils;
-import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.Map;
 @EqualsAndHashCode
 @ToString(doNotUseGetters = true)
 @Entity
-@DynamicInsert
 @Collection("cours_crypto")
 public class CoursCrypto implements FirestoreSynchronisableEntity {
     @Id
@@ -30,7 +28,7 @@ public class CoursCrypto implements FirestoreSynchronisableEntity {
     private Double cours;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime dateHeure;
+    private LocalDateTime dateHeure = LocalDateTime.now();
 
     @Setter
     @ManyToOne(optional = false)

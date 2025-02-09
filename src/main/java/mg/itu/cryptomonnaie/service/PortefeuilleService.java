@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class PortefeuilleService {
     private final PortefeuilleRepository portefeuilleRepository;
     private final TransactionService transactionService;
+    private final FirestoreService firestoreService;
 
     @Transactional
     public Portefeuille getByUtilisateurAndCryptomonnaieOrCreate(
@@ -34,12 +35,15 @@ public class PortefeuilleService {
         portefeuille.setUtilisateur(utilisateur);
         portefeuille.setCryptomonnaie(cryptomonnaie);
 
-        return save(portefeuille);
+        save(portefeuille);
+        firestoreService.synchronizeLocalDbToFirestore(portefeuille);
+
+        return portefeuille;
     }
 
     @Transactional
-    public Portefeuille save(final Portefeuille portefeuille) {
-        return portefeuilleRepository.save(portefeuille);
+    public void save(final Portefeuille portefeuille) {
+        portefeuilleRepository.save(portefeuille);
     }
 
     public SituationPortefeuilleDTO getSituationPortefeuilleActuelle(final Utilisateur utilisateur) {

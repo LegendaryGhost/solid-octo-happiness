@@ -1,11 +1,11 @@
 package mg.itu.cryptomonnaie.utils;
 
 import com.google.cloud.Timestamp;
-import com.google.cloud.firestore.DocumentSnapshot;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import mg.itu.cryptomonnaie.entity.*;
+import mg.itu.cryptomonnaie.exception.NoSuchCollection;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -35,22 +35,18 @@ public final class FirestoreUtils {
         return Timestamp.ofTimeSecondsAndNanos(localDateTime.atZone(ZoneId.systemDefault()).toEpochSecond(), localDateTime.getNano());
     }
 
-    public static String documentSnapshotCollectionName(final DocumentSnapshot documentSnapshot) {
-        return documentSnapshot.getReference().getParent().getId();
-    }
-
-    public static String getCollectionName(final Class<? extends FirestoreSynchronisableEntity> c) {
-        return COLLECTION_REGISTER.findByCollectionClass(c).getCollectionName();
+    public static String getCollectionName(final Class<?> collectionClass) {
+        return COLLECTION_REGISTER.findByCollectionClass(collectionClass).getCollectionName();
     }
 
     @Getter
     @EqualsAndHashCode
     @ToString
     public static class CollectionMetaDataHolder {
-        private final Class<? extends FirestoreSynchronisableEntity> clazz;
+        private final Class<?> clazz;
         private String collectionName;
 
-        private CollectionMetaDataHolder(Class<? extends FirestoreSynchronisableEntity> clazz) {
+        private CollectionMetaDataHolder(Class<?> clazz) {
             Assert.notNull(clazz, "La classe ne peut pas être \"null\"");
             this.clazz = clazz;
 
@@ -77,21 +73,18 @@ public final class FirestoreUtils {
             collectionMetaDataHolders = new ArrayList<>();
         }
 
-        public CollectionMetaDataHolder findByCollectionClass(final Class<? extends FirestoreSynchronisableEntity> c) {
+        public CollectionMetaDataHolder findByCollectionClass(final Class<?> c) throws NoSuchCollection {
             return collectionMetaDataHolders.stream()
                 .filter(holder -> holder.getClazz().equals(c))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(
-                    String.format("Aucune classe trouvée pour \"%s\"", c.getName())
-                ));
+                .orElseThrow(() -> new NoSuchCollection(c));
         }
 
-        CollectionRegister addCollection(final Class<? extends FirestoreSynchronisableEntity> c) {
+        CollectionRegister addCollection(final Class<?> c) {
             final CollectionMetaDataHolder collectionMetaDataHolder = new CollectionMetaDataHolder(c);
 
             final boolean isDuplicate = collectionMetaDataHolders.stream()
                 .anyMatch(holder -> holder.equals(collectionMetaDataHolder));
-
             if (isDuplicate) throw new IllegalArgumentException(String.format(
                 "Une collectionMetaDataHolder avec le nom \"%s\" et la classe \"%s\" existe déjà",
                 collectionMetaDataHolder.getCollectionName(), collectionMetaDataHolder.getClazz()));

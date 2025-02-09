@@ -24,7 +24,6 @@ import java.util.concurrent.ExecutionException;
 
 import static mg.itu.cryptomonnaie.utils.FirestoreUtils.*;
 import static mg.itu.cryptomonnaie.utils.FirestoreUtils.convertGoogleCloudTimestampToLocalDateTime;
-import static mg.itu.cryptomonnaie.utils.FirestoreUtils.documentSnapshotCollectionName;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -57,9 +56,25 @@ public class FirestoreService {
         log.info("Listeners Firestore correctement détruits");
     }
 
+    public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(final List<T> entities) {
+        synchronizeLocalDbToFirestore(entities, null);
+    }
+
     public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(
-        final T entity, final boolean delete
+        final List<T> entities, @Nullable Boolean delete
     ) {
+        entities.forEach(entity -> synchronizeLocalDbToFirestore(entity, delete));
+    }
+
+    public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(final T entity) {
+        synchronizeLocalDbToFirestore(entity, null);
+    }
+
+    public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(
+        final T entity, @Nullable Boolean delete
+    ) {
+        delete = delete != null && delete;
+
         final Class<? extends FirestoreSynchronisableEntity> entityClass = entity.getClass();
         final String collectionName  = getCollectionName(entityClass);
         final String entityClassName = entityClass.getName();
@@ -71,13 +86,19 @@ public class FirestoreService {
 
             log.debug("Synchronisation de la base de données locale vers Firestore pour l'entité : \"{}\"", entityClassName);
         } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(String.format("Erreur lors de la %s vers Firestore pour l'entité : %s",
-                delete ? "suppression" : "synchronisation", entityClassName), e);
+            log.error("Erreur lors de la {} vers Firestore pour l'entité : {}",
+                delete ? "suppression" : "synchronisation", entityClassName, e);
         }
     }
 
+    /*
+        Petite remarque sur cette méthode :
+
+        La synchronisation de firestore → Base de données locale ne nécessite pas d'implémenter "FirestoreSynchronisableEntity".
+        Il suffit que la classe soit une entité et une collection.
+     */
     @SuppressWarnings("unchecked")
-    private <T extends FirestoreSynchronisableEntity, ID> FirestoreService addRegistrationListener(final Class<T> entityClass) {
+    private <T, ID> FirestoreService addRegistrationListener(final Class<T> entityClass) {
         final String collectionName = getCollectionName(entityClass);
         listenerRegistrations.add(firestore.collection(collectionName).addSnapshotListener((snapshots, e) -> {
             final String entityClassName = entityClass.getName();
@@ -87,19 +108,23 @@ public class FirestoreService {
             }
             if (snapshots == null) return;
 
-            final JpaRepository<T, Object> repository = Facade.getRepositoryFor(entityClass);
+            final JpaRepository<T, ID> repository = Facade.getRepositoryFor(entityClass);
             snapshots.getDocumentChanges().forEach(documentChange -> {
-                DocumentSnapshot documentSnapshot = documentChange.getDocument();
-                switch (documentChange.getType()) {
-                    case ADDED, MODIFIED -> {
-                        T t = createFromDocumentSnapshot(documentSnapshot, entityClass, objectMapper, entityManager);
-                        if (t != null) repository.save(t);
+                try {
+                    DocumentSnapshot documentSnapshot = documentChange.getDocument();
+                    switch (documentChange.getType()) {
+                        case ADDED, MODIFIED -> {
+                            T t = createEntityFromDocumentSnapshot(documentSnapshot, entityClass, objectMapper, entityManager);
+                            if (t != null) repository.save(t);
+                        }
+                        case REMOVED -> {
+                            ID id = (ID) convertId(
+                                documentSnapshot.getId(), collectionName, entityClass, entityManager);
+                            if (id != null) repository.deleteById(id);
+                        }
                     }
-                    case REMOVED -> {
-                        ID id = (ID) convertId(
-                            documentSnapshot.getId(), collectionName, entityClass, entityManager);
-                        if (id != null) repository.deleteById(id);
-                    }
+                } catch (Exception ex) {
+                    log.error("Erreur lors du process des changements de document pour la collection : \"{}\"", collectionName, ex);
                 }
             });
         }));
@@ -108,7 +133,7 @@ public class FirestoreService {
     }
 
     @Nullable
-    private static <T extends FirestoreSynchronisableEntity> T createFromDocumentSnapshot(
+    private static <T> T createEntityFromDocumentSnapshot(
         final DocumentSnapshot documentSnapshot,
         final Class<T> entityClass,
         final ObjectMapper objectMapper,
@@ -116,10 +141,10 @@ public class FirestoreService {
     ) {
         final Map<String, Object> data = documentSnapshot.getData();
 
-        final String collectionName = documentSnapshotCollectionName(documentSnapshot);
+        final String collectionName = documentSnapshot.getReference().getParent().getId();
         final String id = documentSnapshot.getId();
         if (data == null) {
-            log.error("Les données du document avec l'identifiant \"{}\" dans la collection \"{}\" sont \"null\"", id, collectionName);
+            log.warn("Les données du document avec l'identifiant \"{}\" dans la collection \"{}\" sont \"null\"", id, collectionName);
             return null;
         }
 
