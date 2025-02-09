@@ -16,5 +16,5 @@ public interface CryptomonnaieRepository extends JpaRepository<Cryptomonnaie, In
         ORDER BY c.id ASC
         LIMIT 1
     """)
-    Optional<Cryptomonnaie> findByIdOrFindFirst(@Nullable Integer id);
+    Optional<Cryptomonnaie> findByIdOrFindTopest(@Nullable Integer id);
 }

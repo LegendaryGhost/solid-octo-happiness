@@ -27,8 +27,8 @@ public class CryptomonnaieService {
     }
 
     @Transactional
-    public Cryptomonnaie getByIdOrGetFirst(@Nullable final Integer id) {
-        return cryptomonnaieRepository.findByIdOrFindFirst(id)
+    public Cryptomonnaie getByIdOrGetTopest(@Nullable final Integer id) {
+        return cryptomonnaieRepository.findByIdOrFindTopest(id)
             .orElseThrow(() -> new RuntimeException("Aucune cryptomonnaie dans la base de données"));
     }
 }

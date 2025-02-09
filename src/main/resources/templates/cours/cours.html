@@ -16,7 +16,7 @@
                         <h4 class="card-title">Filtre</h4>
                     </div>
                     <div class="card-body">
-                        <form class="form">
+                        <form id="formulaire-filtre" class="form">
                             <div class="row">
                                 <div class="col-md-6 col-12">
                                     <div class="form-group">
@@ -27,15 +27,14 @@
                                         >
                                             <option value="">Sélectionnez une cryptomonnaie</option>
                                             <option th:each="cryptomonnaie : ${cryptomonnaies}"
-                                                    th:value="${cryptomonnaie.id}"
                                                     th:text="${cryptomonnaie.designation}"
-                                                    th:selected="${param.idCryptomonnaie != null && cryptomonnaie.id.toString() == param.idCryptomonnaie[0]}">
+                                                    th:value="${cryptomonnaie.id}">
                                             </option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary mt-2">
+                                    <button class="btn btn-primary mt-2" type="submit">
                                         Appliquer
                                     </button>
                                 </div>
@@ -51,11 +50,10 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title"
-                                th:text="'Graphique des fluctuations pour : ' + ${cryptoActuelle}"></h4>
+                            <h4 id="titre-chart" class="card-title"></h4>
                         </div>
                         <div class="card-body">
-                            <div id="crypto-chart" th:data-cours-cryptos="${coursCryptos}"></div>
+                            <div id="chart"></div>
                         </div>
                     </div>
                 </div>
@@ -67,20 +65,47 @@
 <th:block th:fragment="scripts">
     <script th:src="@{/extensions/apexcharts/apexcharts.min.js}"></script>
     <script>
+        const CHART_ELEMENT_ID         = "chart";
+        const CHART_TITLE_ELEMENT_ID   = "titre-chart";
+        const CHART_TITLE_PREFIX       = "Graphique des fluctuations";
+        const FILTER_FORM_ELEMENT_ID   = "formulaire-filtre"
+        const SELECT_CRYPTO_ELEMENT_ID = "cryptomonnaie";
+        const TIMEOUT                  = [[${timeout}]];
+
         document.addEventListener("DOMContentLoaded", () => {
-            const chartElement = document.querySelector("#crypto-chart");
+            const createErrorMessageForMissingElement = (elementId) => {
+                return `L'élément avec l'id "${elementId}" n'existe pas`;
+            };
+
+            const selectCryptoElementValue = () => {
+                const selectCryptoElement = document.getElementById(SELECT_CRYPTO_ELEMENT_ID);
+                if (!selectCryptoElement) {
+                    console.error(createErrorMessageForMissingElement(SELECT_CRYPTO_ELEMENT_ID));
+                    return;
+                }
+
+                return selectCryptoElement.value;
+            };
+
+            const chartElement = document.getElementById(CHART_ELEMENT_ID);
             if (!chartElement) {
-                console.error("L'élément avec l'id \"crypto-chart\" n'existe pas");
+                console.error(createErrorMessageForMissingElement(CHART_ELEMENT_ID));
                 return;
             }
 
-            const coursCryptos = JSON.parse(chartElement.dataset.coursCryptos || "[]");
-            const coursData = coursCryptos.map(coursCrypto => ({
-                x: new Date(coursCrypto.dateHeure).getTime(),
-                y: coursCrypto.cours
-            }));
+            const chartTitleElement = document.getElementById(CHART_TITLE_ELEMENT_ID);
+            if (!chartTitleElement) {
+                console.error(createErrorMessageForMissingElement(CHART_TITLE_ELEMENT_ID));
+                return;
+            }
 
-            const options = {
+            const filterFormElement = document.getElementById(FILTER_FORM_ELEMENT_ID);
+            if (!filterFormElement) {
+                console.error(createErrorMessageForMissingElement(FILTER_FORM_ELEMENT_ID));
+                return;
+            }
+
+            const chartOptions = {
                 chart: {
                     type: "line",
                     height: 350,
@@ -95,21 +120,21 @@
                     }
                 },
                 series: [{
-                    name: "Prix en Ar",
-                    data: coursData
+                    name: "Prix en Euro",
+                    data: []
                 }],
                 xaxis: {
                     type: "datetime",
                     labels: {
-                        format: 'HH:mm:ss',  // Affichage de l'heure et des minutes
-                        rotate: -45          // Angle des labels pour mieux les espacer
+                        format: "HH:mm:ss",
+                        rotate: -45
                     },
                     title: {
-                        text: 'Temps'
+                        text: "Temps"
                     },
-                    min: new Date().getTime() - 60 * 1000 * 60,  // Afficher les dernières 60 minutes seulement
-                    max: new Date().getTime(),                   // Limiter au temps actuel
-                    tickAmount: 10,                              // Limite le nombre de ticks sur l'axe X
+                    min: new Date().getTime() - 60 * 1000 * 60,
+                    max: new Date().getTime(),
+                    tickAmount: 10,
                     axisBorder: {
                         show: true
                     },
@@ -120,34 +145,42 @@
                 stroke: {curve: "smooth"},
                 tooltip: {
                     x: {
-                        format: "dd/MM/yyyy HH:mm:ss"  // Format du tooltip pour afficher l'heure complète
+                        format: "dd/MM/yyyy HH:mm:ss"
                     }
                 }
             };
 
             try {
-                const chart = new ApexCharts(chartElement, options);
+                const chart = new ApexCharts(chartElement, chartOptions);
                 chart.render();
 
-                setInterval(() => {
-                    fetch(`/cours/data?idCryptomonnaie=${document.querySelector('#cryptomonnaie').value || ''}`)
+                const fetchDataAndUpdateChart = (idCryptomonnaie) => {
+                    fetch(`/cours/donnees?idCryptomonnaie=${idCryptomonnaie || ''}`)
                         .then(response => {
                             if (!response.ok) throw new Error("Erreur lors de la récupération des données");
                             return response.json();
                         })
-                        .then(newCoursCryptos => {
-                            const newCoursData = newCoursCryptos.map(newCoursCrypto => ({
-                                x: new Date(newCoursCrypto.dateHeure).getTime(),
-                                y: newCoursCrypto.cours
-                            }));
-
+                        .then(coursCryptoList => {
                             chart.updateSeries([{
-                                name: "Prix en Ar",
-                                data: newCoursData
+                                data: coursCryptoList.map(coursCrypto => ({
+                                    x: new Date(coursCrypto.dateHeure).getTime(),
+                                    y: coursCrypto.cours
+                                }))
                             }]);
+
+                            chartTitleElement.innerText = `${CHART_TITLE_PREFIX} pour : ${coursCryptoList[0].cryptomonnaie.designation}`;
                         })
-                        .catch(error => console.error("Erreur lors de l'actualisation des données : ", error));
-                }, 10000);
+                        .catch(error => console.error("Erreur lors de la récupération des données : ", error));
+                };
+
+                fetchDataAndUpdateChart();
+
+                filterFormElement.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    fetchDataAndUpdateChart(selectCryptoElementValue());
+                });
+
+                setInterval(() => fetchDataAndUpdateChart(selectCryptoElementValue()), TIMEOUT);
             } catch (error) {
                 console.error("Erreur lors du rendu de la chart : ", error);
             }
