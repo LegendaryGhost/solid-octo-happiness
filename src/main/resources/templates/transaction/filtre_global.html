@@ -47,7 +47,9 @@
                                     <div class="col-md-8 form-group">
                                         <input type="datetime-local"
                                                id="date-max"
-                                               class="form-control">
+                                               class="form-control"
+                                                name="dateMax"
+                                        >
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -74,14 +76,14 @@
                                     <th>Valeur Portefeuille</th>
                                 </tr>
                             </thead>
-                            <!-- <tbody>
-                                <tr th:each="transaction : ${transactions}">
-                                    <td th:text="${transaction.utilisateur}"></td>
-                                    <td th:text="${transaction.totalAchat} + ' €'"></td>
-                                    <td th:text="${transaction.totalVente} + ' €'"></td>
+                      <tbody>
+                                <tr th:each="transaction : ${historiqueTransaction}">
+                                    <td th:text="${transaction.getEmailUtilisateur()}"></td>
+                                    <td th:text="${transaction.getTotalAchats()} + ' €'"></td>
+                                    <td th:text="${transaction.getTotalVentes()} + ' €'"></td>
                                     <td th:text="${transaction.valeurPortefeuille} + ' €'"></td>
                                 </tr>
-                            </tbody> -->
+                            </tbody>
                             <tbody>
                                 <tr>
                                     <td>User1</td>

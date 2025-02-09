@@ -54,6 +54,7 @@ public class CoursCryptoController {
         model.addAttribute("request", request);
         model.addAttribute("cryptomonnaies", cryptomonnaies);
         model.addAttribute("typesAnalyse", TypeAnalyseCoursCrypto.values());
+        model.addAttribute("resultat",0);
         return "AnalyseCours";
     }
 
