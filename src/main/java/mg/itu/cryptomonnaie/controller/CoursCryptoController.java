@@ -44,26 +44,23 @@ public class CoursCryptoController {
 
     @GetMapping(path = "/analyse")
     public String analyse(Model model) {
-        AnalyseCoursCryptoRequest request = new AnalyseCoursCryptoRequest();
-        List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.getAll();
-        model.addAttribute("request", request);
-        model.addAttribute("cryptomonnaies", cryptomonnaies);
+        model.addAttribute("request", new AnalyseCoursCryptoRequest());
+        model.addAttribute("cryptomonnaies", cryptomonnaieService.getAll());
         model.addAttribute("typesAnalyse", TypeAnalyseCoursCrypto.values());
         model.addAttribute("resultat",0);
         return "cours/AnalyseCours";
     }
 
     @PostMapping("/analyse")
-    public String traiterAnalyse(@Valid AnalyseCoursCryptoRequest request, Model model) {
-
-        System.out.println(request);
-
+    public String traiterAnalyse(
+        @Valid AnalyseCoursCryptoRequest request, Model model
+    ) {
         List<Cryptomonnaie> cryptomonnaies = cryptomonnaieService.getAll();
         model.addAttribute("request", request);
         model.addAttribute("cryptomonnaies", cryptomonnaies);
         model.addAttribute("typesAnalyse", TypeAnalyseCoursCrypto.values());
         model.addAttribute("resultat", coursCryptoService.analyser(request));
 
-        return "redirect:/cours/analyse";
+        return "cours/AnalyseCours";
     }
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import mg.itu.cryptomonnaie.utils.Collection;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 /*
     ###### PETIT SOUCIS MAIS ACCEPTABLE ######
@@ -20,7 +22,7 @@ import mg.itu.cryptomonnaie.utils.Collection;
 @Collection("favoris")
 public class CryptoFavoris {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Setter
@@ -32,4 +34,7 @@ public class CryptoFavoris {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cryptomonnaie")
     private Cryptomonnaie cryptomonnaie;
+
+//    @Version
+//    private Integer version;
 }
