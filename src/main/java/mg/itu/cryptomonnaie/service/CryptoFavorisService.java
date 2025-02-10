@@ -11,7 +11,7 @@ public class CryptoFavorisService {
     private final CryptoFavorisRepository cryptoFavorisRepository;
 
     @Transactional
-    public boolean isCryptomonnaieInFavoris(final Integer idUtilisateur, final Integer idCryptomonnaie) {
+    public boolean isCryptomonnaieInFavoris(final String idUtilisateur, final Integer idCryptomonnaie) {
         return cryptoFavorisRepository.existsByUtilisateurIdAndCryptomonnaieId(idUtilisateur, idCryptomonnaie);
     }
 }

@@ -80,10 +80,13 @@ public class FirestoreService {
 
         final DocumentReference documentReference = firestore.collection(collectionName).document(entity.getDocumentId());
         try {
-            // Vérifier si le document existe. Si oui alors, on ne l'envoie pas, sinon on le crée
-
             if (delete) documentReference.delete().get();
-            else documentReference.set(entity.toMap()).get();
+            else {
+                Map<String, Object> map = entity.toMap();
+                if (documentReference.get().get().exists())
+                     documentReference.update(map).get();
+                else documentReference.set(map).get();
+            }
 
             log.debug("Synchronisation de la base de données locale vers Firestore pour l'entité : \"{}\"", entityClassName);
         } catch (InterruptedException | ExecutionException e) {

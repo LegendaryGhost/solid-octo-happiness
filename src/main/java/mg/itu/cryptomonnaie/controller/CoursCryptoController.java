@@ -32,7 +32,8 @@ public class CoursCryptoController {
     public String index(Model model) {
         model.addAttribute("cryptomonnaies", cryptomonnaieService.getAll())
             .addAttribute("timeout",coursCryptoFixedRate);
-        return "cours";
+
+        return "cours/graphe";
     }
 
     @ResponseBody

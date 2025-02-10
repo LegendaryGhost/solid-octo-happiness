@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CryptoFavorisRepository extends JpaRepository<CryptoFavoris, Integer> {
 
-    boolean existsByUtilisateurIdAndCryptomonnaieId(Integer idUtilisateur, Integer idCryptomonnaie);
+    boolean existsByUtilisateurIdAndCryptomonnaieId(String idUtilisateur, Integer idCryptomonnaie);
 }

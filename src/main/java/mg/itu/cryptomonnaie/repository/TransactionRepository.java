@@ -15,7 +15,7 @@ import org.springframework.lang.Nullable;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
-    List<Transaction> findAllByUtilisateurIdOrderByDateHeureDesc(Integer idUtilisateur);
+    List<Transaction> findAllByUtilisateurIdOrderByDateHeureDesc(String idUtilisateur);
 
     @Query("""
         SELECT NEW mg.itu.cryptomonnaie.dto.HistoriqueTransactionDTO(
@@ -43,7 +43,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     """)
     List<HistoriqueTransactionDTO> findHistoriqueGlobale(
         @Nullable Integer idCryptomonnaie,
-        @Nullable Integer idUtilisateur);
+        @Nullable String idUtilisateur);
 
     @Query("""
         SELECT

@@ -22,5 +22,5 @@ public interface OperationRepository extends JpaRepository<Operation, Integer> {
     """)
     List<Operation> findAllBySuiviOperationRecentAndStatut(@Nullable LocalDateTime dateHeure, StatutOperation statut);
 
-    List<Operation> findAllByUtilisateurId(Integer idUtilisateur);
+    List<Operation> findAllByUtilisateurId(String idUtilisateur);
 }

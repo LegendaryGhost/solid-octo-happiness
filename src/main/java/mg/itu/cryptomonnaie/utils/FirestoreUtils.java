@@ -20,9 +20,11 @@ public final class FirestoreUtils {
 
     public static final CollectionRegister COLLECTION_REGISTER = new CollectionRegister()
         .addCollection(CoursCrypto.class)
+        .addCollection(CryptoFavoris.class)
         .addCollection(Cryptomonnaie.class)
         .addCollection(Operation.class)
-        .addCollection(Transaction.class);
+        .addCollection(Transaction.class)
+        .addCollection(Utilisateur.class);
 
     public static LocalDateTime convertGoogleCloudTimestampToLocalDateTime(final Timestamp timestamp) {
         return LocalDateTime.ofInstant(

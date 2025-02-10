@@ -31,13 +31,13 @@ public class TransactionService {
 
     @Transactional
     public List<HistoriqueTransactionDTO> getHistoriqueGlobale(
-        final Integer idCryptomonnaie, final Integer idUtilisateur
+        final Integer idCryptomonnaie, final String idUtilisateur
     ) {
         return transactionRepository.findHistoriqueGlobale(idCryptomonnaie, idUtilisateur);
     }
 
     @Transactional
-    public List<Transaction> getAllByUtilisateurIdOrderByDateHeureDesc(final Integer idUtilisateur) {
+    public List<Transaction> getAllByUtilisateurIdOrderByDateHeureDesc(final String idUtilisateur) {
         return transactionRepository.findAllByUtilisateurIdOrderByDateHeureDesc(idUtilisateur);
     }
 
@@ -65,7 +65,7 @@ public class TransactionService {
 
         // Envoi de notification si la crypto fait partie des favoris de l'utilisateur
         if (cryptoFavorisService.isCryptomonnaieInFavoris(utilisateur.getId(), idCryptomonnaie))
-            notificationService.envoyerNotificationPush(utilisateur.getToken(),
+            notificationService.envoyerNotificationPush(utilisateur.getExpoPushToken(),
                 "Transaction effectuée",
                 String.format("Vous avez %s %s %s au cours de %s",
                     typeTransaction == TypeTransaction.ACHAT ? "acheté" : "vendu",
@@ -93,6 +93,7 @@ public class TransactionService {
             }
         }
         utilisateurService.save(utilisateur);
+        firestoreService.synchronizeLocalDbToFirestore(utilisateur);
 
         portefeuilleService.save(portefeuille);
     }

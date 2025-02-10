@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Integer> {
 
-    Portefeuille findByUtilisateurIdAndCryptomonnaieId(Integer idUtilisateur, Integer idCryptomonnaie);
+    Portefeuille findByUtilisateurIdAndCryptomonnaieId(String idUtilisateur, Integer idCryptomonnaie);
 
     @Query("""
         SELECT u.id AS idUtilisateur,
@@ -29,5 +29,5 @@ public interface PortefeuilleRepository extends JpaRepository<Portefeuille, Inte
         )
         AND u.id = :idUtilisateur
     """)
-    List<PortefeuilleAvecCours> findAvecCoursActuelByUtilisateur(Integer idUtilisateur);
+    List<PortefeuilleAvecCours> findAvecCoursActuelByUtilisateur(String idUtilisateur);
 }
