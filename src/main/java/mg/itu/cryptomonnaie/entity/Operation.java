@@ -40,4 +40,7 @@ public class Operation {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_utilisateur")
     private Utilisateur utilisateur;
+
+//    @Version
+//    private Integer version;
 }

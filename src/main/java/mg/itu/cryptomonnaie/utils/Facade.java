@@ -14,6 +14,6 @@ public final class Facade {
     @SuppressWarnings("unchecked")
     public static <T, ID> JpaRepository<T, ID> getRepositoryFor(final Class<T> entityClass) {
         return (JpaRepository<T, ID>) SpringContextUtil.getBean(
-            Utils.uncapitalize(entityClass.getName()) + "Repository");
+            Utils.uncapitalize(entityClass.getSimpleName()) + "Repository");
     }
 }

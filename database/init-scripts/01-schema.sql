@@ -38,7 +38,7 @@ CREATE TABLE cours_crypto
     id               SERIAL,
     cours            NUMERIC(15, 2) NOT NULL,
     date_heure       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    id_cryptomonnaie INTEGER        NOT NULL,
+    id_cryptomonnaie INTEGER        NOT NULL
     PRIMARY KEY (id),
     FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id)
 );
@@ -66,7 +66,7 @@ CREATE TABLE operation
     montant            NUMERIC(15, 2) NOT NULL,
     date_heure         TIMESTAMP      NOT NULL,
     type_operation     VARCHAR(7)     NOT NULL, -- Dépôt / Retrait
-    id_utilisateur     VARCHAR        NOT NULL,
+    id_utilisateur     VARCHAR        NOT NULL
     PRIMARY KEY (id),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id)
 );

@@ -10,16 +10,20 @@ import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.entity.*;
 import mg.itu.cryptomonnaie.utils.Facade;
 import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
+import org.springframework.beans.BeanUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import static mg.itu.cryptomonnaie.utils.FirestoreUtils.*;
@@ -32,6 +36,7 @@ public class FirestoreService {
     private final Firestore firestore;
     @PersistenceContext
     private final EntityManager entityManager;
+    private final PlatformTransactionManager transactionManager;
     private final ObjectMapper objectMapper;
 
     private List<ListenerRegistration> listenerRegistrations;
@@ -102,38 +107,67 @@ public class FirestoreService {
         Il suffit que la classe soit une entité et une collection.
      */
     @SuppressWarnings("unchecked")
-    private <T, ID> FirestoreService addRegistrationListener(final Class<T> entityClass) {
+    public <T, ID> FirestoreService addRegistrationListener(final Class<T> entityClass) {
         final String collectionName = getCollectionName(entityClass);
+
         listenerRegistrations.add(firestore.collection(collectionName).addSnapshotListener((snapshots, e) -> {
-            final String entityClassName = entityClass.getName();
             if (e != null) {
-                log.error("Erreur lors de l'écoute des changements pour l'entité : \"{}\"", entityClassName, e);
+                log.error("Erreur lors de l'écoute des changements pour l'entité : \"{}\"", entityClass.getName(), e);
                 return;
             }
             if (snapshots == null) return;
 
-            final JpaRepository<T, ID> repository = Facade.getRepositoryFor(entityClass);
             snapshots.getDocumentChanges().forEach(documentChange -> {
                 try {
                     DocumentSnapshot documentSnapshot = documentChange.getDocument();
+
                     switch (documentChange.getType()) {
                         case ADDED, MODIFIED -> {
+                            log.info("Changement détecté pour la collection : \"{}\"", collectionName);
                             T t = createEntityFromDocumentSnapshot(documentSnapshot, entityClass, objectMapper, entityManager);
-                            if (t != null) repository.save(t);
+                            if (t != null) saveEntityWithNativeQuery(t, entityClass);
                         }
                         case REMOVED -> {
-                            ID id = (ID) convertId(
-                                documentSnapshot.getId(), collectionName, entityClass, entityManager);
-                            if (id != null) repository.deleteById(id);
+                            ID id = (ID) convertId(documentSnapshot.getId(), collectionName, entityClass, entityManager);
+                            if (id != null) Facade.getRepositoryFor(entityClass).deleteById(id);
                         }
                     }
                 } catch (Exception ex) {
-                    log.error("Erreur lors du process des changements de document pour la collection : \"{}\"", collectionName, ex);
+                    log.error("Erreur lors du traitement des changements de document pour la collection : \"{}\"", collectionName, ex);
                 }
             });
         }));
 
         return this;
+    }
+
+    private <T> void saveEntityWithNativeQuery(T entity, Class<T> entityClass) {
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.executeWithoutResult(status -> {
+            try {
+                String nativeQuery = null;
+                if (entity instanceof Operation operation) {
+                    nativeQuery = "INSERT INTO operation (id, num_carte_bancaire, date_heure, montant, type_operation, id_utilisateur) VALUES (:id, :date_heure, :montant, :type_operation, :id_utilisateur)";
+                    entityManager.createNativeQuery(nativeQuery)
+                        .setParameter("id", operation.getId())
+                        .setParameter("date_heure", operation.getDateHeure())
+                        .setParameter("montant", operation.getMontant())
+                        .setParameter("type_operation", operation.getTypeOperation())
+                        .setParameter("id_utilisateur", operation.getUtilisateur().getId())
+                        .executeUpdate();
+                } else if (entity instanceof CryptoFavoris cryptoFavoris) {
+                    nativeQuery = "INSERT INTO crypto_favoris (id, id_utilisateur, id_cryptomonnaie) VALUES (:id, :id_utilisateur, :id_cryptomonnaie)";
+                    entityManager.createNativeQuery(nativeQuery)
+                        .setParameter("id", cryptoFavoris.getId())
+                        .setParameter("id_utilisateur", cryptoFavoris.getUtilisateur().getId())
+                        .setParameter("id_cryptomonnaie", cryptoFavoris.getCryptomonnaie().getId())
+                        .executeUpdate();
+                }
+            } catch (Exception e) {
+                log.error("Erreur lors de l'insertion des données : {}", e.getMessage(), e);
+                status.setRollbackOnly();
+            }
+        });
     }
 
     /*
