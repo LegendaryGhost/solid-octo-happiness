@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.entity.CoursCrypto;
 import mg.itu.cryptomonnaie.repository.CoursCryptoRepository;
 import mg.itu.cryptomonnaie.request.AnalyseCoursCryptoRequest;
+import mg.itu.cryptomonnaie.specifications.CoursCryptoSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +37,7 @@ public class CoursCryptoService {
         return coursCryptoRepository.findFirstByCryptomonnaieIdOrderByDateHeureDesc(idCryptomonnaie);
     }
 
-    @Scheduled(fixedRateString = "${courscrypto.fixedrate}")
+    // @Scheduled(fixedRateString = "${courscrypto.fixedrate}")
     @Transactional
     public void genererCoursCryptosAleatoirement() {
         List<CoursCrypto> coursCryptosAleatoires = new ArrayList<>();
@@ -57,8 +60,14 @@ public class CoursCryptoService {
 
     @Nullable
     public Double analyser(final AnalyseCoursCryptoRequest request) {
-        List<Double> coursCrypto = coursCryptoRepository.findAllCoursActuelInIdsCryptomonnaieForPeriode(
-            request.getIdsCryptomonnaie(), request.getDateHeureMin(), request.getDateHeureMax());
+        Specification<CoursCrypto> spec = CoursCryptoSpecification.filterByIdsAndDateRange(request.getIdsCryptomonnaie(), request.getDateHeureMin(), request.getDateHeureMax());
+        // Exécutez la requête
+        List<CoursCrypto> coursCryptoList = coursCryptoRepository.findAll(spec);
+
+
+        List<Double> coursCrypto = coursCryptoList.stream()
+            .map(CoursCrypto::getCours)
+            .collect(Collectors.toList());;
         if (coursCrypto.isEmpty()) return null;
 
         return switch (request.getTypeAnalyse()) {

@@ -6,10 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
-public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Integer> {
+public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Integer>, JpaSpecificationExecutor<CoursCrypto> {
 
     List<CoursCrypto> findByCryptomonnaieId(Integer idCryptomonnaie);
 
