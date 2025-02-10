@@ -6,10 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
-public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Integer> {
+public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Integer>, JpaSpecificationExecutor<CoursCrypto> {
 
     List<CoursCrypto> findByCryptomonnaieId(Integer idCryptomonnaie);
 
@@ -19,8 +20,8 @@ public interface CoursCryptoRepository extends JpaRepository<CoursCrypto, Intege
         SELECT cc.cours
         FROM CoursCrypto cc
         WHERE cc.cryptomonnaie.id IN :idsCryptomonnaie
-            AND (:dateHeureMin IS NULL OR cc.dateHeure >= :dateHeureMin)
-            AND (:dateHeureMax IS NULL OR cc.dateHeure <= :dateHeureMax)
+            AND (COALESCE(:dateHeureMin, cc.dateHeure) >= :dateHeureMin)
+            AND (COALESCE(:dateHeureMax, cc.dateHeure) <= :dateHeureMax)
         ORDER BY cc.dateHeure DESC
     """)
     List<Double> findAllCoursActuelInIdsCryptomonnaieForPeriode(

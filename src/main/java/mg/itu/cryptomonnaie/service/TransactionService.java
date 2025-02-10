@@ -80,7 +80,7 @@ public class TransactionService {
         portefeuilleQuantite = portefeuilleQuantite == null ? 0 : portefeuilleQuantite;
 
         // Mise à jour du fonds de l'utilisateur
-        final Double fondsActuel = utilisateur.getFondsActuel();
+        final Double fondsActuel = utilisateur.getFondsActuel() == null ? 0 : utilisateur.getFondsActuel();
         final Double montant     = requestQuantite * cours;
         switch (typeTransaction) {
             case ACHAT -> {
