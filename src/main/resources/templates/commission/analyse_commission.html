@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{main_layout :: layout(~{::title}, ~{::content}, ~{::scripts}, ~{::styles})}">
+<head>
+    <title>Analyse des Commissions</title>
+    <th:block th:fragment="styles">
+        <link rel="stylesheet" th:href="@{/extensions/toastify-js/src/toastify.css}">
+    </th:block>
+</head>
+
+<th:block th:fragment="content">
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Analyse des Commissions</h3>
+                    <p class="text-subtitle text-muted">Effectuez une analyse des commissions appliquées</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Commissions</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Analyse</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <section class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Formulaire d'Analyse</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- On bind le formulaire à l'objet analyseCommissionRequest -->
+                        <form  class="form form-horizontal" th:action="@{/commission/analyse}" th:object="${analyseCommissionRequest}" method="post">
+                            <div class="form-body">
+                                <div class="row">
+                                    <!-- Champ : Type d'analyse -->
+                                    <div class="col-md-4">
+                                        <label for="type-analyse">Type d'analyse</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select class="form-select" id="type-analyse" th:field="*{typeAnalyse}">
+                                            <option value="">Choisir</option>
+                                            <!-- Itération sur les valeurs de l'énumération TypeAnalyseCommission -->
+                                            <option th:each="type : ${typesAnalyse}"
+                                                    th:value="${type}"
+                                                    th:text="${type}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Champ : Cryptomonnaie -->
+                                    <div class="col-md-4">
+                                        <label for="crypto">Crypto</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select class="form-select" id="crypto" th:field="*{idCryptomonnaie}">
+                                            <option value="">Choisir</option>
+                                            <!-- Itération sur la liste des cryptomonnaies -->
+                                            <option th:each="cryptoItem : ${crypto}"
+                                                    th:value="${cryptoItem.id}"
+                                                    th:text="${cryptoItem.designation}">
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Champ : Date et heure minimum -->
+                                    <div class="col-md-4">
+                                        <label for="date-min">Date et heure min</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <input type="datetime-local" id="date-min" class="form-control" th:field="*{dateHeureMin}">
+                                    </div>
+
+                                    <!-- Champ : Date et heure maximum -->
+                                    <div class="col-md-4">
+                                        <label for="date-max">Date et heure max</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <input type="datetime-local" id="date-max" class="form-control" th:field="*{dateHeureMax}">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary mt-2">Lancer</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Section d'affichage du résultat -->
+                        <div class="mt-4">
+                            <h5>Résultat de l'analyse</h5>
+                            <p th:text="${resultat}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</th:block>
+
+<th:block th:fragment="scripts">
+    <script th:src="@{/extensions/toastify-js/src/toastify.js}"></script>
+    <th:block th:insert="~{partials/_success}"/>
+</th:block>
+</html>

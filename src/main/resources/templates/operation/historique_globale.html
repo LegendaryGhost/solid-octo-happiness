@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, _, _)}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Opérations en attente</title>
+</head>
+<th:block th:fragment="content">
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Opérations en attente</h3>
+                    <p class="text-subtitle text-muted">Liste des opérations en attente des utilisateurs</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Opération</a></li>
+                            <li aria-current="page" class="breadcrumb-item active">Opérations en attente</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <section class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Filtre</h4>
+                    </div>
+                    <div class="card-body">
+                        <form class="form">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="date-heure">Date et heure</label>
+                                        <input type="datetime-local"
+                                               id="date-heure"9
+                                               name="dateHeure"
+                                               class="form-control"
+                                               th:value="${param.dateHeure != null ? param.dateHeure[0] : ''}">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary mt-2" type="submit">
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Liste des opérations</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table mb-0 table-md">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Email utilisateur</th>
+                                    <th>Montant</th>
+                                    <th>Date et heure</th>
+                                    <th>Type d'opération</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="operation : ${operations}">
+                                    <td>
+                                        <div class="avatar avatar-lg me-3">
+                                            <img th:src="${operation.utilisateur.pdp}" alt="Photo de profil"/>
+                                        </div>
+                                    </td>
+                                    <td th:text="${operation.utilisateur.email}"></td>
+                                    <td th:text="${operation.montant}"></td>
+                                    <td th:text="${operation.dateHeure}"></td>
+                                    <td th:text="${operation.typeOperation.value}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</th:block>
+</html>

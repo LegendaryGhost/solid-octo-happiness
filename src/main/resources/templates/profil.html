@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{_layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil Utilisateur</title>
+</head>
+<body>
+<div id="main">
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Profil Utilisateur</h3>
+                    <p class="text-subtitle text-muted">Gérez vos informations personnelles</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="row">
+                <!-- User Profile Card -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body py-4 px-4">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar avatar-xl">
+                                    <img src="/assets/compiled/jpg/1.jpg" alt="Avatar">
+                                </div>
+                                <div class="ms-3 name">
+                                    <h5 class="font-bold" th:text="${utilisateur.nom}">Nom</h5>
+                                    <h6 class="text-muted mb-0" th:text="${utilisateur.prenom}">Prénom</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Info -->
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body px-4">
+                                    <div class="text-muted mb-1">Email</div>
+                                    <div th:text="${utilisateur.email}">email@example.com</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body px-4">
+                                    <div class="text-muted mb-1">Date de naissance</div>
+                                    <div th:text="${utilisateur.dateNaissance}">01/01/1990</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Section -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Portfolio</h4>
+                            <div class="card-subtitle text-muted" th:text="'Fond total : '+${utilisateur.fond}+'€'">0.00 €</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-lg">
+                                    <tbody>
+                                    <tr th:each="crypto : ${utilisateur.cryptos}">
+                                        <td class="col-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar avatar-md">
+                                                    <div class="avatar-initial rounded bg-primary">
+                                                        <i class="bi bi-currency-bitcoin"></i>
+                                                    </div>
+                                                </div>
+                                                <p class="font-bold ms-3 mb-0" th:text="${crypto.nom}">Bitcoin</p>
+                                            </div>
+                                        </td>
+                                        <td class="col-auto">
+                                            <p class="mb-0" th:text="${crypto.quantite}">0.5 BTC</p>
+                                        </td>
+                                        <td class="col-auto text-end">
+                                            <p class="mb-0" th:text="${crypto.valeur}+'€'">0.00 €</p>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>

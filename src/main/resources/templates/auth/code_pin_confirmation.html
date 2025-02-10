@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{auth/layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Code PIN</title>
+</head>
+
+<div class="container" th:fragment="body">
+    <div class="card mt-5">
+        <div class="card-header">
+            <h4 class="card-title">Vérification par Code PIN</h4>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-5">
+                <h3>Authentification</h3>
+                <p>Veuillez entrer votre code PIN à 6 chiffres</p>
+            </div>
+
+            <form th:action="@{/verification-code-pin}" method="post">
+                <div class="pin-input-container d-flex justify-content-center gap-2 mb-4">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                    <input type="text" class="form-control pin-input text-center" maxlength="1" pattern="\d"
+                        inputmode="numeric" required autocomplete="off" style="width: 50px; height: 50px;">
+                </div>
+
+                <input type="hidden" id="fullPin" name="codePin">
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary me-1 mb-1">
+                        <span class="bi bi-shield-lock"></span> Valider
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputs = document.querySelectorAll('.pin-input');
+            const hiddenInput = document.getElementById('fullPin');
+
+            inputs.forEach((input, index) => {
+                // Auto-focus sur le prochain input
+                input.addEventListener('input', function () {
+                    if (this.value.length === 1) {
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    }
+                    updateHiddenInput();
+                });
+
+                // Gestion de la touche backspace
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Backspace' && !this.value) {
+                        if (index > 0) {
+                            inputs[index - 1].focus();
+                        }
+                    }
+                });
+
+                // Accepter uniquement les chiffres
+                input.addEventListener('keypress', function (e) {
+                    if (!/\d/.test(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+
+            // Mise à jour de l'input caché avec le PIN complet
+            function updateHiddenInput() {
+                const pin = Array.from(inputs).map(input => input.value).join('');
+                console.log(pin);
+                hiddenInput.value = pin;
+            }
+        });
+    </script>
+</div>
+
+
+
+</html>

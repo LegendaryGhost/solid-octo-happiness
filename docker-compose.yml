@@ -1,0 +1,34 @@
+networks:
+  shared_network:
+    external: true
+
+services:
+  postgres_phoenix_coin:
+    image: postgres:15-alpine
+    container_name: postgres_phoenix_coin
+    networks:
+      - shared_network
+    env_file:
+      - .env
+    ports:
+      - "5434:5432"
+    volumes:
+      - cryptomonnaie_postgres_data:/var/lib/postgresql/data
+      - ./database/init-scripts:/docker-entrypoint-initdb.d
+
+  spring_boot_phoenix_coin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring_boot_phoenix_coin
+    networks:
+      - shared_network
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_phoenix_coin
+
+volumes:
+  cryptomonnaie_postgres_data: {}

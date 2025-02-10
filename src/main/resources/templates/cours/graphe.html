@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, ~{::scripts}, _)}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cours des cryptos</title>
+</head>
+<th:block th:fragment="content">
+    <div class="page-heading">
+        <h3>Courbe de fluctuation des cryptomonnaies</h3>
+    </div>
+    <div class="page-content">
+        <section class="section">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Filtre</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="formulaire-filtre" class="form">
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="cryptomonnaie">Cryptomonnaie</label>
+                                        <select class="form-select"
+                                                id="cryptomonnaie"
+                                                name="idCryptomonnaie"
+                                        >
+                                            <option value="">Sélectionnez une cryptomonnaie</option>
+                                            <option th:each="cryptomonnaie : ${cryptomonnaies}"
+                                                    th:text="${cryptomonnaie.designation}"
+                                                    th:value="${cryptomonnaie.id}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary mt-2" type="submit">
+                                        Appliquer
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 id="titre-chart" class="card-title"></h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</th:block>
+
+<th:block th:fragment="scripts">
+    <script th:src="@{/extensions/apexcharts/apexcharts.min.js}"></script>
+    <script>
+        const CHART_ELEMENT_ID         = "chart";
+        const CHART_TITLE_ELEMENT_ID   = "titre-chart";
+        const CHART_TITLE_PREFIX       = "Graphique des fluctuations";
+        const FILTER_FORM_ELEMENT_ID   = "formulaire-filtre"
+        const SELECT_CRYPTO_ELEMENT_ID = "cryptomonnaie";
+        const TIMEOUT                  = [[${timeout}]];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const createErrorMessageForMissingElement = (elementId) => {
+                return `L'élément avec l'id "${elementId}" n'existe pas`;
+            };
+
+            const selectCryptoElementValue = () => {
+                const selectCryptoElement = document.getElementById(SELECT_CRYPTO_ELEMENT_ID);
+                if (!selectCryptoElement) {
+                    console.error(createErrorMessageForMissingElement(SELECT_CRYPTO_ELEMENT_ID));
+                    return;
+                }
+
+                return selectCryptoElement.value;
+            };
+
+            const chartElement = document.getElementById(CHART_ELEMENT_ID);
+            if (!chartElement) {
+                console.error(createErrorMessageForMissingElement(CHART_ELEMENT_ID));
+                return;
+            }
+
+            const chartTitleElement = document.getElementById(CHART_TITLE_ELEMENT_ID);
+            if (!chartTitleElement) {
+                console.error(createErrorMessageForMissingElement(CHART_TITLE_ELEMENT_ID));
+                return;
+            }
+
+            const filterFormElement = document.getElementById(FILTER_FORM_ELEMENT_ID);
+            if (!filterFormElement) {
+                console.error(createErrorMessageForMissingElement(FILTER_FORM_ELEMENT_ID));
+                return;
+            }
+
+            const chartOptions = {
+                chart: {
+                    type: "line",
+                    height: 350,
+                    background: "transparent",
+                    toolbar: {show: true},
+                    animations: {
+                        enabled: true,
+                        easing: "easeinout",
+                        speed: 800,
+                        animateGradually: {enabled: true, delay: 150},
+                        dynamicAnimation: {enabled: true, speed: 350}
+                    }
+                },
+                series: [{
+                    name: "Prix en Euro",
+                    data: []
+                }],
+                xaxis: {
+                    type: "datetime",
+                    labels: {
+                        format: "HH:mm:ss",
+                        rotate: -45
+                    },
+                    title: {
+                        text: "Temps"
+                    },
+                    min: new Date().getTime() - 60 * 1000 * 60,
+                    max: new Date().getTime(),
+                    tickAmount: 10,
+                    axisBorder: {
+                        show: true
+                    },
+                    axisTicks: {
+                        show: true
+                    }
+                },
+                stroke: {curve: "smooth"},
+                tooltip: {
+                    x: {
+                        format: "dd/MM/yyyy HH:mm:ss"
+                    }
+                }
+            };
+
+            try {
+                const chart = new ApexCharts(chartElement, chartOptions);
+                chart.render();
+
+                const fetchDataAndUpdateChart = (idCryptomonnaie) => {
+                    fetch(`/cours/donnees?idCryptomonnaie=${idCryptomonnaie || ''}`)
+                        .then(response => {
+                            if (!response.ok) throw new Error("Erreur lors de la récupération des données");
+                            return response.json();
+                        })
+                        .then(coursCryptoList => {
+                            chart.updateSeries([{
+                                data: coursCryptoList.map(coursCrypto => ({
+                                    x: new Date(coursCrypto.dateHeure).getTime(),
+                                    y: coursCrypto.cours
+                                }))
+                            }]);
+
+                            chartTitleElement.innerText = `${CHART_TITLE_PREFIX} pour : ${coursCryptoList[0].cryptomonnaie.designation}`;
+                        })
+                        .catch(error => console.error("Erreur lors de la récupération des données : ", error));
+                };
+
+                fetchDataAndUpdateChart();
+
+                filterFormElement.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    fetchDataAndUpdateChart(selectCryptoElementValue());
+                });
+
+                setInterval(() => fetchDataAndUpdateChart(selectCryptoElementValue()), TIMEOUT);
+            } catch (error) {
+                console.error("Erreur lors du rendu de la chart : ", error);
+            }
+        });
+    </script>
+</th:block>
+</html>

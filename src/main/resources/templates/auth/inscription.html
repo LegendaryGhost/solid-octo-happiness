@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{auth/layout :: layout(~{::title}, ~{::body})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:fragment="title">Inscription</title>
+</head>
+<body>
+<!-- Section d'inscription -->
+<div id="auth" class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%">
+        <div class="text-center mb-4">
+            <h3 class="text-primary">Inscription</h3>
+        </div>
+        <form th:action="@{/inscription}" th:object="${inscriptionRequest}" method="post">
+            <div class="form-group mb-3">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" id="nom" th:field="*{nom}" class="form-control" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="prenom" class="form-label">Prénom</label>
+                <input type="text" id="prenom" th:field="*{prenom}" class="form-control" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="dateNaissance" class="form-label">Date de naissance</label>
+                <input type="date" id="dateNaissance" th:field="*{dateNaissance}" class="form-control" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('dateNaissance')}" th:errors="*{dateNaissance}"></div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="motDePasse" class="form-label">Mot de passe</label>
+                <input type="password" id="motDePasse" th:field="*{motDePasse}" class="form-control" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
+            <div class="text-center mt-3">
+                <span>Vous avez déjà un compte ?</span>
+                <a href="/connexion" class="text-primary">Se connecter</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr" th:replace="~{main_layout :: layout(~{::title}, ~{::content}, ~{::scripts}, ~{::styles})}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Faire un dépôt ou retrait</title>
+    <th:block th:fragment="styles">
+        <link rel="stylesheet" th:href="@{/extensions/toastify-js/src/toastify.css}">
+    </th:block>
+</head>
+
+<th:block th:fragment="content">
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Dépôt ou retrait</h3>
+                    <p class="text-subtitle text-muted">Faites votre demande et gérez vos fonds</p>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                    <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Opération</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Dépôt ou Retrait</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <section class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Formulaire</h4>
+                    </div>
+                    <div class="card-body">
+                        <form class="form form-horizontal"
+                              method="post"
+                              th:action="@{/operation/ajouter-en-attente}"
+                              th:object="${o}"
+                        >
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="carte-bancaire">Numéro de carte bancaire</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <input type="text"
+                                               id="carte-bancaire"
+                                               class="form-control"
+                                               placeholder="XXXX XXXX XXXX XXXX"
+                                               maxlength="16"
+                                               th:field="*{numCarteBancaire}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="montant">Montant</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <input type="number"
+                                               id="montant"
+                                               class="form-control"
+                                               placeholder="Montant"
+                                               step="0.01"
+                                               min="0"
+                                               th:field="*{montant}">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="type-operation">Type d'opération</label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select class="form-select"
+                                                id="type-operation"
+                                                th:field="*{typeOperation}"
+                                        >
+                                            <option th:each="type :${typesOperation}"
+                                                    th:value="${type}"
+                                                    th:text="${type.value}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary mt-2">
+                                        Soumettre
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</th:block>
+<th:block th:fragment="scripts">
+    <script th:src="@{/extensions/toastify-js/src/toastify.js}"></script>
+    <th:block th:insert="~{partials/_success}"/>
+</th:block>
+</html>
