@@ -1,9 +1,9 @@
-INSERT INTO utilisateur (email, fonds_actuel, pdp, date_heure_maj, date_heure_creation)
-VALUES ('alice@example.com', 1500.00, 'alice.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('bob@example.com', 2500.00, 'bob.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('charlie@example.com', 1000.00, 'charlie.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('diana@example.com', 1800.00, 'diana.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('edward@example.com', 500.00, 'edward.jpg', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO utilisateur (email, fonds_actuel, pdp, date_heure_creation)
+VALUES ('U1', 'alice@example.com', 1500.00, 'alice.jpg', CURRENT_TIMESTAMP),
+       ('U2', 'bob@example.com', 2500.00, 'bob.jpg',  CURRENT_TIMESTAMP),
+       ('U3', 'charlie@example.com', 1000.00, 'charlie.jpg', CURRENT_TIMESTAMP),
+       ('U4', 'diana@example.com', 1800.00, 'diana.jpg',  CURRENT_TIMESTAMP),
+       ('U5', 'edward@example.com', 500.00, 'edward.jpg', CURRENT_TIMESTAMP);
 
 INSERT INTO admin(email, mot_de_passe)
 VALUES ('phoenix-coin.admin@gmail.com', 'admin1234');

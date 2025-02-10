@@ -71,6 +71,16 @@ public class Utilisateur implements FirestoreSynchronisableEntity {
 
     @Override
     public Map<String, Object> toMap() {
-        return Map.of("fondsActuel", fondsActuel);
+        Map<String, Object> map = new java.util.HashMap<>();
+        map.put("id", id);
+        map.put("email", email);
+        map.put("nom", nom);
+        map.put("prenom", prenom);
+        map.put("dateNaissance", dateNaissance);
+        map.put("pdp", pdp);
+        map.put("fondsActuel", fondsActuel);
+        map.put("expoPushToken", expoPushToken);
+
+        return map;
     }
 }
