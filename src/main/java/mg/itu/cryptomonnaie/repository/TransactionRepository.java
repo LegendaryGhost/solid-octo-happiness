@@ -59,8 +59,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
         FROM Transaction t
             JOIN t.cryptomonnaie c
         WHERE (:idCryptomonnaie IS NULL OR c.id = :idCryptomonnaie)
-            AND (:dateHeureMin  IS NULL OR t.dateHeure >= :dateHeureMin)
-            AND (:dateHeureMax  IS NULL OR t.dateHeure <= :dateHeureMax)
+            AND (COALESCE(:dateHeureMin, t.dateHeure) >= :dateHeureMin)
+            AND (COALESCE(:dateHeureMax, t.dateHeure) <= :dateHeureMax)
         GROUP BY c.id
     """)
     ResultatAnalyseCommission analyserCommission(

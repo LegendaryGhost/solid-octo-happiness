@@ -76,7 +76,7 @@ public class Utilisateur implements FirestoreSynchronisableEntity {
         map.put("email", email);
         map.put("nom", nom);
         map.put("prenom", prenom);
-        map.put("dateNaissance", dateNaissance);
+        map.put("dateNaissance", dateNaissance.toString());
         map.put("pdp", pdp);
         map.put("fondsActuel", fondsActuel);
         map.put("expoPushToken", expoPushToken);

@@ -61,6 +61,6 @@ public class CoursCryptoController {
         model.addAttribute("typesAnalyse", TypeAnalyseCoursCrypto.values());
         model.addAttribute("resultat", coursCryptoService.analyser(request));
 
-        return "redirect:/cours/analyse";
+        return "cours/AnalyseCours";
     }
 }

@@ -116,7 +116,6 @@ public class FirestoreService {
                 return;
             }
             if (snapshots == null) return;
-
             snapshots.getDocumentChanges().forEach(documentChange -> {
                 try {
                     DocumentSnapshot documentSnapshot = documentChange.getDocument();
