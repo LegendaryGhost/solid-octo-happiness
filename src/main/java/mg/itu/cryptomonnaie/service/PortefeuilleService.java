@@ -45,7 +45,7 @@ public class PortefeuilleService {
         return portefeuilleRepository.save(portefeuille);
     }
 
-    public SituationPortefeuilleDTO getSituationPortefeuilleActuelle(final Integer idUtilisateur) {
+    public SituationPortefeuilleDTO getSituationPortefeuilleActuelle(final String idUtilisateur) {
         Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur)
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable, ID: " + idUtilisateur + "."));
 

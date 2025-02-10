@@ -3,6 +3,7 @@ package mg.itu.cryptomonnaie.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mg.itu.cryptomonnaie.exception.InternalException;
 import mg.itu.cryptomonnaie.request.EmailAndPasswordRequest;
 import mg.itu.cryptomonnaie.request.InscriptionRequest;
 import mg.itu.cryptomonnaie.request.VerificationCodePinRequest;
@@ -10,10 +11,7 @@ import mg.itu.cryptomonnaie.security.AuthenticationManager;
 import mg.itu.cryptomonnaie.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -156,7 +154,10 @@ public class AuthenticationController {
 
                 @SuppressWarnings("unchecked")
                 Map<String, String> data = (Map<String, String>) Objects.requireNonNull(responseEntity.getBody()).get("data");
-                authenticationManager.authenticate(utilisateurService.updateOrCreate(pendingVerificationEmail, data.get("token")));
+                final String token = data.get("token");
+                authenticationManager.authenticate(utilisateurService.updateOrCreate(
+                    pendingVerificationEmail, token, recupererInformationsUtilisateur(token)
+                ));
 
                 return "redirect:/portefeuille";
             }
@@ -174,6 +175,29 @@ public class AuthenticationController {
     public String deconnexion() {
         authenticationManager.logout();
         return "redirect:/connexion";
+    }
+
+    private Map<String, String> recupererInformationsUtilisateur(final String token) {
+        try {
+            HttpHeaders httpHeaders = createJsonContentTypeHttpHeaders();
+            httpHeaders.setBearerAuth(token);
+
+            ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
+                identityFlowApiUrl + "/utilisateurs/informations", HttpMethod.GET,
+                new HttpEntity<>(httpHeaders), mapTypeReference);
+
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                @SuppressWarnings("unchecked")
+                Map<String, Map<String, String>> data = ((Map<String, Map<String, String>>) Objects.requireNonNull(responseEntity.getBody()).get("data"));
+                if (!data.containsKey("utilisateur"))
+                    throw new RuntimeException("Données de l'utilisateur absentes dans le corps de la réponse");
+
+                return data.get("utilisateur");
+            } else throw new InternalException();
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("Erreur lors de la récupération des informations de l'utilisateur", e);
+            throw e;
+        }
     }
 
     private void handleHttpStatusCodeException(HttpStatusCodeException e, BindingResult bindingResult) {

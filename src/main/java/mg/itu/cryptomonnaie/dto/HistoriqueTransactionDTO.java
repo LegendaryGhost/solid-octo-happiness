@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public final class HistoriqueTransactionDTO {
-    private final Integer idUtilisateur;
+    private final String idUtilisateur;
     private final String  emailUtilisateur;
     private final Integer idCryptomonnaie;
     private final String  designationCryptomonnaie;
@@ -21,7 +21,7 @@ public final class HistoriqueTransactionDTO {
     private final Double profitOuPerte;
 
     public HistoriqueTransactionDTO(
-        final Integer idUtilisateur,
+        final String  idUtilisateur,
         final String  emailUtilisateur,
         final Integer idCryptomonnaie,
         final String  designationCryptomonnaie,

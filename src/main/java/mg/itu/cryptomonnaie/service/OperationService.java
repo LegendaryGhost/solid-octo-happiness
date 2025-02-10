@@ -22,6 +22,7 @@ public class OperationService {
     private final SuiviOperationService suiviOperationService;
     private final UtilisateurService  utilisateurService;
     private final NotificationService notificationService;
+    private final FirestoreService firestoreService;
 
     public List<Operation> getHistoriqueGlobale(final @Nullable LocalDateTime dateHeure) {
         return operationRepository.findAllBySuiviOperationRecentAndStatut(dateHeure, StatutOperation.VALIDEE);
@@ -79,9 +80,10 @@ public class OperationService {
         });
 
         utilisateurService.save(utilisateur);
+        firestoreService.synchronizeLocalDbToFirestore(utilisateur);
 
         // Envoi de notification
-        notificationService.envoyerNotificationPush(utilisateur.getToken(),
+        notificationService.envoyerNotificationPush(utilisateur.getExpoPushToken(),
             "Opération validée ✅", String.format(
                 "Votre opération de %s de %s a été validée. Votre nouveau solde est de %s",
                 typeOperation.getValue(), operation.getMontant(), utilisateur.getFondsActuel()
@@ -101,7 +103,7 @@ public class OperationService {
 
         // Envoi de notification
         Operation operation = suiviOperation.getOperation();
-        notificationService.envoyerNotificationPush(operation.getUtilisateur().getToken(),
+        notificationService.envoyerNotificationPush(operation.getUtilisateur().getExpoPushToken(),
             "Opération rejetée ❌", String.format(
                 "Votre opération de %s de %s a été rejetée",
                 operation.getTypeOperation().getValue(),

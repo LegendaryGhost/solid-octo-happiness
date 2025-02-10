@@ -5,7 +5,7 @@ import mg.itu.cryptomonnaie.projections.PortefeuilleAvecCours;
 import java.util.List;
 
 public record SituationPortefeuilleDTO(
-    Integer idUtilisateur,
+    String  idUtilisateur,
     Double  fondsActuel,
     List<PortefeuilleAvecCours>    portefeuilleAvecCoursList,
     List<HistoriqueTransactionDTO> historiquesTransaction

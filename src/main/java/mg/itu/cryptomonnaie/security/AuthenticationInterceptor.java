@@ -8,6 +8,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.Map;
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
@@ -31,8 +34,14 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         // Warning !! : This code is for testing purposes only
         if (!authenticationManager.isUserConnected())
-            authenticationManager.authenticate(
-                    utilisateurService.updateOrCreate("alice@gmail.com", "unsecure_token_for_testing_purposes"));
+            authenticationManager.authenticate(utilisateurService.updateOrCreate(
+                "alice@gmail.com", "unsecure_token_for_testing_purposes",
+                Map.of("id", "id_test",
+                    "nom", "Alice",
+                    "prenom", "Liddell",
+                    "date_naissance", "1990-01-01",
+                    "pdp", "https://picsum.photos/300/200")
+            ));
         return true;
     }
 }

@@ -1,11 +1,14 @@
 CREATE TABLE utilisateur
 (
-    id                  SERIAL,
+    id                  VARCHAR(255),
     email               VARCHAR(75)    NOT NULL,
+    nom                 VARCHAR(75)    NOT NULL,
+    prenom              VARCHAR(75)    NOT NULL,
+    date_naissance      DATE           NOT NULL,
     pdp                 VARCHAR(255),
     fonds_actuel        NUMERIC(15, 2) NOT NULL DEFAULT 0,
-    token               VARCHAR(255),
-    date_heure_maj      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    identityflow_token  VARCHAR(255),
+    expo_push_token     VARCHAR(255),
     date_heure_creation TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (email),
     PRIMARY KEY (id)
@@ -13,8 +16,8 @@ CREATE TABLE utilisateur
 
 CREATE TABLE admin
 (
-    id SERIAL,
-    email VARCHAR(75) NOT NULL,
+    id           SERIAL,
+    email        VARCHAR(75)  NOT NULL,
     mot_de_passe VARCHAR(255) NOT NULL,
     UNIQUE (email),
     PRIMARY KEY (id)
@@ -24,7 +27,7 @@ CREATE TABLE cryptomonnaie
 (
     id          SERIAL,
     designation VARCHAR(150) NOT NULL,
-    symbole VARCHAR(10) NOT NULL,
+    symbole     VARCHAR(10)  NOT NULL,
     UNIQUE (designation),
     UNIQUE (symbole),
     PRIMARY KEY (id)
