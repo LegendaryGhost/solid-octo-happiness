@@ -49,8 +49,12 @@ public class TauxCommissionController {
 
     @PostMapping("/analyse")
     public String analyseRequestCommission(@Valid AnalyseCommissionRequest request, Model model){
-        System.out.println(request);
+
+        model.addAttribute("analyseCommissionRequest",request);
+        model.addAttribute("crypto",cryptomonnaieService.getAll());
+        model.addAttribute("typesAnalyse", TypeAnalyseCommission.values());
         model.addAttribute("resultat",0);
+
         return "redirect:/commission/analyse";
     }
 }
