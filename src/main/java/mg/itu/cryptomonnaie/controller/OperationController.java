@@ -48,7 +48,7 @@ public class OperationController {
     }
 
     @GetMapping("/utilisateur/{idUtilisateur}")
-    public String historiqueParUtilisateur(@PathVariable Integer idUtilisateur, Model model) {
+    public String historiqueParUtilisateur(@PathVariable String idUtilisateur, Model model) {
         model.addAttribute("operations", operationService.getAllByUtilisateur(idUtilisateur));
 
         return null;

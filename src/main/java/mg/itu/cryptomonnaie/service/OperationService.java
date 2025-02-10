@@ -32,7 +32,7 @@ public class OperationService {
         return operationRepository.findAllBySuiviOperationRecentAndStatut(null, StatutOperation.EN_ATTENTE);
     }
 
-    public List<Operation> getAllByUtilisateur(final Integer idUtilisateur) {
+    public List<Operation> getAllByUtilisateur(final String idUtilisateur) {
         return operationRepository.findAllByUtilisateurId(idUtilisateur);
     }
 

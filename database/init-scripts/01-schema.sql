@@ -1,14 +1,14 @@
 CREATE TABLE utilisateur
 (
-    id                  VARCHAR(255),
+    id                  VARCHAR,
     email               VARCHAR(75)    NOT NULL,
     nom                 VARCHAR(75)    NOT NULL,
     prenom              VARCHAR(75)    NOT NULL,
     date_naissance      DATE           NOT NULL,
     pdp                 VARCHAR(255),
     fonds_actuel        NUMERIC(15, 2) NOT NULL DEFAULT 0,
-    identityflow_token  VARCHAR(255),
-    expo_push_token     VARCHAR(255),
+    identityflow_token  TEXT,
+    expo_push_token     TEXT,
     date_heure_creation TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (email),
     PRIMARY KEY (id)
@@ -53,7 +53,7 @@ CREATE TABLE _transaction
     taux_commission    NUMERIC(5, 2)  NOT NULL DEFAULT 0,
     montant_commission NUMERIC(15, 2) NOT NULL,
     id_cryptomonnaie   INTEGER        NOT NULL,
-    id_utilisateur     INTEGER        NOT NULL,
+    id_utilisateur     VARCHAR        NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_cryptomonnaie) REFERENCES cryptomonnaie (id),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id)
@@ -66,7 +66,7 @@ CREATE TABLE operation
     montant            NUMERIC(15, 2) NOT NULL,
     date_heure         TIMESTAMP      NOT NULL,
     type_operation     VARCHAR(7)     NOT NULL, -- Dépôt / Retrait
-    id_utilisateur     INTEGER        NOT NULL,
+    id_utilisateur     VARCHAR        NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur (id)
 );
@@ -75,7 +75,7 @@ CREATE TABLE portefeuille
 (
     id               SERIAL,
     quantite         REAL    NOT NULL DEFAULT 0,
-    id_utilisateur   INTEGER NOT NULL,
+    id_utilisateur   VARCHAR NOT NULL,
     id_cryptomonnaie INTEGER NOT NULL,
     UNIQUE (id_utilisateur, id_cryptomonnaie),
     PRIMARY KEY (id),
@@ -105,7 +105,7 @@ CREATE TABLE suivi_operation
 CREATE TABLE crypto_favoris
 (
     id               SERIAL,
-    id_utilisateur   INTEGER NOT NULL,
+    id_utilisateur   VARCHAR NOT NULL,
     id_cryptomonnaie INTEGER NOT NULL,
     UNIQUE (id_utilisateur, id_cryptomonnaie),
     PRIMARY KEY (id),

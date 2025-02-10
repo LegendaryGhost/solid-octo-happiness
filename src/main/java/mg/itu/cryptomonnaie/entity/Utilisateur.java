@@ -52,10 +52,11 @@ public class Utilisateur implements FirestoreSynchronisableEntity {
 
     @JsonIgnore
     @Setter
-    @Column(name = "identityflow_token")
+    @Column(name = "identityflow_token", columnDefinition = "TEXT")
     private String identityFlowToken;
 
     @Setter
+    @Column(columnDefinition = "TEXT")
     private String expoPushToken;
 
     @JsonIgnore

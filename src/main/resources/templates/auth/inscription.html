@@ -43,16 +43,9 @@
                 <div class="text-danger" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></div>
             </div>
 
-            <!-- Afficher les erreurs globales -->
-            <div class="text-danger" th:if="${#fields.hasGlobalErrors()}">
-                <ul>
-                    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
-                </ul>
-            </div>
-
             <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
             <div class="text-center mt-3">
-                <span>Vous avez deja un compte ?</span>
+                <span>Vous avez déjà un compte ?</span>
                 <a href="/connexion" class="text-primary">Se connecter</a>
             </div>
         </form>

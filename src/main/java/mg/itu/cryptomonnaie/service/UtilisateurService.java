@@ -49,7 +49,7 @@ public class UtilisateurService {
 
             // Infos Nullables
             utilisateur.setPdp(informations.getOrDefault("pdp", null));
-            utilisateur.setExpoPushToken(informations.getOrDefault("expo_push_token", null));
+            utilisateur.setExpoPushToken(informations.getOrDefault("push_token", null));
         }
 
         utilisateur.setIdentityFlowToken(token);
