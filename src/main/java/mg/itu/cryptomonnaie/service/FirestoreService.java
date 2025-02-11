@@ -10,11 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import mg.itu.cryptomonnaie.entity.*;
 import mg.itu.cryptomonnaie.utils.Facade;
 import mg.itu.cryptomonnaie.utils.FirestoreSynchronisableEntity;
-import org.springframework.beans.BeanUtils;
+import mg.itu.cryptomonnaie.utils.Utils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -23,7 +22,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import static mg.itu.cryptomonnaie.utils.FirestoreUtils.*;
@@ -79,7 +77,7 @@ public class FirestoreService {
     public <T extends FirestoreSynchronisableEntity> void synchronizeLocalDbToFirestore(
         final T entity, final boolean delete
     ) {
-        final Class<? extends FirestoreSynchronisableEntity> entityClass = entity.getClass();
+        final Class<?> entityClass = Utils.getRealClass(entity);
         final String collectionName  = getCollectionName(entityClass);
         final String entityClassName = entityClass.getName();
 
