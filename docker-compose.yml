@@ -29,6 +29,8 @@ services:
       - "8080:8080"
     depends_on:
       - postgres_phoenix_coin
+    volumes:
+      - /app
 
 volumes:
   cryptomonnaie_postgres_data: {}
