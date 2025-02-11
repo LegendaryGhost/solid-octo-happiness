@@ -2,6 +2,7 @@ package mg.itu.cryptomonnaie.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -44,5 +45,12 @@ public final class Utils {
 
     public static String uncapitalize(final String string) {
         return string.substring(0, 1).toLowerCase() + string.substring(1);
+    }
+
+    public static Class<?> getRealClass(Object entity) {
+        if (entity instanceof HibernateProxy) {
+            return ((HibernateProxy) entity).getHibernateLazyInitializer().getPersistentClass();
+        }
+        return entity.getClass();
     }
 }

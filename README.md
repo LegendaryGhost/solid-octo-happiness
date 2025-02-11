@@ -3,7 +3,11 @@
 Lancer les commande suivantes :
 
 ```shell
-./mvnw clean package
+.\mvnw dependency:resolve
+```
+
+```shell
+.\mvnw clean package
 ```
 
 ```shell
